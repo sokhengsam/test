@@ -1,14 +1,16 @@
 <div class="footer">
 	<div class="question-navigation">
-		<span><img alt="" src="static/css/images/first.png"></span>
+		<span class="move-question-previous" id="firstQuestion">&lt;&lt;</span>
 		<span class="move-question-previous" id="previousQuestion">&lt;</span>
 		<span class="move-question-next" id="nextQuestion">&gt;</span>
-		<span><img alt="" src="static/css/images/last.png"></span>
+		<span class="move-question-next" id="lastQuestion">&gt;&gt;</span>
 	</div>
+	<!-- 
 	<div class="progress-block">
 		<div class="progress-label">Progress...</div>
 		<div class="progress-bar"><span class="progress"></span></div>
 	</div>
+	 -->
 </div>
 
 <!-- jquery template for questionnaire -->
@@ -41,7 +43,7 @@
 
 <!-- question template -->
 <script id="questionTemplate" type="x-jquery-tmpl">
-<div id="scrollWrapper">
+<div id="scrollWrapper" class="questionaire-page">
 	<div class="scrollable" id="scrollable" style="padding-bottom:10px;">
   		<div class="question-code">${questionCode}</div>
   		<div class="question-block">

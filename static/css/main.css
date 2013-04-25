@@ -114,13 +114,15 @@ li:HOVER{
 	width: 30px;
 	display: inline-block;
 	margin: 0px 5%;
+	background-color: #FFF;
 }
 
 .question-navigation span:last-child,.question-navigation span:first-child{
-	width: 25%;
+	/*width: 25%;*/
 	display: inline-block;
 }
 
+/*
 .progress-block{
 	background-color: #b8b8b8;
 	height: 60px;
@@ -157,6 +159,10 @@ li:HOVER{
 	font-weight: bold;
 	font-size: 16px;
 }
+*/
+.question{
+	font-weight: bold;	
+}
 
 .question-code{
 	color: #888888;
@@ -166,8 +172,8 @@ li:HOVER{
 }
 
 .home-navigation{
-	background-color: #8095ad;
-	padding: 10px 0px;
+	background-color: #2281df;
+	padding: 8px 0px;
 }
 
 .back{
@@ -175,17 +181,17 @@ li:HOVER{
 	background-repeat: no-repeat;
 	background-position: left center;
 	padding: 5px 5px 5px 0px;
-	color: #FFF;
+	color: #000;
 	text-align: center;
 	width: 90px;
 	font-weight: bold;
 	display: inline-block;
 	cursor: pointer;
+	margin-left: 10px;
 }
 
 .question-block{
 	-webkit-border-radius: 5px;
-	border:1px solid #000;
 	clear:both;
 	padding: 10px 10px 0 10px;
 	margin: 20px 10px 0px 10px;
@@ -223,7 +229,7 @@ li:HOVER{
 	text-align: center;
 }
 
-.interviewer-participant-identifier input,.interviewer-participant-identifier select, input[type="text"], input[type="number"]{
+.login input,.interviewer-participant-identifier input,.interviewer-participant-identifier select, input[type="text"], input[type="number"]{
 	-webkit-border-radius: 5px;
 	width: 97%;
 	padding: 5px 5px;
@@ -337,6 +343,7 @@ input[type='checkbox'],input[type='radio']{
 	position: absolute;
 	bottom: 0;
 	width:100%;
+	background-color: #2281DF;
 }
 
 .group-question-row{
@@ -378,4 +385,32 @@ input[type='checkbox'],input[type='radio']{
 	position: absolute;
 	height: 100%;
 	width: 100%;
+}
+
+.login{
+	margin: auto;
+	text-align: center;
+}
+
+.login .button{
+	float: none;
+}
+
+.section{
+	background-color: #2f89e6;
+	color: #FFF;
+	text-align: center;
+	font-weight: bold;
+	font-size: 28px;	
+}
+
+.questionaire-page{
+	background: -webkit-linear-gradient(top, #ffffff 0%,#2281df 100%);
+}
+
+.survey-title{
+	padding-left: 10px;
+	color: #888888;
+	font-weight: bold;
+	font-size: 20px;
 }
