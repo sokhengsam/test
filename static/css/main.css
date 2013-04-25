@@ -347,24 +347,18 @@ input[type='checkbox'],input[type='radio']{
 }
 
 .group-question-row{
-	background-image: url("images/up-arrow.png");
-	background-repeat: no-repeat;
-	background-position: center right;
 	vertical-align: middle;
-	border: 1px solid #9d9d9d;
 	padding: 10px;
-	cursor: pointer;
 	color: #888888;
-	-webkit-border-radius: 5px;
 	margin: 0 10px;
 }
 
-.group-question-answers{
-	-webkit-border-radius: 5px;
-	border: 1px solid #CCCC6B;
-	margin: 2px 10px;
-	line-height: 30px;
+.child-question{
+	background: #FFF;
+	margin-bottom: 5px;
+	padding: 0px 5px;
 }
+
 #maskLayer {
 	background-color: black;
 	position: absolute;

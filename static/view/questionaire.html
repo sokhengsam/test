@@ -64,8 +64,10 @@
 
 <!-- group question row template -->
 <script id="groupQuestionTemplate" type="x-jquery-tmpl">
-	<div class="group-question-row">${questionCode}. ${text}</div>
-	<div class="answer-block group-question-answers"></div>
+	<div class="child-question">
+		<div class="group-question-row">${questionCode}. ${text}</div>
+		<div class="answer-block group-question-answers"></div>
+	</div>
 </script>
 
 <script>
