@@ -6,6 +6,8 @@ var surveyDao = null,
 	participantAnswerDao = null,
 	languageDao = null,
 	provinceDao = null,
+	outcomeEvaluationDao = null,
+	participantSurveyDao = null,
 	scroller = null,
 	request = null;
 

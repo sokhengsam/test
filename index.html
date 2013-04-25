@@ -35,6 +35,8 @@
 <script type="text/javascript" src="static/js/dao/participantAnswerDao.js"></script>
 <script type="text/javascript" src="static/js/dao/languageDao.js"></script>
 <script type="text/javascript" src="static/js/dao/provinceDao.js"></script>
+<script type="text/javascript" src="static/js/dao/outComeEvaluationDao.js"></script>
+<script type="text/javascript" src="static/js/dao/participantSurveyDao.js"></script>
 <script type="text/javascript" src="static/js/globalParam.js"></script>
 <script type="text/javascript" src="static/js/adapter/QuestionAdapter.js"></script>
 <script type="text/javascript" src="static/js/adapter/AnswerAdapter.js"></script>
@@ -63,7 +65,9 @@ $(function(){
 	questionTypeDao = new QuestionTypeDao();
 	participantAnswerDao = new ParticipantAnswerDao(),
 	languageDao = new LanguageDao(),
-	provinceDao = new ProvinceDao();
+	provinceDao = new ProvinceDao(),
+	outcomeEvaluationDao = new OutComeEvaluationDao(),
+	participantSurveyDao = new ParticipantSurveyDao();
 	
 	$("#bodyWrapper").css("height", $(window).height()+"px");
 	$("#content").load("static/view/home.html");

@@ -28,7 +28,19 @@ var Surveys =  new Class({
 		},
 		lastDownload: {
 			name: 'lastDownload',
+			dataType: 'NUMERIC',
+		},
+		logo: {
+			name:"logo",
+			dataType: ''
+		},
+		instructionText: {
+			name: 'instructionText',
 			dataType: 'TEXT',
+		},
+		endText: {
+			name: 'endText',
+			dataType: 'TEXT'
 		}
 	},
 	options:{
@@ -39,6 +51,9 @@ var Surveys =  new Class({
 		status: '',
 		editedDate: '',
 		lastDownload: '',
+		logo: '',
+		instructionText: '',
+		endText: ''
 	},
 	jQuery: "Surveys",
 	initialize: function(options){
@@ -66,6 +81,15 @@ var Surveys =  new Class({
 	setLastDownload: function(lastDownload) {
 		this.options.lastDownload = lastDownload;
 	},
+	setLogo: function(logo) {
+		this.options.logo = logo;
+	},
+	setInstructionText: function(ins) {
+		this.options.instructionText = ins;
+	},
+	setEndText: function(endText) {
+		this.options.endText = endText;
+	},
 	getEditedDate: function() {
 		return this.options.editedDate;
 	},
@@ -86,7 +110,16 @@ var Surveys =  new Class({
 	},
 	getLastDownload: function() {
 		return this.options.lastDownload;
-	}
+	},
+	getLogo: function() {
+		return this.options.logo;
+	},
+	getInstructionText: function() {
+		return this.options.instructionText;
+	},
+	getEndText: function() {
+		return this.options.endText;
+	},
 });
 
 var Section = new Class({
@@ -112,6 +145,10 @@ var Section = new Class({
 		description2: {
 			name:'description2',
 			dataType: 'TEXT'
+		},
+		status: {
+			name: 'status',
+			dataType: 'INTEGER'
 		}
 	},
 	options: {
@@ -119,7 +156,8 @@ var Section = new Class({
 		surveyId: '',
 		sectionCode: '',
 		description1: '',
-		description2: ''
+		description2: '',
+		status: '' // status here can be active or inactive
 	},
 	jQuery: 'Section',
 	initialize: function(options){
@@ -144,6 +182,9 @@ var Section = new Class({
 	setDescription2: function(sectionname) {
 		this.options.description2 = sectionname;
 	},
+	setStatus: function(status) {
+		this.options.status = status;
+	},
 	getSectionId: function() {
 		return this.options.sectionId;
 	},
@@ -155,6 +196,9 @@ var Section = new Class({
 	},
 	getDescription2: function() {
 		return this.options.description2;
+	},
+	getStatus: function() {
+		return this.options.status;
 	}
 });
 /* Question domain object */
@@ -210,6 +254,10 @@ var Question = new Class({
 		image: {
 			name: 'image', //binary string image. some question can be the image question
 			dataType: 'BLOB'
+		},
+		status: {
+			name: 'status',
+			dataType: 'INTEGER'
 		}
 	},
 	options: {
@@ -224,7 +272,8 @@ var Question = new Class({
 		enableOther: '',
 		numberRange:'',
 		dateRange:'',
-		image: ''
+		image: '',
+		status: ''
 	},
 	jQuery: "Question",
 	initialize: function(options){
@@ -271,6 +320,9 @@ var Question = new Class({
 	setAllowNull: function(allowNull) {
 		this.options.allowNull = allowNull;
 	},
+	setStatus: function(status) {
+		this.options.status = status;
+	},
 	getAllowNull: function() {
 		return this.options.allowNull;
 	},
@@ -303,6 +355,9 @@ var Question = new Class({
 	},
 	getDateRange: function() {
 		return this.options.dateRange;
+	},
+	getStatus: function() {
+		return this.options.status;
 	}
 });
 /**
@@ -319,11 +374,16 @@ var QuestionType = new Class({
 		questionTypeName: {
 			name: 'questionTypeName',
 			dataType: 'TEXT'
+		},
+		status: {
+			name: 'status',
+			dataType: 'INTEGER'
 		}
 	},
 	options: {
 		questionTypeId: '',
 		questionTypeName: '',
+		status: ''
 	},
 	setQuestionTypeId: function(questionTypeId) {
 		this.options.questionTypeId =  questionTypeId;
@@ -331,11 +391,17 @@ var QuestionType = new Class({
 	setQuestionTypeName: function(questionTypeName) {
 		this.options.questionTypeName = questionTypeName;
 	},
+	setStatus: function(status) {
+		this.options.status = status;
+	},
 	getQuestionTypeId: function() {
 		return this.options.questionTypeId;
 	},
 	getQuestionTypeName: function() {
 		return this.options.questionTypeName;
+	},
+	getStatus: function() {
+		return this.options.status;
 	}
 });
 /**
@@ -368,6 +434,10 @@ var Answer = new Class({
 		goToQuestionId: {
 			name: 'goToQuestionId',
 			dataType: 'INTEGER'
+		},
+		status: {
+			name: 'status',
+			dataType: 'INTEGER'
 		}
 	},
 	options: {
@@ -377,6 +447,7 @@ var Answer = new Class({
 		description2: '',
 		value: '',
 		goToQuestionId: '',
+		status: ''
 	},
 	setQuestionId: function(id) {
 		this.options.questionId = id;
@@ -396,6 +467,9 @@ var Answer = new Class({
 	setDescription2: function(description2) {
 		this.options.description2 = description2;
 	},
+	setStatus: function(status) {
+		this.options.status = status;
+	},
 	getGoToQuestionId: function() {
 		return this.options.goToQuestionId;
 	},
@@ -413,6 +487,9 @@ var Answer = new Class({
 	},
 	getDescription2: function() {
 		return this.options.description2;
+	},
+	getStatus: function() {
+		return this.options.status;
 	}
 });
 
@@ -427,12 +504,8 @@ var ParticipantAnswer = new Class({
 			dataType: 'INTEGER',
 			isPrimaryKey: true
 		},
-		interviewCode: {
-			name: 'interviewCode',
-			dataType: 'INTEGER'
-		},
-		participantCode: {
-			name: 'participantCode',
+		participantSurveyId: {
+			name: 'participantSurveyId',
 			dataType: 'INTEGER'
 		},
 		answerId: {
@@ -446,15 +519,19 @@ var ParticipantAnswer = new Class({
 		description: {
 			name: 'description',
 			dataType: 'TEXT'
+		},
+		status: {
+			name: 'status',
+			dataType: 'INTEGER'
 		}
 	},
 	options: {
 		participantAnswerId:'',
-		interviewCode: '',
-		participantCode: '',
+		participantSurveyId:'',
 		answerId: '',
 		questionId: '',
 		description: '',
+		status: ''
 	},
 	setParticipantAnswerId: function(id) {
 		this.options.participantAnserId = id;
@@ -491,8 +568,160 @@ var ParticipantAnswer = new Class({
 	},
 	getDescription: function() {
 		return this.options.description;
+	},
+	setParticipantSurveyId: function(participantSurveyId) {
+		this.options.participantSurveyId = participantSurveyId;
+	},
+	getParticipantSurveyId: function() {
+		return this.options.participantSurveyId;
+	},
+	setStatus: function(status) {
+		this.options.status = status;
+	},
+	getStatus: function() {
+		return this.options.status;
 	}
-	
+});
+
+var ParticipantSurvey = new Class({
+	Implements: [Options, Fields],
+	fields: {
+		primaryKey: {
+			name: 'participantSurveyId',
+			dataType: 'INTEGER',
+			isPrimaryKey: true,
+		},
+		surveyId: {
+			name: 'surveyId',
+			dataType: 'INTEGER'
+		},
+		surveyDate: {
+			name: 'surveyDate',
+			dataType: 'NUMERIC'
+		},
+		interviewCode: {
+			name: 'interviewCode',
+			dataType: 'TEXT'
+		},
+		participantCode: {
+			name: 'participantCode',
+			dataType: 'TEXT'
+		},
+		placeOfInterview: {
+			name: 'placeOfInterview',
+			dataType: 'TEXT'
+		},
+		provinceId: {
+			name: 'provinceId',
+			dataType: 'INTEGER'
+		},
+		outComeEvaluationId: {
+			name: 'outComeEvaluationId',
+			dataType: 'INTEGER'
+		},
+		languageId: {
+			name: 'languageId',
+			dataType: 'INTEGER'
+		},
+		startDateTime: {
+			name: 'startDateTime',
+			dataType: 'NUMERIC'
+		},
+		endDateTime: {
+			name: 'endDateTime',
+			dataType: 'NUMBERIC'
+		},
+		status: {
+			name: 'status',
+			dataType: 'INTEGER'
+		}
+	},
+	options: {
+		participantSurveyId: '',
+		surveyId: '',
+		surveyDate: '',
+		interviewCode: '',
+		participantCode: '',
+		placeOfInterview: '',
+		provinceId: '',
+		outComeEvaluationId: '',
+		languageId: '',
+		startDateTime: '',
+		endDateTime: '',
+		status: ''
+	},
+	setParticipantSurveyId: function(id) {
+		this.options.participantSurveyId = id;
+	},
+	setSurveyId: function(id) {
+		this.options.surveyId = id;
+	},
+	setSurveyDate: function(d) {
+		this.options.surveyDate = d;
+	},
+	setInterviewCode: function(c) {
+		this.options.interviewCode = c;
+	},
+	setParticipantCode: function(c) {
+		this.options.participantCode = c;
+	},
+	setPlaceOfInterview: function(p) {
+		this.options.placeOfInterview = p;
+	},
+	setProvinceId: function(id) {
+		this.options.provinceId = id;
+	},
+	setOutComeEvaluationId: function(id) {
+		this.options.outComeEvaluationId = id;
+	},
+	setLanguageId: function(id) {
+		this.options.languageId = id;
+	},
+	setStartDateTime: function(start) {
+		this.options.startDateTime = start;
+	},
+	setEndDateTimet: function(end) {
+		this.options.endDateTime = end;
+	},
+	setStatus: function(status) {
+		this.options.status = status;
+	},
+	getParticipantSurveyId: function() {
+		return this.options.participantSurveyId;
+	},
+	getSurveyId: function() {
+		return this.options.surveyId;
+	},
+	getSurveyDate: function() {
+		return this.options.surveyDate;
+	},
+	getInterviewCode: function() {
+		return this.options.interviewCode;
+	},
+	getParticipantCode: function() {
+		return this.options.participantCode;
+	},
+	getPlaceOfInterview: function() {
+		return this.options.placeOfInterview;
+	},
+	getProvinceId: function() {
+		return this.options.provinceId;
+	},
+	getOutComeEvaluationId: function() {
+		return this.options.outComeEvaluationId;
+	},
+	getLanguageId: function() {
+		return this.options.languageId;
+	},
+	getStartDateTime: function() {
+		return this.options.startDateTime;
+	},
+	getEndDateTimet: function() {
+		return this.options.endDateTime;
+	},
+	getStatus: function() {
+		return this.options.status;
+	}
 });
 
 /**
@@ -513,12 +742,17 @@ var Province = new Class({
 		provinceName: {
 			name: "provinceName",
 			dataType: "TEXT"
+		},
+		status: {
+			name: 'status',
+			dataType: 'INTEGER'
 		}
 	},
 	options: {
 		provinceId: '',
 		provinceCode: '',
-		provinceName: ''
+		provinceName: '',
+		status: ''
 	},
 	setProvinceId: function(id) {
 		this.options.provinceId = id;
@@ -529,6 +763,9 @@ var Province = new Class({
 	setProvinceName: function(name) {
 		this.options.provinceName = name;
 	},
+	setStatus: function(status) {
+		this.options.status = status;
+	},
 	getProvinceId: function() {
 		return this.options.provinceId
 	},
@@ -537,6 +774,9 @@ var Province = new Class({
 	},
 	getProvinceName: function() {
 		return this.options.provinceName;
+	},
+	getStatus: function() {
+		return this.options.status;
 	}
 });
 
@@ -555,12 +795,17 @@ var Language = new Class({
 		languageName: {
 			name: "languageName",
 			dataType: "TEXT"
+		},
+		status: {
+			name: "status",
+			dataType: "INTEGER",
 		}
 	},
 	options: {
 		languageId: "",
 		languageCode: "",
-		languageName: ""
+		languageName: "",
+		status: ""
 	},
 	setLanguageId: function(id) {
 		this.options.languageId = id;
@@ -571,6 +816,9 @@ var Language = new Class({
 	setLanguageName: function(name) {
 		this.options.languageName = name;
 	},
+	setStatus: function(status) {
+		this.options.status = status;
+	},
 	getLanguageId: function() {
 		return this.options.languageId;
 	},
@@ -579,6 +827,140 @@ var Language = new Class({
 	},
 	getLanguageName: function() {
 		return this.options.languageName;
+	},
+	getStatus: function() {
+		return this.options.status;
+	}
+});
+
+var OutcomeEvaluation = new Class({
+	Implements: [Options, Fields],
+	fields: {
+		primaryKey: {
+			name: "outcomeEvaluationId",
+			dataType:"INTEGER",
+			isPrimaryKey: true
+		},
+		outcomeEvaluationCode: {
+			name: "outcomeEvaluationCode",
+			dataType: "TEXT"
+		},
+		description1: {
+			name: "description1",
+			dataType: "TEXT"
+		},
+		description2: {
+			name: "description2",
+			dataType: "TEXT"
+		},
+		status: {
+			name: "status",
+			dataType: "INTEGER"
+		}
+	},
+	options: {
+		outcomeEvaluationId: '',
+		outcomeEvaluationCode: '',
+		description1: '',
+		description2: '',
+		status: ''
+	},
+	setOutcomeEvaluationId: function(id) {
+		this.options.outcomeEvaluationId = id;
+	},
+	setOutcomeEvaluationCode: function(code) {
+		this.options.outcomeEvaluationCode = code;
+	},
+	setDescription1: function(d1) {
+		this.options.description1 = d1;
+	},
+	setDescription2: function(d2) {
+		this.options.description2 = d2;
+	},
+	getOutcomeEvaluationId: function() {
+		return this.options.outcomeEvaluationId;
+	},
+	getOutcomeEvaluationCode: function() {
+		return this.options.outcomeEvaluationCode;
+	},
+	getDescription1: function() {
+		return this.options.description1;
+	},
+	getDescription2: function() {
+		return this.options.description2;
+	}
+});
+
+var participantLog = new Class({
+	Implements: [Options, Fields],
+	fields: {
+		primaryKey: {
+			name: 'participantLogId',
+			dataType: 'INTEGER',
+			isPrimaryKey: true,
+			isAutoIncrease: true
+		},
+		participantCode: {
+			name: 'participantCode',
+			dataType: 'TEXT',
+		},
+		startDateTime: {
+			name: 'startDateTime',
+			dataType: 'NUMERIC'
+		},
+		endDateTime: {
+			name: 'endDateTime',
+			dataType: 'NUMERIC'
+		}
+	},
+	options: {
+		participantLogId: '',
+		participantCode: '',
+		startDateTime: '',
+		endDateTime: '',
+	},
+	setParticipantLogId: function(id){
+		this.options.participantLogId = id;
+	},
+	setParticipantCode: function(code) {
+		this.options.participantCode = code;
+	},
+	setStartDateTime: function(d) {
+		this.options.startDateTime = d;
+	},
+	setEndDateTime: function(d) {
+		this.options.endDateTime = d;
+	},
+	getParticipantLogId: function(){
+		return this.options.participantLogId;
+	},
+	getParticipantCode: function() {
+		return this.options.participantCode;
+	},
+	getStartDateTime: function() {
+		return this.options.startDateTime;
+	},
+	getEndDateTime: function() {
+		return this.options.endDateTime;
+	}
+});
+
+var Mobile = new Class({
+	Implement: [Options, Fields],
+	fields: {
+		primaryKey: {
+			name: "mobileId",
+			isPrimaryKey: true,
+			dataType: "INTEGER"
+		},
+		mobileKey: {
+			name: "mobileKey",
+			dataType: "TEXT"
+		}
+	},
+	optoins: {
+		mobileId: "",
+		mobileKey: ""
 	}
 });
 

@@ -85,7 +85,6 @@ function getQuestion() {
 		sectionId = question.getSectionId();
 		var qOption = question.options;
 		qOption.text = question.getDescription1();
-		console.log($("body").data("language"));
 		if($("body").data("language") === 'KH') {
 			qOption.text = question.getDescription2();
 		}
