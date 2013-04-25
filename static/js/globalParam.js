@@ -6,7 +6,8 @@ var surveyDao = null,
 	participantAnswerDao = null,
 	languageDao = null,
 	provinceDao = null,
-	scroller = null;
+	scroller = null,
+	request = null;
 
 
 
@@ -326,3 +327,66 @@ var sampleJson =
 	        }
 	    ]
 	};
+
+function disablePage() {
+	var pageSize = populatePageSize();
+	var maskLayer = document.createElement('div');
+	maskLayer.setAttribute("id", "maskLayer");
+	
+	// fixed auto zoom on screen
+	mainContainer = document.createElement('div');
+	mainContainer.setAttribute('id', 'maskLayerContainer');
+	mainContainer.style.marginLeft = "0";
+	mainContainer.style.marginRight = "0";
+	mainContainer.appendChild(maskLayer);
+
+	//document.body.appendChild(mainContainer);
+	document.body.insertBefore(mainContainer, document.body.childNodes[0]);
+}
+
+/**
+ * 
+ * @returns {Array}
+ */
+function populatePageSize() {
+	var windowWidth, windowHeight;
+	if (self.innerHeight) {
+		if (document.documentElement.clientWidth) {
+			windowWidth = document.documentElement.clientWidth;
+		} else {
+			windowWidth = self.innerWidth;
+		}
+		windowHeight = self.innerHeight;
+	} else if (document.documentElement && document.documentElement.clientHeight) {
+		windowWidth = document.documentElement.clientWidth;
+		windowHeight = document.documentElement.clientHeight;
+	} else if (document.body) {
+		windowWidth = document.body.clientWidth;
+		windowHeight = document.body.clientHeight;
+	}
+
+	return new Array(windowWidth, windowHeight)
+}
+
+/**
+ * Get the position of the scroll
+ * @returns {Array}
+ */
+function populatePageScroll() {
+	var xScroll, yScroll;
+	if (self.pageYOffset) {
+		yScroll = self.pageYOffset;
+		xScroll = self.pageXOffset
+	} else if (document.documentElement && document.documentElement.scrollTop) {
+		yScroll = document.documentElement.scrollTop;
+		xScroll = document.documentElement.scrollLeft
+	} else if (document.body) {
+		yScroll = document.body.scrollTop;
+		xScroll = document.body.scrollLeft
+	}
+ 
+	return new Array(xScroll, yScroll);
+}
+function loadAjaxLoader() {
+	
+}

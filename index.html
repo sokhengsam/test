@@ -54,7 +54,7 @@ $.ajaxSetup({
     data: null
 });
 $(function(){
-
+	//disablePage();
 	surveyDao = new SurveysDao();
 	questionDao = new QuestionDao();
 	answerDao = new AnswerDao();
@@ -66,8 +66,10 @@ $(function(){
 	
 	$("#bodyWrapper").css("height", $(window).height()+"px");
 	$("#content").load("static/view/home.html");
-
-	var request = new CASIAPIRequests();
+	//$("#content").load("static/view/login.html");
+	
+	request = new CASIAPIRequests();
+	//TODO: check the survey edited date before downloading
 	if(navigator.onLine) {
 		request.downloadSurvey();
 	}

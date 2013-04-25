@@ -38,7 +38,6 @@ var SQLiteHelper =  new Class({
 			var self = this;
 			var d = [];
 			var p = this.findPrimaryKeyName();
-			console.log(domain.options[p]);
 			d.push(domain.options[p]);
 			for(var n in domain.options) {
 				//skip the value if the primary key is integer cos it's already autoincrease
@@ -46,8 +45,6 @@ var SQLiteHelper =  new Class({
 					d.push(domain.options[n]);
 				}
 			}
-			console.log(this.options.tableName);
-			console.log(d);
 			self.getDB().transaction(function(tx) {
 				tx.executeSql(self.getInsertStatement(), d, function(){console.log("insert success");}, 
 				function(tx, error){
@@ -56,12 +53,28 @@ var SQLiteHelper =  new Class({
 			});
 		//}
 	},
-	clear: function() {
+	clear: function(primaryKey, successCallBack, failCallBack) {
 		var clearStatement = "DELETE FROM " + this.options.tableName;
+		if(typeof primaryKey !== 'undefined') {
+			clearStatement += " WHERE " + this.findPrimaryKeyName() + "=" + primaryKey; 
+		}
 		this.options.db.transaction(function(tx) {
-			tx.executeSql(clearStatement, [], function(){console.log("Removed all data succed");}, function(tx, error){console.log("Remove fail " + error.message);});
+			tx.executeSql(clearStatement, [], 
+			function(){
+				console.log("Removed all data succed");
+				if(typeof successCallBack === 'function') {
+					successCallBack();
+				}
+			}, 
+			function(tx, error){
+				console.log("Remove fail " + error.message);
+				if(typeof failCallBack === 'function') {
+					failCallBack();
+				}
+			});
 		});
 	},
+	
 	update: function(domain) {
 		var self = this;
 		var d = [];
@@ -105,7 +118,6 @@ var SQLiteHelper =  new Class({
 	},
 	getFindByPrimaryKeyStatement: function(id) {
 		var findByPrimaryKeyStatement = "SELECT * FROM " + this.options.tableName + " WHERE " + this.findPrimaryKeyName() + " = " + id;
-		console.log(findByPrimaryKeyStatement);
 		return findByPrimaryKeyStatement;
 	},
 	getCreateTableStatement: function() {

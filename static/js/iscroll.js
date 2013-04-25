@@ -100,7 +100,8 @@ var m = Math,
 			onBeforeScrollStart: function (e) { 
 				var target = e.target;
 				while (target.nodeType != 1) target = target.parentNode;
-				if (target.tagName != 'select' && target.tagName != 'input' && target.tagName != 'textarea' && target.tagName != 'a' && target.tagName != 'div')
+				console.log(target.tagName.toLowerCase);
+				if (target.tagName.toLowerCase != 'select' && target.tagName.toLowerCase != 'input' && target.tagName.toLowerCase != 'textarea' && target.tagName.toLowerCase != 'a' && target.tagName.toLowerCase != 'div')
 					e.preventDefault();
 			},
 			onScrollStart: null,
