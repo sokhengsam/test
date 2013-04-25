@@ -1,0 +1,27 @@
+<div class="home-navigation">
+	<span class="back">Back</span>
+	<span class="title">Select Survey</span>
+</div>
+<div class="page-container">
+	<b>Under construction</b>
+	<div class="register-box" style="text-align:center;">
+		<div style="width:100%; text-align:left;">
+			<input type="number" id="interview-code" placeholder="Interview Code"><br/>
+			<input type="number" id="participant-code" placeholder="Participant Code"/><br/>
+			<select id="language">
+				<option>Select a language</option>
+			</select><br/>
+			<select id="province">
+				<option>Select a province</option>
+			</select>
+			<button type="button" class="button" id="start" onclick="">Begin</button>
+		</div>
+	</div>
+</div>
+<script>
+	$(function(){
+		$("#start").click(function(){
+			$("#content").load("static/view/questionaire.html");
+		});
+	});
+</script>

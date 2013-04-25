@@ -1,0 +1,42 @@
+<div class="home-navigation">
+	<span class="back" id="backToSurveyList">Back</span>
+	<span class="title">Survey Title</span>
+</div>
+<div class="page-container">
+	<div class="interviewer-participant-identifier">
+		<div><input type="text" placeholder="Enter interviewer ID"></div>
+		<div><input type="text" placeholder="Enter participant ID"></div>
+		<div>
+			<select id="province">
+				<option>Select Province</option>
+			</select>
+		</div>
+		<div>
+			<select id="language">
+				<option>Select Language</option>
+			</select>
+		</div>
+		<div class="button" id="begin">Begin</div>
+	</div>
+</div>
+<script>
+	$(function(){
+		var l = languageDao.getAll();
+		var p = provinceDao.getAll();
+		setTimeout(function(){
+			for(var i =0; i < l.length; i++){
+				$("#language").append("<option value='"+l[i].getLanguageCode()+"'>"+l[i].getLanguageName()+"</option>");
+			}
+			for(var i = 0; i < p.length; i++) {
+				$("#province").append("<option value='"+p[i].getProvinceCode()+"'>"+p[i].getProvinceName()+"</option>");
+			}
+		}, 500);
+		$("#begin").click(function(){
+			$("body").data("language", $("#language option:selected").val());
+			$("#content").load("static/view/questionaire.html");
+		});
+		$("#backToSurveyList").click(function(){
+			$("#content").load("static/view/surveyList.html");
+		});
+	});
+</script>

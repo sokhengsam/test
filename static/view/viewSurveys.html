@@ -1,0 +1,39 @@
+<div class="home-navigation">
+	<span class="back">Back</span>
+	<span class="title">View History</span>
+</div>
+<div class="home">
+	<div class="survey-block">
+		<div class="home-menu-list">
+			<ul id="survey-list"></ul>
+		</div>
+	</div>
+</div>
+
+<script>
+$(function(){
+	var surveys = surveyDao.getAll();
+	setTimeout(function(){
+		for(var i = 0; i < surveys.length; i++) {
+			var onclick = "loadQuestion("+surveys[i].getSurveyId()+");";
+			var complete = "Incomplete";
+			if(surveys[i].getStatus() == 1) {
+				onclick = "";
+				complete = "Complete";
+			}
+			$("#survey-list").append("<li onclick='"+onclick+"'>"+ surveys[i].getDescription1()+"<span class='survey-status'>"+complete+"</span></li>");
+		}
+	}, 200);
+	
+	$(".back").click(function(){
+		$("#content").load("static/view/home.html");
+	})
+});
+function loadQuestion(surveyId) {
+	var questions = questionDao.getBySurvey(surveyId);
+	setTimeout(function(){
+		$("body").data("questionaire", questions);
+		$("#content").load("static/view/questionaire.html");
+	}, 500);
+}
+</script>

@@ -1,0 +1,121 @@
+<div class="header">The CASI Project</div>
+<div class="page-container">
+	<div class="cloud-image">
+		<img alt="" src="static/css/images/cloud.png">
+	</div>
+	<div class="welcome-text">Welcome</div>
+	<div class="home-menu-list">
+		<ul>
+			<li>Select Survey</li>
+			<li>View History</li>
+			<li>Clear Data</li>
+		</ul>
+	</div>
+	<div class="poweredby">
+		<img alt="" src="static/css/images/poweredby.png"/>
+		<img alt="" src="static/css/images/poweredby.png"/>
+		<img alt="" src="static/css/images/poweredby.png"/>
+	</div>
+</div>
+
+<script>
+$(function(){
+	$(".home-menu-list ul li:first").click(function(){
+		$("#content").load("static/view/surveyList.html");
+	});
+	$(".home-menu-list ul li:first").next().click(function(){
+		$("#content").load("static/view/viewSurveys.html");
+	});
+	$(".home-menu-list ul li:first").next().next().click(function(){
+		participantAnswerDao.clear();
+		questionTypeDao.clear();
+		answerDao.clear();
+		questionDao.clear();
+		sectionDao.clear();
+		surveyDao.clear();
+	});
+});
+function initMockUp() {
+	for(var i = 0; i < 3; i++) {
+		var survey = new Surveys();
+		survey.setSurveyCode("surveyCode_" +i);
+		survey.setSurveyName("survey " + i);
+		survey.setStatus(0);
+		surveyDao.persist(survey);
+	}
+	setTimeout(function(){
+		var surveys = surveyDao.getAll();
+		setTimeout(function(){
+			for(var i = 0; i< surveys.length; i++) {
+				var survey = surveys[i];
+				console.log("Survey id: "+ survey.getSurveyId());
+				//persist question
+				var question = new Question();
+				question.setSurveyId(survey.getSurveyId());
+				question.setQuestionCode("Q01");
+				question.setQuestionName("Q01");
+				question.setText("How many day do you work in the project?");
+				questionDao.persist(question);
+				var question = new Question();
+				question.setSurveyId(survey.getSurveyId());
+				question.setQuestionCode("Q02");
+				question.setQuestionName("Q02");
+				question.setText("How do you know this program?");
+				questionDao.persist(question);
+			}
+		}, 500);
+		
+		setTimeout(function(){
+			var questions = questionDao.getAll();
+			setTimeout(function(){
+				console.log("length: " + questions.length);
+				
+				var question = questions[0],
+					answer = new Answer();
+				answer.setQuestionId(question.getQuestionId());
+				answer.setText("1 week");
+				answer.setAnswerType("0");
+				answerDao.persist(answer);
+				answer = new Answer();
+				answer.setQuestionId(question.getQuestionId());
+				answer.setText("2 week");
+				answer.setAnswerType("0");
+				answerDao.persist(answer);
+				answer = new Answer();
+				answer.setQuestionId(question.getQuestionId());
+				answer.setText("3 week");
+				answer.setAnswerType("0");
+				answerDao.persist(answer);
+				answer = new Answer();
+				answer.setQuestionId(question.getQuestionId());
+				answer.setText("4 week");
+				answer.setAnswerType("0");
+				answerDao.persist(answer);
+				//
+				var question = questions[1],
+				answer = new Answer();
+				answer.setQuestionId(question.getQuestionId());
+				answer.setText("Radio");
+				answer.setAnswerType("1");
+				answerDao.persist(answer);
+				answer = new Answer();
+				answer.setQuestionId(question.getQuestionId());
+				answer.setText("TV");
+				answer.setAnswerType("1");
+				answerDao.persist(answer);
+				answer = new Answer();
+				answer.setQuestionId(question.getQuestionId());
+				answer.setText("Social Network");
+				answer.setAnswerType("1");
+				answerDao.persist(answer);
+				answer = new Answer();
+				answer.setQuestionId(question.getQuestionId());
+				answer.setText("Website");
+				answer.setAnswerType("1");
+				answerDao.persist(answer);
+			}, 500);
+		}, 1000);
+		alert("Data initiailization done.");
+	}, 500);
+}
+</script>

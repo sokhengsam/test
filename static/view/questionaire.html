@@ -1,0 +1,165 @@
+<div class="footer">
+	<div class="question-navigation">
+		<span><img alt="" src="static/css/images/first.png"></span>
+		<span class="move-question-previous" id="previousQuestion">&lt;</span>
+		<span class="move-question-next" id="nextQuestion">&gt;</span>
+		<span><img alt="" src="static/css/images/last.png"></span>
+	</div>
+	<div class="progress-block">
+		<div class="progress-label">Progress...</div>
+		<div class="progress-bar"><span class="progress"></span></div>
+	</div>
+</div>
+
+<!-- jquery template for questionnaire -->
+
+<!-- single answer template -->
+<script id="singleTemplate" type="x-jquery-tmpl">
+	<div class="answer">
+		<img src="static/css/images/radio-off.png">
+		<input type="radio" name="signAnswer"><label>${text}</label>
+	</div>
+</script>
+
+<!-- number answer template -->
+<script id="numberTemplate" type="x-jquery-tmpl">
+	<div class="answer"><input type="number" name="answer"/>${text}</div>
+</script>
+
+<!-- text answer template -->
+<script id="textTemplate" type="x-jquery-tmpl">
+	<div class="answer"><input type="text" name="answer"/>${text}</div>
+</script>
+
+<!-- multiple answer template -->
+<script id="multipleTemplate" type="x-jquery-tmpl">
+  <div class="answer">
+	<img src="static/css/images/check-off.png">
+	<input type="checkbox" /><label>${text}</label>
+  </div>
+</script>
+
+<!-- question template -->
+<script id="questionTemplate" type="x-jquery-tmpl">
+<div id="scrollWrapper">
+	<div class="scrollable" id="scrollable" style="padding-bottom:10px;">
+  		<div class="question-code">${questionCode}</div>
+  		<div class="question-block">
+			<div class="question">${questionCode}. ${text}</div>
+			<div class="answer-block"></div>
+  		</div>
+	</div>
+</div>
+</script>
+
+<!-- parent of group question template -->
+<script id="parentGroupQuestionTemplate" type="x-jquery-tmpl">
+  <div class="question-code">${questionCode}</div>
+  <div class="question-block">
+	<div class="question">${questionCode}. ${text}</div>
+  </div>
+</script>
+
+<!-- group question row template -->
+<script id="groupQuestionTemplate" type="x-jquery-tmpl">
+	<div class="group-question-row">${questionCode}. ${text}</div>
+	<div class="answer-block group-question-answers"></div>
+</script>
+
+<script>
+var qIndex = 0,
+	totalQ,
+	sectionId,
+	progress;
+
+function getQuestion() {
+	var questionaire = $("body").data("questionaire");
+	totalQ = questionaire.length;
+	if(Number(qIndex)+1 <= totalQ) {
+		$(".pagination-label").text(Number(qIndex)+1 +"/"+totalQ);
+		var question = questionaire[qIndex];
+		sectionId = question.getSectionId();
+		var qOption = question.options;
+		qOption.text = question.getDescription1();
+		console.log($("body").data("language"));
+		if($("body").data("language") === 'KH') {
+			qOption.text = question.getDescription2();
+		}
+		var questionAdapter = new QuestionAdapter(qOption);
+	 	questionAdapter.mergeTemplate();
+	 	
+		var answers = answerDao.getByQuestion(question.getQuestionId());
+		
+		setTimeout(function(){
+			var answerAdapter = new AnswerAdapter({questionType: question.getQuestionTypeId()}, answers, $("body").data("language"));
+			answerAdapter.mergeTemplate();
+			setTimeout(function(){
+				$("#scrollWrapper").css("height", ($(window).height() - $(".footer").outerHeight()) + "px");
+				if(typeof scroller !== 'undefined') {
+					scroller.destroy();
+					scroller = new iScroll("scrollWrapper");
+				}
+			}, 100);
+		},500);
+	}
+}
+$(function(){
+	$("input[type='checkbox']").checkbox("add",{imageOn: "static/css/images/check-on.png",imageOff: "static/css/images/check-off.png"})
+	
+	$("input[type='radio']").radio("add",{imageOn: "static/css/images/radio-on.png",imageOff: "static/css/images/radio-off.png"});
+	
+	getQuestion();
+	$("#previousQuestion").hide();
+	$("#homePage").click(function(){
+		$("#content").load("static/view/home.html");
+	});
+	$("#nextQuestion").click(function(){
+		if(qIndex == totalQ) {
+			return;
+		}
+		qIndex = qIndex + 1;
+		if(qIndex < totalQ) {
+			$("#previousQuestion").show();
+			$(".question-code").remove();
+			$(".question-block").remove();
+			$("#scrollWrapper").remove();
+			getQuestion();
+		}
+		else {
+			/*
+			var msg = confirm("Are you satify with your answer?");
+			if(msg) {
+				$("#content").load("static/view/home.html");
+			}*/
+			showDailog();			
+		}
+		var progress = (qIndex * 100)/totalQ;
+		$(".progress").css({"width": progress + "%"});
+	});
+	
+	$("#previousQuestion").click(function(){
+		qIndex--;
+		$(".question-code").remove();
+		$(".question-block").remove();
+		$("#scrollWrapper").remove();
+		getQuestion();
+		if(qIndex == 0){
+			$(this).hide();
+		}
+	});
+	setTimeout(function() {
+		$("#scrollWrapper").css("height", ($(window).height() - $(".footer").outerHeight()) + "px");
+		scroller = new iScroll("scrollWrapper");
+	}, 100);
+});
+
+function showDailog(){
+	buildPopUpPage(240,110);
+	var actionBlock = $("<div class='dialog-action'></div>");
+	actionBlock.append($('<button></button>').text("Yes").addClass("dialog-button").click(function(){enablepage();$("#content").load("static/view/home.html");}));
+	actionBlock.append($('<button></button>').text("No").addClass("dialog-button").click(enablepage));
+	$("#popup").append($("<div class='dialog-title'></div>").text("Confirm"));
+	$("#popup").append($("<div class='dialog-message'></div>").text("Are you satify with your answer?"));
+	$("#popup").append(actionBlock);
+}
+</script>
