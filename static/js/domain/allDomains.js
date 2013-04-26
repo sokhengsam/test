@@ -946,6 +946,9 @@ var participantLog = new Class({
 	}
 });
 
+/**
+ * 
+ */
 var Mobile = new Class({
 	Implement: [Options, Fields],
 	fields: {
@@ -965,3 +968,33 @@ var Mobile = new Class({
 	}
 });
 
+var AnswerType = new Class({
+	Implements: [Options, Fields],
+	fields: {
+		primaryKey: {
+			name: "answerTypeId",
+			isPrimaryKey: true,
+			dataType: "INTEGER"
+		},
+		answerTypeCode: {
+			name: "answerTypeCode",
+			dataType: "INTEGER"
+		}
+	},
+	options: {
+		answerTypeId: "",
+		answerTypeCode: ""
+	},
+	setAnswerTypeId: function(id) {
+		this.options.answerTypeId = id;
+	},
+	setAnswerTypeCode: function(code) {
+		this.options.answerTypeCode = code;
+	},
+	getAnswerTypeId: function() {
+		return this.options.answerTypeId;
+	},
+	getAnswerTypeCode: function() {
+		return this.options.answerTypeCode();
+	}
+});
