@@ -53,7 +53,7 @@ var QuestionDao = new Class({
 			});
 		});
 	},
-	getBySection: function(sectionId) {
+	getBySection: function(sectionId, successCallback) {
 		var selectAll = "SELECT * FROM "+this.options.tableName + " WHERE sectionId = " + sectionId;
 		var items = [];
 		this.options.db.transaction(function(tx){
@@ -69,8 +69,8 @@ var QuestionDao = new Class({
 					item.setQuestionTypeId(dataset.item(i)["questionTypeId"]);
 					items.push(item);
 				}
+				successCallback(items);
 			});
 		});
-		return items;
 	},
 });

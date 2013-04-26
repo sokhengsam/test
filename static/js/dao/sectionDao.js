@@ -26,11 +26,10 @@ var SectionDao = new Class({
 					item.setDescription2(dataset.item(i)["description2"]);
 					//item.questions.push(self.getQuestion(item.getSectionId()));
 					items.push(item);
-					success();
 				}
+				success(items);
 			});
 		});
-		return items;
 	},
 	getQuestion: function(sectionId) {
 		var q = [];

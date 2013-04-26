@@ -83,6 +83,7 @@ var qIndex = 0,
 function getQuestion() {
 	var questionaire = $("body").data("questionaire");
 	totalQ = questionaire.length;
+	console.log(qIndex);
 	if(Number(qIndex)+1 <= totalQ) {
 		$(".pagination-label").text(Number(qIndex)+1 +"/"+totalQ);
 		var question = questionaire[qIndex];
@@ -153,7 +154,9 @@ $(function(){
 	$("input[type='radio']").radio("add",{imageOn: "static/css/images/radio-on.png",imageOff: "static/css/images/radio-off.png"});
 	
 	getQuestion();
-	$("#previousQuestion").hide();
+	if(sectionDisplayed == 0) {
+		$("#previousQuestion").hide();
+	}
 	$("#homePage").click(function(){
 		$("#content").load("static/view/home.html");
 	});
@@ -170,25 +173,44 @@ $(function(){
 			getQuestion();
 		}
 		else {
-			/*
-			var msg = confirm("Are you satify with your answer?");
-			if(msg) {
-				$("#content").load("static/view/home.html");
-			}*/
-			showDailog();
+			//check the survey displayed. 
+			//if all the survey already displayed meant they are at the end so, show dialog. Otherwise, load next section
+			//sectionDisplayed started from 0
+			if(sectionDisplayed < $("body").data("sections").length -1) {
+				$("#content").load("static/view/section.html");
+			}
+			else {
+				//total score and show dialog
+				showDailog();
+			}
 		}
 		var progress = (qIndex * 100)/totalQ;
 		$(".progress").css({"width": progress + "%"});
 	});
 	
 	$("#previousQuestion").click(function(){
-		qIndex--;
-		$(".question-code").remove();
-		$(".question-block").remove();
-		$("#scrollWrapper").remove();
-		getQuestion();
-		if(qIndex == 0){
-			$(this).hide();
+		if(sectionDisplayed > 0 && qIndex == 0) {
+			sectionDisplayed--;
+			var sections = $("body").data("sections");
+			var section = sections[sectionDisplayed];
+			questionDao.getBySection(section.getSectionId(), function(questions){
+				$("body").data("questionaire", questions);
+				$(".question-code").remove();
+				$(".question-block").remove();
+				$("#scrollWrapper").remove();
+				qIndex = questions.length -1;
+				getQuestion();
+			});
+		}
+		else {
+			$(".question-code").remove();
+			$(".question-block").remove();
+			$("#scrollWrapper").remove();
+			qIndex--;
+			getQuestion();
+			if(qIndex == 0 && sectionDisplayed == 0) {
+				$(this).hide();
+			}
 		}
 	});
 	setTimeout(function() {

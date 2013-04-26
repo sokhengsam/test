@@ -27,6 +27,7 @@
 <script type="text/javascript" src="static/js/utils/sqliteHelper.js"></script>
 <script type="text/javascript" src="static/js/utils/sqlite-reference.js"></script>
 <script type="text/javascript" src="static/js/domain/allDomains.js"></script>
+<!--  --> 
 <script type="text/javascript" src="static/js/dao/surveysDao.js"></script>
 <script type="text/javascript" src="static/js/dao/questionDao.js"></script>
 <script type="text/javascript" src="static/js/dao/answerDao.js"></script>
@@ -37,6 +38,11 @@
 <script type="text/javascript" src="static/js/dao/provinceDao.js"></script>
 <script type="text/javascript" src="static/js/dao/outComeEvaluationDao.js"></script>
 <script type="text/javascript" src="static/js/dao/participantSurveyDao.js"></script>
+<script type="text/javascript" src="static/js/dao/participantSurveyDao.js"></script>
+<script type="text/javascript" src="static/js/dao/participantSurveyDao.js"></script>
+<script type="text/javascript" src="static/js/dao/mobileDao.js"></script>
+<script type="text/javascript" src="static/js/dao/answerTypeDao.js"></script>
+<!--  -->
 <script type="text/javascript" src="static/js/globalParam.js"></script>
 <script type="text/javascript" src="static/js/adapter/QuestionAdapter.js"></script>
 <script type="text/javascript" src="static/js/adapter/AnswerAdapter.js"></script>
@@ -45,6 +51,7 @@
 <script type="text/javascript" src="static/js/adapter/InputTextAnswer.js"></script>
 <script type="text/javascript" src="static/js/adapter/GroupQuestionAdapter.js"></script>
 <script type="text/javascript" src="static/js/network/BaseJSNetwork.js"></script>
+<script type="text/javascript" src="static/js/utils/dateTimeConvertor.js"></script>
 <script type="text/javascript" src="static/js/parser/jsonParser.js"></script>
 <script type="text/javascript" src="static/js/network/CASIAPIRequests.js"></script>
 <script type="text/javascript" src="static/js/component/CASICheckbox.js"></script>
@@ -52,6 +59,7 @@
 <script type="text/javascript" src="static/js/utils/popuphelper.js"></script>
 
 <script type="text/javascript">
+var sectionDisplayed = Number(-1);
 $.ajaxSetup({
     cache: true,
     data: null
@@ -67,7 +75,10 @@ $(function(){
 	languageDao = new LanguageDao(),
 	provinceDao = new ProvinceDao(),
 	outcomeEvaluationDao = new OutComeEvaluationDao(),
-	participantSurveyDao = new ParticipantSurveyDao();
+	participantSurveyDao = new ParticipantSurveyDao(),
+	mobileDao = new MobileDao(),
+	answerTypeDao = new AnswerTypeDao(),
+	evaluationOutcomeDao = new OutComeEvaluationDao();
 	
 	$("#bodyWrapper").css("height", $(window).height()+"px");
 	$("#content").load("static/view/home.html");

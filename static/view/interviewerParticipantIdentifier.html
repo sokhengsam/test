@@ -4,22 +4,23 @@
 </div>
 <div class="page-container">
 	<div class="interviewer-participant-identifier">
-		<div><input type="text" placeholder="Enter Interviewer ID"></div>
-		<div><input type="text" placeholder="Enter Participant ID"></div>
-		<div><input type="text" placeholder="Enter Place of Interview"></div>
+		<div>Start at: <span id="startDateTime"></span></div>
+		<div><input id="interviewerId" type="text" placeholder="Enter Interviewer ID"></div>
+		<div><input id="participantId" type="text" placeholder="Enter Participant ID"></div>
+		<div><input id="placeOfInterview" type="text" placeholder="Enter Place of Interview"></div>
 		<div>
 			<select id="province">
-				<option>Select Province</option>
+				<option value="-1">Select Province</option>
 			</select>
 		</div>
 		<div>
 			<select id="evaluationOutcome">
-				<option>Select Evaluation Outcome</option>
+				<option value="-1">Select Evaluation Outcome</option>
 			</select>
 		</div>
 		<div>
 			<select id="language">
-				<option>Select Language</option>
+				<option value="-1">Select Language</option>
 			</select>
 		</div>
 		<div class="button" id="begin">Begin</div>
@@ -27,22 +28,33 @@
 </div>
 <script>
 	$(function(){
-		var l = languageDao.getAll();
-		var p = provinceDao.getAll();
-		setTimeout(function(){
+		languageDao.getAll(function(l){
 			for(var i =0; i < l.length; i++){
 				$("#language").append("<option value='"+l[i].getLanguageCode()+"'>"+l[i].getLanguageName()+"</option>");
 			}
+		});
+		provinceDao.getAll(function(p){
 			for(var i = 0; i < p.length; i++) {
-				$("#province").append("<option value='"+p[i].getProvinceCode()+"'>"+p[i].getProvinceName()+"</option>");
+				$("#province").append("<option value='"+p[i].getProvinceId()+"'>"+p[i].getProvinceName()+"</option>");
 			}
-		}, 500);
+		});
+		evaluationOutcomeDao.getAll(function(e){
+			for(var i = 0; i < e.length; i++) {
+				$("#evaluationOutcome").append("<option value='"+e[i].getOutcomeEvaluationId()+"'>"+e[i].getDescription1()+"</option>");
+			}
+		});
 		$("#begin").click(function(){
 			$("body").data("language", $("#language option:selected").val());
-			$("#content").load("static/view/questionaire.html");
+			$("#content").load("static/view/section.html");
 		});
 		$("#backToSurveyList").click(function(){
 			$("#content").load("static/view/surveyList.html");
 		});
+		var dateTimeConvertor = new DateTimeConvertor();
+		$("#startDateTime").text(dateTimeConvertor.getCurrentUSDate() + " " + dateTimeConvertor.getCurrentTime());
 	});
+	/*
+	function validateField() {
+		return $("#interviewerId").val() != "" && $("#participantId").val() !="" && ;
+	}*/
 </script>

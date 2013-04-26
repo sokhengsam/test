@@ -878,6 +878,9 @@ var OutcomeEvaluation = new Class({
 	setDescription2: function(d2) {
 		this.options.description2 = d2;
 	},
+	setStatus: function(s) {
+		this.options.status = s;
+	},
 	getOutcomeEvaluationId: function() {
 		return this.options.outcomeEvaluationId;
 	},
@@ -889,6 +892,9 @@ var OutcomeEvaluation = new Class({
 	},
 	getDescription2: function() {
 		return this.options.description2;
+	},
+	getStatus: function() {
+		return this.options.status;
 	}
 });
 
@@ -995,6 +1001,6 @@ var AnswerType = new Class({
 		return this.options.answerTypeId;
 	},
 	getAnswerTypeCode: function() {
-		return this.options.answerTypeCode();
+		return this.options.answerTypeCode;
 	}
 });

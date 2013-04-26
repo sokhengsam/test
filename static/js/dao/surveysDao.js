@@ -19,7 +19,7 @@ var SurveysDao = new Class({
 			tx.executeSql(updateStatement, [status], function(){console.log("update status done!");}, function(tx, error){console.log("update status fail " + error.message);});
 		}); 
 	},
-	getAll: function() {
+	getAll: function(successCallback) {
 		var selectAll = "SELECT * FROM "+this.options.tableName;
 		var items = [];
 		this.getDB().transaction(function(tx){
@@ -35,9 +35,9 @@ var SurveysDao = new Class({
 					item.setLastDownload(dataset.item(i)["lastDownload"]);
 					items.push(item);
 				}
+				successCallback(items);
 			});
 		});
-		return items;
 	},
 	findByPrimaryKey: function(id) {
 		var self = this;

@@ -11,7 +11,7 @@ var ProvinceDao = new Class({
 		}
 		this.createTable();
 	},
-	getAll: function() {
+	getAll: function(successCallback) {
 		var selectAll = "SELECT * FROM "+this.options.tableName;
 		var items = [];
 		this.options.db.transaction(function(tx){
@@ -25,9 +25,8 @@ var ProvinceDao = new Class({
 					item.setProvinceName(dataset.item(i)["provinceName"]);
 					items.push(item);
 				}
+				successCallback(items);
 			});
 		});
-		return items;
 	}
-	
 });

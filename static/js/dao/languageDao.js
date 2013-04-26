@@ -11,7 +11,7 @@ var LanguageDao = new Class({
 		}
 		this.createTable();
 	},
-	getAll: function() {
+	getAll: function(successCallback) {
 		var selectAll = "SELECT * FROM "+this.options.tableName;
 		var items = [];
 		this.options.db.transaction(function(tx){
@@ -25,9 +25,9 @@ var LanguageDao = new Class({
 					item.setLanguageName(dataset.item(i)["languageName"]);
 					items.push(item);
 				}
+				successCallback(items);
 			});
 		});
-		return items;
 	}
 	
 });

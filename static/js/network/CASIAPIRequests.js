@@ -14,7 +14,7 @@ var CASIAPIRequests = new Class({
 		this.getRequest("http://cenat.gov.kh:8090/CASIMS/index.php/home/getjsondata", requestData, function(response){self.insertDB(response);}, function(){self.downloadSurveyFail();});
 	},
 	insertDB: function(response){
-		this.parseJson(response);
+		$.when(this.parseJson(response)).done(function(){console.log("done");});
 	},
 	downloadSurveyFail: function() {
 		console.log("download survey fail. reading from static sample json");
@@ -29,9 +29,10 @@ var CASIAPIRequests = new Class({
 			answers = sampleJson.answer,
 			participantanswers = sampleJson.participantanswer,
 			provinces = sampleJson.province,
-			languages = sampleJson.language;
+			languages = sampleJson.language,
+			evaluationOutcome = sampleJson.outcomeevaluation;
 	
-		this.parseSurvey(surveys);
+		$.when(this.parseSurvey(surveys)).done(function(){console.log("done 2");});
 		this.parseSection(sections);
 		this.parseQuestionType(questiontypes);
 		this.parseQuestion(question);
@@ -39,6 +40,7 @@ var CASIAPIRequests = new Class({
 		this.parseParticipantAnswer(participantanswers);
 		this.parseProvince(provinces);
 		this.parseLanguages(languages);
+		this.parseEvaluationOutcome(evaluationOutcome);
 		
 	}
 });

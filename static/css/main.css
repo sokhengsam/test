@@ -408,3 +408,45 @@ input[type='checkbox'],input[type='radio']{
 	font-weight: bold;
 	font-size: 20px;
 }
+.iphone-button {
+    color: #fff;
+    text-decoration: none;
+    display: inline-block;
+    padding: 4px 10px;
+    -webkit-border-radius: 5px;
+}
+.iphone-button.black {
+    background-image: -webkit-gradient(linear, left top, left bottom,
+        from(#7d828c),
+        color-stop(0.5, #303749),
+        color-stop(0.5, #121a2e),
+        to(#121a2e));
+    border: solid 1px rgba(79, 79, 79, 0.75);
+}
+.iphone-button.iphone-back {
+    position: relative;
+    padding-left: 5px;
+    margin-left: 8px;
+}
+
+.iphone-back.black > span {
+       display: block;
+       height: 20px;
+       width: 20px;
+       background-image: -webkit-gradient(linear, left top, right bottom,
+              from(#7d828c),
+              color-stop(0.5, #303749),
+              color-stop(0.5, #121a2e),
+              to(#121a2e));
+       border-left: solid 1px rgba(79, 79, 79, 0.75);
+       border-bottom: solid 1px rgba(79, 79, 79, 0.75);
+      -webkit-transform: rotate(45deg);
+      -webkit-mask-image: -webkit-gradient(linear, left bottom, right top,
+              from(#000000),
+              color-stop(0.5,#000000),
+              color-stop(0.5, transparent),
+              to(transparent));
+       position: absolute;
+       left: -8px;
+       top: 2px;
+}

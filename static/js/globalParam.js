@@ -8,6 +8,9 @@ var surveyDao = null,
 	provinceDao = null,
 	outcomeEvaluationDao = null,
 	participantSurveyDao = null,
+	mobileDao = null,
+	answerTypeDao = null,
+	evaluationOutcomeDao= null,
 	scroller = null,
 	request = null;
 

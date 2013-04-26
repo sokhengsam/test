@@ -1,11 +1,33 @@
 <div class="section">
 	<div class="space"></div>
-	Section A:<br/>
-	Demographic
+	<span id="sectionCode"></span><br/>
+	<span id="description"></span>
+</div>
+<div class="footer">
+	<div class="navigation">
+		<a id="loadQuestion" class="iphone-button iphone-back black">Next</a>
+	</div>
+	<!-- 
+	<div class="progress-block">
+		<div class="progress-label">Progress...</div>
+		<div class="progress-bar"><span class="progress"></span></div>
+	</div>
+	 -->
 </div>
 <script>
 	$(function(){
-		$(".section").css("height", $(window).height());
+		var sections = $("body").data("sections");
+		sectionDisplayed++;
+		var section = sections[sectionDisplayed];
+		$("#sectionCode").text("Section " + section.getSectionCode() + ": ");
+		$("#description").text(section.getDescription1());
+		$(".section").css("height", $(window).height() - $(".footer").height());
 		$(".space").css("height", ($(window).height()/2.7));
+		$("#loadQuestion").click(function() {
+			questionDao.getBySection(section.getSectionId(), function(questions) {
+				$("body").data("questionaire", questions);
+				$("#content").load("static/view/questionaire.html");
+			});
+		});
 	});
 </script>

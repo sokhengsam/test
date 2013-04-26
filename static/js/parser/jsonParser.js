@@ -1,19 +1,5 @@
 var JSONParser = new Class({
-	getCurrentDate: function() {
-		var today = new Date();
-		var dd = today.getDate();
-		var mm = today.getMonth()+1; //January is 0!
-
-		var yyyy = today.getFullYear();
-		if(dd < 10){
-			dd = '0' + dd;
-		}
-		if(mm < 10){
-			mm = '0' + mm;
-		}
-		today = dd+'-'+mm+'-'+yyyy;
-		return today;
-	},
+	Extends: DateTimeConvertor,
 	parseSurvey: function(surveys) {
 		for(var n =0 ; n < surveys.length; n++) {
 			var survey = new Surveys();
@@ -87,7 +73,7 @@ var JSONParser = new Class({
 			var p = provinces[i];
 			province.setProvinceId(p.ProvinceID);
 			province.setProvinceCode(p.ProvinceCode);
-			province.setProvinceName(p.ProvinceName);
+			province.setProvinceName(p.Description1);
 			provinceDao.persist(province);
 		}
 	},
@@ -101,6 +87,19 @@ var JSONParser = new Class({
 			languageDao.persist(language);
 		}
 	},
+	parseEvaluationOutcome: function(evaluationOutcome) {
+		for(var i = 0; i < evaluationOutcome.length; i++) {
+			var eva = new OutcomeEvaluation();
+			var e = evaluationOutcome[i];
+			eva.setOutcomeEvaluationId(e.OutcomeEvaluationID);
+			eva.setOutcomeEvaluationCode(e.OutcomeEvaluationCode);
+			eva.setDescription1(e.Description1);
+			eva.setDescription2(e.Description2);
+			eva.setStatus(e.Status);
+			evaluationOutcomeDao.persist(eva);
+		}
+	},
+	//shouldn't be nothing to parse
 	parseParticipantAnswer: function(participantAnswers) {
 		
 	},

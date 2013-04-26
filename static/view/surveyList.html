@@ -15,31 +15,29 @@
 		$("#homePage").click(function(){
 			$("#content").load("static/view/home.html");
 		});
-		var surveys = surveyDao.getAll();
-		setTimeout(function(){
+		surveyDao.getAll(function(surveys) {
 			for(var i = 0; i < surveys.length; i++) {
-				$("#survey-list").append("<li onclick='loadQuestion("+surveys[i].getSurveyId()+");'>"+ surveys[i].getDescription1() + " | Last Downloaded: " + surveys[i].getLastDownload()+"</li>");
+				$("#survey-list").append("<li onclick='loadSection("+surveys[i].getSurveyId()+");'>"+ surveys[i].getDescription1() + " | Last Downloaded: " + surveys[i].getLastDownload()+"</li>");
 			}
-		}, 500);
+		});
 	});
-	function loadQuestion(surveyId) {
-		//var section = sectionDao.getBySurvey(surveyId);
-		var questions = questionDao.getBySection(surveyId);
-		setTimeout(function() {
-			$("body").data("questionaire", questions);
-			$("#content").load("static/view/interviewerParticipantIdentifier.html");
-		}, 500);
+	function loadSection(surveyId) {
+		sectionDao.getBySurvey(surveyId, function(sections) {
+			//questionDao.getBySection(surveyId, function(questions) {
+				$("body").data("sections", sections);
+			//});
+		});
+		$("#content").load("static/view/interviewerParticipantIdentifier.html");
 	}
 	function refreshSurvey() {
-		request.downloadSurvey();
-		setTimeout(function(){
-			var surveys = surveyDao.getAll();
-			setTimeout(function(){
-				console.log(surveys.length);
-				for(var i = 0; i < surveys.length; i++) {
-					$("#survey-list").append("<li onclick='loadQuestion("+surveys[i].getSurveyId()+");'>"+ surveys[i].getDescription1() + " | Last Downloaded: " + surveys[i].getLastDownload()+"</li>");
-				}
-			}, 500);
-		}, 5000);
+		request.downloadSurvey(function() {
+			//setTimeout(function(){
+				surveyDao.getAll(function(surveys){
+					for(var i = 0; i < surveys.length; i++) {
+						$("#survey-list").append("<li onclick='loadQuestion("+surveys[i].getSurveyId()+");'>"+ surveys[i].getDescription1() + " | Last Downloaded: " + surveys[i].getLastDownload()+"</li>");
+					}
+				});
+			//}, 5000);
+		});
 	}
 </script>
