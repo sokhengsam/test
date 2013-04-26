@@ -6,7 +6,7 @@ var InputTextAnswer = new Class({
 	},
 	mergeTemplate: function(){
 		// merge template
-		$('#textTemplate').tmpl(this.answers).appendTo($(".answer-block"));
+		$('#textTemplate').tmpl(this.answers).appendTo($(".answer-block :last"));
 	}
 });
 var InputNumberAnswer = new Class({
@@ -17,6 +17,6 @@ var InputNumberAnswer = new Class({
 	},
 	mergeTemplate: function(){
 		// merge template
-		$('#numberTemplate').tmpl(this.answers).appendTo($(".answer-block"));
+		$('#numberTemplate').tmpl(this.answers).appendTo($(".answer-block :last"));
 	}
 });

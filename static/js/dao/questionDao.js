@@ -34,7 +34,7 @@ var QuestionDao = new Class({
 		return items;
 	},
 	getChild: function(id, success) {
-		var selectAll = "SELECT * FROM "+this.options.tableName + " parentId = " + id;
+		var selectAll = "SELECT * FROM "+this.options.tableName + " WHERE parentId = " + id;
 		var items = [];
 		this.options.db.transaction(function(tx){
 			tx.executeSql(selectAll, [], function(tx, result) {
@@ -42,12 +42,14 @@ var QuestionDao = new Class({
 				for (var i = 0; i < dataset.length; i++) {
 					var item = new Question();
 					item.setQuestionId(dataset.item(i)["questionId"]);
-					item.setSurveyId(dataset.item(i)["surveyId"]);
+					item.setSectionId(dataset.item(i)["surveyId"]);
 					item.setQuestionCode(dataset.item(i)["questionCode"]);
-					item.setQuestionName(dataset.item(i)["questionName"]);
-					item.setText(dataset.item(i)["text"]);
-					success(item);
+					item.setDescription1(dataset.item(i)["description1"]);
+					item.setDescription2(dataset.item(i)["description2"]);
+					item.setQuestionTypeId(dataset.item(i)["questionTypeId"]);
+					items.push(item);
 				}
+				success(items);
 			});
 		});
 	},

@@ -6,6 +6,6 @@ var MultipleAnswer = new Class({
 	},
 	mergeTemplate: function(){
 		// merge template
-		$('#multipleTemplate').tmpl(this.answer).appendTo($(".answer-block"));
+		$('#multipleTemplate').tmpl(this.answer).appendTo($(".answer-block :last"));
 	}
 });

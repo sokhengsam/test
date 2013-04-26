@@ -93,7 +93,7 @@ function getQuestion() {
 			qOption.text = question.getDescription2();
 		}
 		if(qOption.questionTypeId == 6) {
-			getGroupQuestion(qOption);
+			getGroupQuesion(qOption);
 		}
 		else {
 			var questionAdapter = new QuestionAdapter(qOption);
@@ -112,25 +112,28 @@ function getQuestion() {
 		}
 	}
 }
+
 function getGroupQuesion(qOption) {
+	var lang = $("body").data("language");
+	var groupQuestionAdapter = new GroupQuestionAdapter();
 	var groupQuestion = new Object();
 	groupQuestion.parentQuestionCode = qOption.questionCode;
 	groupQuestion.label = qOption.text;
-	groupQuestion.childQuestion = [];
 	
-	questionDao.getChild(qOption.questionId, function(question) {
-		var q = question;
-		q.answers = [];
-		q.text = q.getDescription1();
-		if($("body").data("language") === 'KH') {
-			q.text = q.getDescription2();
+	groupQuestionAdapter.mergeGroupQuestionParent(groupQuestion); // merge parent question info 
+	
+	questionDao.getChild(qOption.questionId, function(questions) {
+		for(qIndex = 0;qIndex < questions.length;qIndex++){
+			var question = questions[qIndex];
+			question.text = question.getDescription1();
+			if( lang === 'KH') {
+				question.text = question.getDescription2();
+			}
+			answerDao.getByQuestion(question.getQuestionId(), function(answers){
+				groupQuestionAdapter.mergeChildQuestionTemplate(question);	
+				groupQuestionAdapter.mergeChildQuestionAnswerTemplate(question.getQuestionTypeId(),answers,lang);
+			});
 		}
-		var answer = answerDao.getByQuestion(q.getQuestionId(), function(answer){
-			q.answers.push(answer);
-			groupQuestion.childQuestion.push(qChild[i]);
-			var gQuestionAdapter = new GroupQuestionAdapter(groupQuestion);
-			gQuestionAdapter.mergeGroupTemplate();
-		});
 	});
 	
 }

@@ -7,7 +7,6 @@ var QuestionAdapter = new Class({
 	mergeTemplate: function(event,callback){
 		var question = $('#questionTemplate').tmpl(this.question);
 		$("#content").prepend(question);
-		
 		if(event != undefined && callback != undefined){
 			question.bind(event,function(){
 				callback($(this).find(".answer-block"));
@@ -15,9 +14,9 @@ var QuestionAdapter = new Class({
 		}
 		
 	},
-	mergeGroupQuestionTemplate: function(){
-		console.log("mergeQuestionTemplate");
-		var question = $('#parentGroupQuestionTemplate').tmpl(this.question);
+	mergeGroupQuestionTemplate: function(question){
+		//console.log("mergeQuestionTemplate");
+		var question = $('#parentGroupQuestionTemplate').tmpl(question);
 		$("#content").prepend(question);
 	}
 });

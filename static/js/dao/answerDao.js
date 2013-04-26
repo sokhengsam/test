@@ -62,9 +62,9 @@ var AnswerDao = new Class({
 					item.setDescription2(dataset.item(i)["description2"]);
 					item.setValue(dataset.item(i)["value"]);
 					item.setGoToQuestionId(dataset.item(i)["goToQuestionId"]);
-					success(item);
-					//items.push(item);
+					items.push(item);
 				}
+				success(items);
 			});
 		});
 		//return items;
