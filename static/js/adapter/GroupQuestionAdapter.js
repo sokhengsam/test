@@ -7,6 +7,7 @@ var GroupQuestionAdapter = new Class({
 		this.mergeGroupQuestionTemplate({questionCode: mergeData.parentQuestionCode,text: mergeData.label});
 	},
 	mergeChildQuestionTemplate: function(mergeData){
+		//console.log("text : " + mergeData.text);
 		var question = $('#groupQuestionTemplate').tmpl({questionCode: mergeData.getQuestionCode(),text:mergeData.text});
 		$(".question-block").append(question);
 	}

@@ -101,16 +101,16 @@ function getQuestion() {
 			var answers = answerDao.getByQuestion(question.getQuestionId(), function(answers){
 				var answerAdapter = new AnswerAdapter({questionType: question.getQuestionTypeId()}, answers, $("body").data("language"));
 				answerAdapter.mergeTemplate();
-				setTimeout(function(){
-					$("#scrollWrapper").css("height", ($(window).height() - $(".footer").outerHeight()) + "px");
-					if(typeof scroller !== 'undefined') {
-						scroller.destroy();
-						scroller = new iScroll("scrollWrapper");
-					}
-				}, 100);
 			});
 		}
 	}
+	setTimeout(function(){
+		$("#scrollWrapper").css("height", ($(window).height() - $(".footer").outerHeight()) + "px");
+		if(typeof scroller !== 'undefined') {
+			scroller.destroy();
+			scroller = new iScroll("scrollWrapper");
+		}
+	}, 100);
 }
 
 function getGroupQuesion(qOption) {
@@ -125,14 +125,24 @@ function getGroupQuesion(qOption) {
 	questionDao.getChild(qOption.questionId, function(questions) {
 		for(qIndex = 0;qIndex < questions.length;qIndex++){
 			var question = questions[qIndex];
+			var lsAnswers;
 			question.text = question.getDescription1();
 			if( lang === 'KH') {
 				question.text = question.getDescription2();
 			}
+			//groupQuestionAdapter.mergeChildQuestionTemplate(question);
+			
+			$.when(answerDao.getByQuestion(question.getQuestionId(), function(answers){
+				lsAnswers = answers;
+			}))                
+            .done(function () {
+            	groupQuestionAdapter.mergeChildQuestionTemplate(question);
+            	groupQuestionAdapter.mergeChildQuestionAnswerTemplate(question.getQuestionTypeId(),lsAnswers,lang);
+            });
+    		/*
 			answerDao.getByQuestion(question.getQuestionId(), function(answers){
-				groupQuestionAdapter.mergeChildQuestionTemplate(question);	
 				groupQuestionAdapter.mergeChildQuestionAnswerTemplate(question.getQuestionTypeId(),answers,lang);
-			});
+			});*/
 		}
 	});
 	
