@@ -23,7 +23,8 @@
 		}, 500);
 	});
 	function loadQuestion(surveyId) {
-		var questions = questionDao.getBySurvey(surveyId);
+		//var section = sectionDao.getBySurvey(surveyId);
+		var questions = questionDao.getBySection(surveyId);
 		setTimeout(function() {
 			$("body").data("questionaire", questions);
 			$("#content").load("static/view/interviewerParticipantIdentifier.html");
@@ -39,6 +40,6 @@
 					$("#survey-list").append("<li onclick='loadQuestion("+surveys[i].getSurveyId()+");'>"+ surveys[i].getDescription1() + " | Last Downloaded: " + surveys[i].getLastDownload()+"</li>");
 				}
 			}, 500);
-		}, 2000);
+		}, 5000);
 	}
 </script>

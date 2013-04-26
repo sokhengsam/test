@@ -47,7 +47,7 @@ var AnswerDao = new Class({
 		});
 		return items;
 	},
-	getByQuestion: function(id) {
+	getByQuestion: function(id, success) {
 		var select = "SELECT * FROM " + this.options.tableName + " WHERE questionId = " + id;
 		var items = [];
 		this.options.db.transaction(function(tx){
@@ -62,10 +62,11 @@ var AnswerDao = new Class({
 					item.setDescription2(dataset.item(i)["description2"]);
 					item.setValue(dataset.item(i)["value"]);
 					item.setGoToQuestionId(dataset.item(i)["goToQuestionId"]);
-					items.push(item);
+					success(item);
+					//items.push(item);
 				}
 			});
 		});
-		return items;
+		//return items;
 	},
 });

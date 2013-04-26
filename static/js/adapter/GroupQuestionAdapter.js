@@ -1,12 +1,12 @@
 var GroupQuestionAdapter = new Class({
 	Implements:[QuestionAdapter,AnswerAdapter],
 	initialize:function(options){
-		this.data = this.convert();
+		this.data = options;
 	},
 	mergeGroupTemplate: function(){
-		this.mergeGroupQuestionTemplate({questionCode: this.data.questionCode,text: this.data.label});
+		this.mergeGroupQuestionTemplate({questionCode: this.data.parentQuestionCode,text: this.data.label});
 		for(q=0;q<this.data.questions.length;q++){
-			var question = $('#groupQuestionTemplate').tmpl({text:this.data.questions[q].label});
+			var question = $('#groupQuestionTemplate').tmpl({text:this.data.questions[q].text});
 			$(".question-block").append(question);
 			for(a=0;a < this.data.questions[q].answers.length;a++){
 				this.mergeAnswerTemplate({text: this.data.questions[q].answers[a]});

@@ -13,7 +13,7 @@ var AnswerAdapter = new Class({
 	},
 	mergeTemplate: function(){
 		if(Number(this.options.questionType) == 1 || Number(this.options.questionType) == 2 
-				|| Number(this.options.questionType) == 3) {
+				|| Number(this.options.questionType) == 3 || Number(this.options.questionType) == 6) {
 			switch(Number(this.options.questionType)) {
 				case 1: //input text
 					var inputTextAnswer = new InputTextAnswer(aOption);
@@ -24,6 +24,8 @@ var AnswerAdapter = new Class({
 					inputNumberAnswer.mergeTemplate();
 					break;
 				case 3: //date
+					break;
+				case 6: //parent child question type
 					break;
 				default:
 					console.log("unknow answer type");

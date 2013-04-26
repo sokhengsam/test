@@ -4,7 +4,7 @@ var QuestionAdapter = new Class({
 		//parse json to question template data
 		this.question = question;
 	},
-	mergeTemplate: function(event,callback){		
+	mergeTemplate: function(event,callback){
 		var question = $('#questionTemplate').tmpl(this.question);
 		$("#content").prepend(question);
 		
@@ -15,9 +15,9 @@ var QuestionAdapter = new Class({
 		}
 		
 	},
-	mergeGroupQuestionTemplate: function(parentQuestion){
+	mergeGroupQuestionTemplate: function(){
 		console.log("mergeQuestionTemplate");
-		var question = $('#parentGroupQuestionTemplate').tmpl(parentQuestion);
+		var question = $('#parentGroupQuestionTemplate').tmpl(this.question);
 		$("#content").prepend(question);
 	}
 });

@@ -124,6 +124,7 @@ var Surveys =  new Class({
 
 var Section = new Class({
 	Implements: [Options, Fields],
+	questions: [],
 	fields: {
 		primaryKey: {
 			name: 'sectionId',

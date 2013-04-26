@@ -56,10 +56,14 @@
 
 <!-- parent of group question template -->
 <script id="parentGroupQuestionTemplate" type="x-jquery-tmpl">
-  <div class="question-code">${questionCode}</div>
-  <div class="question-block">
-	<div class="question">${questionCode}. ${text}</div>
-  </div>
+<div id="scrollWrapper" class="questionaire-page">
+	<div class="scrollable" id="scrollable" style="padding-bottom:10px;">
+  		<div class="question-code">${questionCode}</div>
+  		<div class="question-block">
+			<div class="question">${questionCode}. ${text}</div>
+  		</div>
+	</div>
+</div>
 </script>
 
 <!-- group question row template -->
@@ -88,23 +92,47 @@ function getQuestion() {
 		if($("body").data("language") === 'KH') {
 			qOption.text = question.getDescription2();
 		}
-		var questionAdapter = new QuestionAdapter(qOption);
-	 	questionAdapter.mergeTemplate();
-	 	
-		var answers = answerDao.getByQuestion(question.getQuestionId());
-		
-		setTimeout(function(){
-			var answerAdapter = new AnswerAdapter({questionType: question.getQuestionTypeId()}, answers, $("body").data("language"));
-			answerAdapter.mergeTemplate();
-			setTimeout(function(){
-				$("#scrollWrapper").css("height", ($(window).height() - $(".footer").outerHeight()) + "px");
-				if(typeof scroller !== 'undefined') {
-					scroller.destroy();
-					scroller = new iScroll("scrollWrapper");
-				}
-			}, 100);
-		},500);
+		if(qOption.questionTypeId == 6) {
+			getGroupQuestion(qOption);
+		}
+		else {
+			var questionAdapter = new QuestionAdapter(qOption);
+			questionAdapter.mergeTemplate();
+			var answers = answerDao.getByQuestion(question.getQuestionId(), function(answers){
+				var answerAdapter = new AnswerAdapter({questionType: question.getQuestionTypeId()}, answers, $("body").data("language"));
+				answerAdapter.mergeTemplate();
+				setTimeout(function(){
+					$("#scrollWrapper").css("height", ($(window).height() - $(".footer").outerHeight()) + "px");
+					if(typeof scroller !== 'undefined') {
+						scroller.destroy();
+						scroller = new iScroll("scrollWrapper");
+					}
+				}, 100);
+			});
+		}
 	}
+}
+function getGroupQuesion(qOption) {
+	var groupQuestion = new Object();
+	groupQuestion.parentQuestionCode = qOption.questionCode;
+	groupQuestion.label = qOption.text;
+	groupQuestion.childQuestion = [];
+	
+	questionDao.getChild(qOption.questionId, function(question) {
+		var q = question;
+		q.answers = [];
+		q.text = q.getDescription1();
+		if($("body").data("language") === 'KH') {
+			q.text = q.getDescription2();
+		}
+		var answer = answerDao.getByQuestion(q.getQuestionId(), function(answer){
+			q.answers.push(answer);
+			groupQuestion.childQuestion.push(qChild[i]);
+			var gQuestionAdapter = new GroupQuestionAdapter(groupQuestion);
+			gQuestionAdapter.mergeGroupTemplate();
+		});
+	});
+	
 }
 $(function(){
 	$("input[type='checkbox']").checkbox("add",{imageOn: "static/css/images/check-on.png",imageOff: "static/css/images/check-off.png"})
@@ -134,7 +162,7 @@ $(function(){
 			if(msg) {
 				$("#content").load("static/view/home.html");
 			}*/
-			showDailog();			
+			showDailog();
 		}
 		var progress = (qIndex * 100)/totalQ;
 		$(".progress").css({"width": progress + "%"});

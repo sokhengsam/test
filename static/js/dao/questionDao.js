@@ -16,14 +16,11 @@ var QuestionDao = new Class({
 */	},
 	getAll: function() {
 		var selectAll = "SELECT * FROM "+this.options.tableName;
-		
 		var items = [];
 		this.options.db.transaction(function(tx){
 			tx.executeSql(selectAll, [], function(tx, result) {
 				dataset = result.rows;
-				console.log(dataset.length);
 				for (var i = 0; i < dataset.length; i++) {
-					console.log("Reading question dataset..");
 					var item = new Question();
 					item.setQuestionId(dataset.item(i)["questionId"]);
 					item.setSurveyId(dataset.item(i)["surveyId"]);
@@ -36,16 +33,31 @@ var QuestionDao = new Class({
 		});
 		return items;
 	},
-	getBySurvey: function(surveyId) {
-		var selectAll = "SELECT * FROM "+this.options.tableName + " WHERE sectionId = " + surveyId;
-		console.log(selectAll);
+	getChild: function(id, success) {
+		var selectAll = "SELECT * FROM "+this.options.tableName + " parentId = " + id;
 		var items = [];
 		this.options.db.transaction(function(tx){
 			tx.executeSql(selectAll, [], function(tx, result) {
 				dataset = result.rows;
-				console.log(dataset.length);
 				for (var i = 0; i < dataset.length; i++) {
-					console.log("Reading question dataset..");
+					var item = new Question();
+					item.setQuestionId(dataset.item(i)["questionId"]);
+					item.setSurveyId(dataset.item(i)["surveyId"]);
+					item.setQuestionCode(dataset.item(i)["questionCode"]);
+					item.setQuestionName(dataset.item(i)["questionName"]);
+					item.setText(dataset.item(i)["text"]);
+					success(item);
+				}
+			});
+		});
+	},
+	getBySection: function(sectionId) {
+		var selectAll = "SELECT * FROM "+this.options.tableName + " WHERE sectionId = " + sectionId;
+		var items = [];
+		this.options.db.transaction(function(tx){
+			tx.executeSql(selectAll, [], function(tx, result) {
+				dataset = result.rows;
+				for (var i = 0; i < dataset.length; i++) {
 					var item = new Question();
 					item.setQuestionId(dataset.item(i)["questionId"]);
 					item.setSectionId(dataset.item(i)["surveyId"]);
