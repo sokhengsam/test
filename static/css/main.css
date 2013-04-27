@@ -240,13 +240,18 @@ li:HOVER{
 	text-align: right;
 }
 
-.interviewer-participant-identifier{
+.interviewer-participant-identifier, .interviewer-identifier{
 	margin-top: 10px;
 	line-height: 45px;
 	text-align: center;
 }
 
-.login input,.interviewer-participant-identifier input,.interviewer-participant-identifier select, input[type="text"], input[type="number"]{
+.interviewer-identifier span {
+	font-size: 19px;
+	font-weight: bold;
+	color: rgb(109, 103, 103);
+}
+.interviewer-identifier input,.interviewer-participant-identifier input,.interviewer-participant-identifier select, input[type="text"], input[type="number"]{
 	-webkit-border-radius: 5px;
 	width: 97%;
 	padding: 5px 5px;
@@ -257,7 +262,7 @@ li:HOVER{
 	font-weight: bold;
 }
 
-.interviewer-participant-identifier .button{
+.interviewer-participant-identifier .button, .interviewer-identifier .button{
 	float: none;
 	line-height: normal;
 	margin: 0;

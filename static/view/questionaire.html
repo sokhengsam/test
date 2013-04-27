@@ -19,7 +19,7 @@
 <script id="singleTemplate" type="x-jquery-tmpl">
 	<div class="answer">
 		<img src="static/css/images/radio-off.png">
-		<input type="radio" name="signAnswer"><label>${text}</label>
+		<input svalue="${value}" type="radio" name="signAnswer"><label>${text}</label>
 	</div>
 </script>
 
@@ -37,7 +37,7 @@
 <script id="multipleTemplate" type="x-jquery-tmpl">
   <div class="answer">
 	<img src="static/css/images/check-off.png">
-	<input type="checkbox" /><label>${text}</label>
+	<input svalue="${value}" type="checkbox" /><label>${text}</label>
   </div>
 </script>
 
@@ -45,12 +45,12 @@
 <script id="questionTemplate" type="x-jquery-tmpl">
 <div class="question-header">
 	<span class="question-code">${questionCode}</span>
-	<span class="suspend-survey">[-]</span>
+	<span class="suspend-survey" onclick="suspend();">[-]</span>
 </div>
 <div id="scrollWrapper" class="questionaire-page">
 	<div class="scrollable" id="scrollable" style="padding-bottom:10px;">
   		<div class="question-block">
-			<div class="question">${questionCode}. ${text}</div>
+			<div class="question" id="${questionId}" qtype="${questionTypeId}">${questionCode}. ${text}</div>
 			<div class="answer-block"></div>
   		</div>
 	</div>
@@ -61,7 +61,7 @@
 <script id="parentGroupQuestionTemplate" type="x-jquery-tmpl">
 <div class="question-header">
 	<span class="question-code">${questionCode}</span>
-	<span class="suspend-survey">[-]</span>
+	<span class="suspend-survey" onclick="suspend();">[-]</span>
 </div>
 <div id="scrollWrapper" class="questionaire-page">
 	<div class="scrollable" id="scrollable" style="padding-bottom:10px;">
@@ -75,7 +75,7 @@
 <!-- group question row template -->
 <script id="groupQuestionTemplate" type="x-jquery-tmpl">
 	<div class="child-question">
-		<div class="group-question-row">${questionCode}. ${text}</div>
+		<div class="group-question-row" id="${questionId}" qtype="${questionTypeId}">${questionCode}. ${text}</div>
 		<div class="answer-block group-question-answers"></div>
 	</div>
 </script>
@@ -84,19 +84,21 @@
 var qIndex = 0,
 	totalQ,
 	sectionId,
-	progress;
+	progress,
+	participantAnswerList=[],
+	lastQid;
 
 function getQuestion() {
 	var questionaire = $("body").data("questionaire");
 	totalQ = questionaire.length;
-	console.log(totalQ);
 	if(Number(qIndex)+1 <= totalQ) {
 		$(".pagination-label").text(Number(qIndex)+1 +"/"+totalQ);
 		var question = questionaire[qIndex];
+		lastQid = question.getQuestionId();
 		sectionId = question.getSectionId();
 		var qOption = question.options;
 		qOption.text = question.getDescription1();
-		if($("body").data("language") === 'KH') {
+		if($("body").data("language") == 2) {
 			qOption.text = question.getDescription2();
 		}
 		if(qOption.questionTypeId == 6) {
@@ -134,7 +136,7 @@ function getGroupQuesion(qOption) {
 			var question = questions[i];
 			var lsAnswers;
 			question.text = question.getDescription1();
-			if( lang === 'KH') {
+			if(lang == 2) {
 				question.text = question.getDescription2();
 			}
 			//groupQuestionAdapter.mergeChildQuestionTemplate(question);
@@ -152,10 +154,44 @@ function getGroupQuesion(qOption) {
 			});*/
 		}
 	});
-	
+}
+function parseValue(child, type, participantA) {
+	if(Number(type) == 1 || Number(type) == 2 || Number(type) == 3 || Number(type) == 6) {
+		participantA.setDescriptoin(child.find("input").val());
+	}
+	else if(Number(type) == 4 || Number(type) == 5) {
+		switch(Number(type)) {
+			case 4: //single question type
+				child.find("input['type=radio']:checked").attr("svalue");
+				break;
+			case 5: //multiple question type
+				//how to store the answer id in the participant answer for this???
+				child.find("input['type=checkbox']").each(function(i, ch){
+					if(ch.is(":checked")) {
+						
+					}
+				});
+				break;
+			default:
+				console.log("unknow answer type");
+		}
+	}
+}
+function parseAnswer() {
+	var childQuestions = $("#child-question");
+	//parent child question
+	if(childQuestions.length > 0) {
+		childQuestion.each(function(i, child){
+			var participantA = new ParticipantAnswer();
+			var q = child.find("group-question-row");
+			participantA.setQuestionId(q.attr("id"));
+			var type = q.attr("qtype");
+			parseValue($(this), type, participantA);
+			participantAnswerList.push(participantA);
+		});
+	}
 }
 $(function(){
-	console.log("called......");
 	$("input[type='checkbox']").checkbox("add",{imageOn: "static/css/images/check-on.png",imageOff: "static/css/images/check-off.png"})
 	
 	$("input[type='radio']").radio("add",{imageOn: "static/css/images/radio-on.png",imageOff: "static/css/images/radio-off.png"});
@@ -173,6 +209,7 @@ $(function(){
 		}
 		qIndex = qIndex + 1;
 		if(qIndex < totalQ) {
+			parseAnswer();
 			$(".question-header").remove();
 			$("#previousQuestion").show();
 			$(".question-code").remove();
@@ -223,12 +260,18 @@ $(function(){
 			}
 		}
 	});
+	
 	setTimeout(function() {
 		$("#scrollWrapper").css("height", ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15) + "px");
 		scroller = new iScroll("scrollWrapper");
 	}, 100);
 });
-
+function suspend() {
+	var pLog = $("#participantLog").data("participantLog");
+	pLog.setLastQuestion(lastQid);
+	participantLogDao.update(pLog);
+	$("#content").load("static/view/home.html");
+}
 function showDailog(){
 	buildPopUpPage(240,110);
 	var actionBlock = $("<div class='dialog-action'></div>");

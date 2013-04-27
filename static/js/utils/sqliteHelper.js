@@ -38,7 +38,9 @@ var SQLiteHelper =  new Class({
 			var self = this;
 			var d = [];
 			var p = this.findPrimaryKeyName();
-			d.push(domain.options[p]);
+			if(!domain.fields.primaryKey.isAutoIncrease) {
+				d.push(domain.options[p]);
+			}
 			for(var n in domain.options) {
 				//skip the value if the primary key is integer cos it's already autoincrease
 				if(!(p == n)) {
@@ -46,11 +48,11 @@ var SQLiteHelper =  new Class({
 				}
 			}
 			self.getDB().transaction(function(tx) {
-				tx.executeSql(self.getInsertStatement(), d, function(){
+				tx.executeSql(self.getInsertStatement(), d, function(transaction, resultSet){
 					if(typeof(processCompleteCallback) !== "undefined"){
-						processCompleteCallback();
+						//insertId is for autoincrease primary key
+						processCompleteCallback(resultSet.insertId);
 					}
-					console.log("insert success");
 				}, 
 				function(tx, error){
 					if(typeof(processCompleteCallback) !== "undefined"){
@@ -158,10 +160,10 @@ var SQLiteHelper =  new Class({
 			value = " VALUES (";
 		for(var n in this.fields) {
 			var f = this.fields[n];
-			//if(!(f.isPrimaryKey === true)) {
+			if(!(f.isAutoIncrease === true)) {
 				tFields += f.name + ", ";
 				value += "?, "; 
-			//}
+			}
 		}
 		//remove the last ", " and concat with the ")"
 		tFields = tFields.substring(0, tFields.length -2) + ")";

@@ -27,10 +27,15 @@
 	</div>
 </div>
 <script>
+	var partic;
 	$(function(){
+		participantSurveyDao.getAll(function(participants){
+			partic = participants;
+		});
+		var dateTimeConvertor = new DateTimeConvertor();
 		languageDao.getAll(function(l){
 			for(var i =0; i < l.length; i++){
-				$("#language").append("<option value='"+l[i].getLanguageCode()+"'>"+l[i].getLanguageName()+"</option>");
+				$("#language").append("<option value='"+l[i].getLanguageId()+"'>"+l[i].getLanguageName()+"</option>");
 			}
 		});
 		provinceDao.getAll(function(p){
@@ -45,14 +50,67 @@
 		});
 		$("#begin").click(function(){
 			$("body").data("language", $("#language option:selected").val());
+			//save participant survey + log
+			if(!isParticipantExist($("#participantId").val())) {
+				var participantSurvey = new ParticipantSurvey();
+				participantSurvey.setSurveyId($("#selectedSurvey").data("selectedSurvey"));
+				participantSurvey.setSurveyDate(dateTimeConvertor.getCurrentDate());
+				participantSurvey.setInterviewCode($("#interviewerId").val());
+				participantSurvey.setParticipantCode($("#participantId").val());
+				participantSurvey.setPlaceOfInterview($("#placeOfInterview").val());
+				var provinceId = $("#province option:selected").val();
+				var outComeEval = $("#evaluationOutcome option:selected").val();
+				var langId = $("#language option:selected").val();
+				if(provinceId != -1) {
+					participantSurvey.setProvinceId(provinceId);
+				}
+				if(outComeEval != -1) {
+					participantSurvey.setOutComeEvaluationId(outComeEval);
+				}
+				if(langId != -1) {
+					participantSurvey.setLanguageId(langId);
+				}
+				participantSurvey.setStartDateTime(dateTimeConvertor.getCurrentDate());
+				participantSurvey.setEndDateTime("");
+				participantSurvey.setStatus(0);
+				participantSurveyDao.persist(participantSurvey, function(index) {
+					participantSurvey.setParticipantSurveyId(index);
+					$("#participant").data("participant", participantSurvey);
+				});
+				
+				var participantLog = new ParticipantLog();
+				participantLog.setParticipantCode($("#interviewerId").val());
+				participantLog.setStartDateTime(dateTimeConvertor.getCurrentDate());
+				participantLog.setEndDateTime("");
+				participantLog.setLastQuestion("");
+				participantLogDao.persist(participantLog, function(i) {
+					participantLog.setParticipantLogId(i)
+					$("#participantLog").data("participantLog", participantLog);
+				});
+			}
+			
+			//participantLogDao.persist();
 			$("#content").load("static/view/section.html");
 		});
 		$("#backToSurveyList").click(function(){
 			$("#content").load("static/view/surveyList.html");
 		});
-		var dateTimeConvertor = new DateTimeConvertor();
 		$("#startDateTime").text(dateTimeConvertor.getCurrentUSDate() + " " + dateTimeConvertor.getCurrentTime());
 	});
+	
+	function isParticipantExist(participantCode) {
+		if(typeof partic === 'undefined') {
+			return false;
+		}
+		for(var i = 0; i < partic.length; i++) {
+			var p = partic[i];
+			if(p.getParticipantCode() == participantCode) {
+				$("#participant").data("participant", p);
+				return true;
+			}
+		}
+		return false;
+	}
 	/*
 	function validateField() {
 		return $("#interviewerId").val() != "" && $("#participantId").val() !="" && ;

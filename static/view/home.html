@@ -20,6 +20,12 @@
 
 <script>
 $(function(){
+	request = new CASIAPIRequests();
+	//TODO: check the survey edited date before downloading
+	if(navigator.onLine) {
+		showLoadingDialog();
+		request.downloadSurvey();
+	}
 	$(".home-menu-list ul li:first").click(function(){
 		$("#content").load("static/view/surveyList.html");
 	});

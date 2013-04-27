@@ -8,7 +8,7 @@ var GroupQuestionAdapter = new Class({
 	},
 	mergeChildQuestionTemplate: function(mergeData){
 		//console.log("text : " + mergeData.text);
-		var question = $('#groupQuestionTemplate').tmpl({questionCode: mergeData.getQuestionCode(),text:mergeData.text});
+		var question = $('#groupQuestionTemplate').tmpl({questionId: mergeData.getQuestionId(),questionTypeId: mergeData.getQuestionTypeId(),questionCode: mergeData.getQuestionCode(),text:mergeData.text});
 		$(".question-block").append(question);
 	}
 	,

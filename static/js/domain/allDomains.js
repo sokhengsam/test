@@ -590,6 +590,7 @@ var ParticipantSurvey = new Class({
 		primaryKey: {
 			name: 'participantSurveyId',
 			dataType: 'INTEGER',
+			isAutoIncrease: true,
 			isPrimaryKey: true,
 		},
 		surveyId: {
@@ -681,7 +682,7 @@ var ParticipantSurvey = new Class({
 	setStartDateTime: function(start) {
 		this.options.startDateTime = start;
 	},
-	setEndDateTimet: function(end) {
+	setEndDateTime: function(end) {
 		this.options.endDateTime = end;
 	},
 	setStatus: function(status) {
@@ -717,7 +718,7 @@ var ParticipantSurvey = new Class({
 	getStartDateTime: function() {
 		return this.options.startDateTime;
 	},
-	getEndDateTimet: function() {
+	getEndDateTime: function() {
 		return this.options.endDateTime;
 	},
 	getStatus: function() {
@@ -898,7 +899,7 @@ var OutcomeEvaluation = new Class({
 	}
 });
 
-var participantLog = new Class({
+var ParticipantLog = new Class({
 	Implements: [Options, Fields],
 	fields: {
 		primaryKey: {
@@ -918,6 +919,10 @@ var participantLog = new Class({
 		endDateTime: {
 			name: 'endDateTime',
 			dataType: 'NUMERIC'
+		},
+		lastQuestion: {
+			name: 'lastQuestion',
+			dataType: 'INTEGER'
 		}
 	},
 	options: {
@@ -925,6 +930,7 @@ var participantLog = new Class({
 		participantCode: '',
 		startDateTime: '',
 		endDateTime: '',
+		lastQuestion: ''
 	},
 	setParticipantLogId: function(id){
 		this.options.participantLogId = id;
@@ -938,6 +944,9 @@ var participantLog = new Class({
 	setEndDateTime: function(d) {
 		this.options.endDateTime = d;
 	},
+	setLastQuestion: function(i) {
+		this.options.lastQuestion = i;
+	},
 	getParticipantLogId: function(){
 		return this.options.participantLogId;
 	},
@@ -949,6 +958,9 @@ var participantLog = new Class({
 	},
 	getEndDateTime: function() {
 		return this.options.endDateTime;
+	},
+	getLastQuestion: function() {
+		return this.options.lastQuestion;
 	}
 });
 

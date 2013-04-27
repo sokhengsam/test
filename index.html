@@ -7,10 +7,9 @@
 	<link rel="stylesheet" href="static/css/main.css"/>
 </head>
 <body>
-<!-- 
-	<a onclick='updateQuestionType();'>Update Type</a>
-	| <a onclick='getAllQuestionType();'>Get all</a>
-	| <a onclick='findByPrimaryKey();'>Find By PrimaryKey</a>  -->
+	<span id="selectedSurvey"></span>
+	<span id="participant"></span>
+	<span id="participantLog"></span>
 	<div id="questionaire"></div>
 	<div class="bodyWrapper" id="bodyWrapper">
 		<div class="containerWrapper">
@@ -85,17 +84,14 @@ $(function(){
 	participantSurveyDao = new ParticipantSurveyDao(),
 	mobileDao = new MobileDao(),
 	answerTypeDao = new AnswerTypeDao(),
-	evaluationOutcomeDao = new OutComeEvaluationDao();
+	evaluationOutcomeDao = new OutComeEvaluationDao(),
+	participantLogDao = new ParticipantLogDao();
 	
 	$("#bodyWrapper").css("height", $(window).height()+"px");
-	$("#content").load("static/view/home.html");
+	//$("#content").load("static/view/home.html");
+	$("#content").load("static/view/login.html");
 	
-	request = new CASIAPIRequests();
-	//TODO: check the survey edited date before downloading
-	if(navigator.onLine) {
-		showLoadingDialog();
-		request.downloadSurvey();
-	}
+	
 	/*	
 	var groupQuestionAdapter = new GroupQuestionAdapter();
 	groupQuestionAdapter.mergeGroupTemplate();
