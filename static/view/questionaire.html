@@ -1,9 +1,9 @@
 <div class="footer">
 	<div class="question-navigation">
-		<span class="move-question-previous" id="firstQuestion">&lt;&lt;</span>
-		<span class="move-question-previous" id="previousQuestion">&lt;</span>
-		<span class="move-question-next" id="nextQuestion">&gt;</span>
-		<span class="move-question-next" id="lastQuestion">&gt;&gt;</span>
+		<!-- <span class="move-question-previous" id="firstQuestion">&lt;&lt;</span>  -->
+		<span class="move-question-previous" id="previousQuestion">&lt;&lt;</span>
+		<span class="move-question-next" id="nextQuestion">&gt;&gt;</span>
+		<!-- <span class="move-question-next" id="lastQuestion">&gt;&gt;</span> -->
 	</div>
 	<!-- 
 	<div class="progress-block">
@@ -45,7 +45,10 @@
 <script id="questionTemplate" type="x-jquery-tmpl">
 <div id="scrollWrapper" class="questionaire-page">
 	<div class="scrollable" id="scrollable" style="padding-bottom:10px;">
-  		<div class="question-code">${questionCode}</div>
+  		<div class="question-header">
+			<span class="question-code">${questionCode}</span>
+			<span class="suspend-survey">[-]</span>
+		</div>
   		<div class="question-block">
 			<div class="question">${questionCode}. ${text}</div>
 			<div class="answer-block"></div>

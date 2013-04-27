@@ -23,7 +23,7 @@ var SQLiteHelper =  new Class({
 			tx.executeSql(self.getCreateTableStatement(), [], function(){console.log("create table done!");}, function(tx, error){console.log("create tale fail!!! " + error.message);});
 		});
 	},
-	persist: function(domain) {
+	persist: function(domain,processCompleteCallback) {
 		var primaryKeyFieldName;
 		for(var n in domain.fields) {
 			if(domain.fields[n].isPrimaryKey === true) {
@@ -46,8 +46,16 @@ var SQLiteHelper =  new Class({
 				}
 			}
 			self.getDB().transaction(function(tx) {
-				tx.executeSql(self.getInsertStatement(), d, function(){console.log("insert success");}, 
+				tx.executeSql(self.getInsertStatement(), d, function(){
+					if(typeof(processCompleteCallback) !== "undefined"){
+						processCompleteCallback();
+					}
+					console.log("insert success");
+				}, 
 				function(tx, error){
+					if(typeof(processCompleteCallback) !== "undefined"){
+						processCompleteCallback();
+					}
 					console.log("insert fail. " + error.message);
 				});
 			});

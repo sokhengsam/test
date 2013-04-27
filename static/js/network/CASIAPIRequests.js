@@ -1,9 +1,11 @@
+var persistLength = [];
 var CASIAPIRequests = new Class({
 	Extends: BaseJSNetwork,
 	Implements: JSONParser,
 	initailize: function(options){
 		this.parent();
 		this.baseUrl = "http://cenat.gov.kh:8090/CASIMS/index.php/home/getjsondata";
+		this.self = this;
 	},
 	pushAnswer: function(requestData,responseHandler,failureHandler){
 		this.postRequest(this.baseUrl,requestData,responseHandler,failureHandler);
@@ -20,8 +22,8 @@ var CASIAPIRequests = new Class({
 		console.log("download survey fail. reading from static sample json");
 		this.parseJson(sampelJson);
 	},
-	
 	parseJson: function(sampleJson) {
+		
 		var surveys = sampleJson.survey,
 			sections = sampleJson.section,
 			questiontypes = sampleJson.questiontype,
@@ -31,9 +33,11 @@ var CASIAPIRequests = new Class({
 			provinces = sampleJson.province,
 			languages = sampleJson.language,
 			evaluationOutcome = sampleJson.outcomeevaluation;
-	
-		$.when(this.parseSurvey(surveys)).done(function(){console.log("done 2");});
-		this.parseSection(sections);
+		
+		this.countPersistProcess((surveys.length + sections.length))
+		
+		this.parseSurvey(surveys,this.processPersistCompleteCallback);
+		this.parseSection(sections,this.processPersistCompleteCallback);
 		this.parseQuestionType(questiontypes);
 		this.parseQuestion(question);
 		this.parseAnswer(answers);
@@ -41,6 +45,17 @@ var CASIAPIRequests = new Class({
 		this.parseProvince(provinces);
 		this.parseLanguages(languages);
 		this.parseEvaluationOutcome(evaluationOutcome);
-		
+	},
+	processPersistCompleteCallback: function(){
+		console.log(persistLength);
+		persistLength.shift();
+		if(persistLength.length == 0){
+			enablepage();
+		}
+	},
+	countPersistProcess: function(length){
+		for(i=0;i < length;i++){
+			persistLength.push(i);
+		}
 	}
 });

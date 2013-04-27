@@ -1,6 +1,21 @@
 var JSONParser = new Class({
 	Extends: DateTimeConvertor,
-	parseSurvey: function(surveys) {
+	getCurrentDate: function() {
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth()+1; //January is 0!
+
+		var yyyy = today.getFullYear();
+		if(dd < 10){
+			dd = '0' + dd;
+		}
+		if(mm < 10){
+			mm = '0' + mm;
+		}
+		today = dd+'-'+mm+'-'+yyyy;
+		return today;
+	},
+	parseSurvey: function(surveys,persistCallback) {
 		for(var n =0 ; n < surveys.length; n++) {
 			var survey = new Surveys();
 			var s = surveys[n];
@@ -11,10 +26,10 @@ var JSONParser = new Class({
 			survey.setStatus(s.Status);
 			survey.setEditedDate(s.EditedDate);
 			survey.setLastDownload(this.getCurrentDate());
-			surveyDao.persist(survey);
+			surveyDao.persist(survey,persistCallback);
 		}
 	},
-	parseSection: function(sections) {
+	parseSection: function(sections,persistCallback) {
 		for(var sec = 0; sec < sections.length; sec++) {
 			var section = new Section();
 			var sect = sections[sec];
@@ -23,7 +38,7 @@ var JSONParser = new Class({
 			section.setSectionCode(sect.SectionCode);
 			section.setDescription1(sect.Description1);
 			section.setDescription2(sect.Description2);
-			sectionDao.persist(section);
+			sectionDao.persist(section,persistCallback);
 		}
 	},
 	parseQuestionType: function(questionTypes) {

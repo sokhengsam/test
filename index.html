@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="static/casi.manifest">       
+<html manifest="static/casi.manifest">        
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="user-scalable=yes, initial-scale=1.0" />
@@ -64,6 +64,11 @@ $.ajaxSetup({
     cache: true,
     data: null
 });
+
+function persistCallback(){
+	console.log("persist Callback");
+}
+
 $(function(){
 	//disablePage();
 	surveyDao = new SurveysDao();
@@ -86,6 +91,7 @@ $(function(){
 	request = new CASIAPIRequests();
 	//TODO: check the survey edited date before downloading
 	if(navigator.onLine) {
+		showLoadingDialog();
 		request.downloadSurvey();
 	}
 	/*	
@@ -93,6 +99,12 @@ $(function(){
 	groupQuestionAdapter.mergeGroupTemplate();
 	*/
 });
+
+
+function showLoadingDialog(){
+	buildPopUpPage(150,60);
+	$("#popup").append($("<div class='loading-dialog'></div>").append($("<img/>").attr("src","static/css/images/loading.gif")));
+}
 
 </script>
 
