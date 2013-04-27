@@ -185,6 +185,7 @@ li:HOVER{
 	display: inline-block;
 	float: right;
 	font-size: 25px;
+	color: #aeaeaf;
 }
 
 .home-navigation{
@@ -330,7 +331,7 @@ input[type='checkbox'],input[type='radio']{
 }
 
 .dialog-message{
-	color: #888888;
+	color: #FFF;
 	padding: 5px 5px;
 }
 
@@ -351,7 +352,7 @@ input[type='checkbox'],input[type='radio']{
 
 .dialog-title{
 	text-align: center;
-	color: #888888;
+	color: #FFF;
 	font-weight: bold;
 }
 

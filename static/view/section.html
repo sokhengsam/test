@@ -17,7 +17,7 @@
 		$("#sectionCode").text("Section " + section.getSectionCode() + ": ");
 		$("#description").text(section.getDescription1());
 		$(".section").css("height", $(window).height() - $(".footer").height());
-		$(".space").css("height", ($(window).height()/2.7));
+		//$(".space").css("height", ($(window).height()/2.7));
 		$("#nextQuestion").click(function() {
 			questionDao.getBySection(section.getSectionId(), function(questions) {
 				$("body").data("questionaire", questions);
