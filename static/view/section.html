@@ -4,15 +4,10 @@
 	<span id="description"></span>
 </div>
 <div class="footer">
-	<div class="navigation">
-		<a id="loadQuestion" class="iphone-button iphone-back black">Next</a>
+	<div class="question-navigation">
+		<span class="move-question-previous" id="previousQuestion">&lt;&lt;</span>
+		<span class="move-question-next" id="nextQuestion">&gt;&gt;</span>
 	</div>
-	<!-- 
-	<div class="progress-block">
-		<div class="progress-label">Progress...</div>
-		<div class="progress-bar"><span class="progress"></span></div>
-	</div>
-	 -->
 </div>
 <script>
 	$(function(){
@@ -23,11 +18,15 @@
 		$("#description").text(section.getDescription1());
 		$(".section").css("height", $(window).height() - $(".footer").height());
 		$(".space").css("height", ($(window).height()/2.7));
-		$("#loadQuestion").click(function() {
+		$("#nextQuestion").click(function() {
 			questionDao.getBySection(section.getSectionId(), function(questions) {
 				$("body").data("questionaire", questions);
 				$("#content").load("static/view/questionaire.html");
 			});
+		});
+		//load the last question of the last section
+		$("#previousQuestion").click(function(){
+			
 		});
 	});
 </script>

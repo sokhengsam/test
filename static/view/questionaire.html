@@ -43,12 +43,12 @@
 
 <!-- question template -->
 <script id="questionTemplate" type="x-jquery-tmpl">
+<div class="question-header">
+	<span class="question-code">${questionCode}</span>
+	<span class="suspend-survey">[-]</span>
+</div>
 <div id="scrollWrapper" class="questionaire-page">
 	<div class="scrollable" id="scrollable" style="padding-bottom:10px;">
-  		<div class="question-header">
-			<span class="question-code">${questionCode}</span>
-			<span class="suspend-survey">[-]</span>
-		</div>
   		<div class="question-block">
 			<div class="question">${questionCode}. ${text}</div>
 			<div class="answer-block"></div>
@@ -59,9 +59,12 @@
 
 <!-- parent of group question template -->
 <script id="parentGroupQuestionTemplate" type="x-jquery-tmpl">
+<div class="question-header">
+	<span class="question-code">${questionCode}</span>
+	<span class="suspend-survey">[-]</span>
+</div>
 <div id="scrollWrapper" class="questionaire-page">
 	<div class="scrollable" id="scrollable" style="padding-bottom:10px;">
-  		<div class="question-code">${questionCode}</div>
   		<div class="question-block">
 			<div class="question">${questionCode}. ${text}</div>
   		</div>
@@ -86,7 +89,7 @@ var qIndex = 0,
 function getQuestion() {
 	var questionaire = $("body").data("questionaire");
 	totalQ = questionaire.length;
-	console.log(qIndex);
+	console.log(totalQ);
 	if(Number(qIndex)+1 <= totalQ) {
 		$(".pagination-label").text(Number(qIndex)+1 +"/"+totalQ);
 		var question = questionaire[qIndex];
@@ -109,8 +112,8 @@ function getQuestion() {
 		}
 	}
 	setTimeout(function(){
-		$("#scrollWrapper").css("height", ($(window).height() - $(".footer").outerHeight()) + "px");
-		if(typeof scroller !== 'undefined') {
+		$("#scrollWrapper").css("height", ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15) + "px"); //10px maybe the margin or padding top
+		if(typeof scroller !== 'undefined' && scroller != null) {
 			scroller.destroy();
 			scroller = new iScroll("scrollWrapper");
 		}
@@ -127,8 +130,8 @@ function getGroupQuesion(qOption) {
 	groupQuestionAdapter.mergeGroupQuestionParent(groupQuestion); // merge parent question info 
 	
 	questionDao.getChild(qOption.questionId, function(questions) {
-		for(qIndex = 0;qIndex < questions.length;qIndex++){
-			var question = questions[qIndex];
+		for(var i = 0;i < questions.length;i++){
+			var question = questions[i];
 			var lsAnswers;
 			question.text = question.getDescription1();
 			if( lang === 'KH') {
@@ -152,6 +155,7 @@ function getGroupQuesion(qOption) {
 	
 }
 $(function(){
+	console.log("called......");
 	$("input[type='checkbox']").checkbox("add",{imageOn: "static/css/images/check-on.png",imageOff: "static/css/images/check-off.png"})
 	
 	$("input[type='radio']").radio("add",{imageOn: "static/css/images/radio-on.png",imageOff: "static/css/images/radio-off.png"});
@@ -169,6 +173,7 @@ $(function(){
 		}
 		qIndex = qIndex + 1;
 		if(qIndex < totalQ) {
+			$(".question-header").remove();
 			$("#previousQuestion").show();
 			$(".question-code").remove();
 			$(".question-block").remove();
@@ -198,6 +203,7 @@ $(function(){
 			var section = sections[sectionDisplayed];
 			questionDao.getBySection(section.getSectionId(), function(questions){
 				$("body").data("questionaire", questions);
+				$(".question-header").remove();
 				$(".question-code").remove();
 				$(".question-block").remove();
 				$("#scrollWrapper").remove();
@@ -206,6 +212,7 @@ $(function(){
 			});
 		}
 		else {
+			$(".question-header").remove();
 			$(".question-code").remove();
 			$(".question-block").remove();
 			$("#scrollWrapper").remove();
@@ -217,7 +224,7 @@ $(function(){
 		}
 	});
 	setTimeout(function() {
-		$("#scrollWrapper").css("height", ($(window).height() - $(".footer").outerHeight()) + "px");
+		$("#scrollWrapper").css("height", ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15) + "px");
 		scroller = new iScroll("scrollWrapper");
 	}, 100);
 });
