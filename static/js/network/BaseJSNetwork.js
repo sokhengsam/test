@@ -7,7 +7,6 @@ var BaseJSNetwork = new Class({
 		//nothing to do
 	},
 	getRequest: function(requestUrl,requestData,responseHandler,failureHandler){
-		console.log(requestUrl);
 		$.ajax({
 			type: "GET",
 			url: requestUrl,

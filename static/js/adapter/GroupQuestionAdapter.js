@@ -8,7 +8,8 @@ var GroupQuestionAdapter = new Class({
 	},
 	mergeChildQuestionTemplate: function(mergeData){
 		//console.log("text : " + mergeData.text);
-		var question = $('#groupQuestionTemplate').tmpl({questionId: mergeData.getQuestionId(),questionTypeId: mergeData.getQuestionTypeId(),questionCode: mergeData.getQuestionCode(),text:mergeData.text});
+		console.log(mergeData);
+		var question = $('#groupQuestionTemplate').tmpl({qcode:mergeData.getQuestionCode(), allowNull: mergeData.getAllowNull(), questionId: mergeData.getQuestionId(),questionTypeId: mergeData.getQuestionTypeId(),questionCode: mergeData.getQuestionCode(),text:mergeData.text});
 		$(".question-block").append(question);
 	}
 	,

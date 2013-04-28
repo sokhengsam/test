@@ -47,6 +47,7 @@ var QuestionDao = new Class({
 					item.setDescription1(dataset.item(i)["description1"]);
 					item.setDescription2(dataset.item(i)["description2"]);
 					item.setQuestionTypeId(dataset.item(i)["questionTypeId"]);
+					item.setAllowNull(dataset.item(i)["allowNull"]);
 					items.push(item);
 				}
 				success(items);
@@ -67,6 +68,7 @@ var QuestionDao = new Class({
 					item.setDescription1(dataset.item(i)["description1"]);
 					item.setDescription2(dataset.item(i)["description2"]);
 					item.setQuestionTypeId(dataset.item(i)["questionTypeId"]);
+					item.setAllowNull(dataset.item(i)["allowNull"]);
 					items.push(item);
 				}
 				successCallback(items);

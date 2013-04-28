@@ -12,6 +12,13 @@
 </div>
 <script type="text/javascript">
 	$("#begin").click(function(){
-		$("#content").load("static/view/home.html");
+		var interviewerPassword = $("#interviewerPassword").val();
+		var pwd = "e10adc3949ba59abbe56e057f20f883e";
+		if(md5(interviewerPassword) != pwd) {
+			alert("Password incorrect !!!");
+		}
+		else {
+			$("#content").load("static/view/home.html");
+		}
 	});
 </script>

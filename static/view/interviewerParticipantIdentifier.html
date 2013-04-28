@@ -29,6 +29,9 @@
 <script>
 	var partic;
 	$(function(){
+		var surv = $("#selectedSurvey").data("selectedSurvey");
+		$(".title").text(surv.description);
+		delete surv;
 		participantSurveyDao.getAll(function(participants){
 			partic = participants;
 		});
@@ -50,10 +53,14 @@
 		});
 		$("#begin").click(function(){
 			$("body").data("language", $("#language option:selected").val());
+			if(!validateField()) {
+				alert("Please fill in all informations!");
+				return false;
+			}
 			//save participant survey + log
 			if(!isParticipantExist($("#participantId").val(), $("#evaluationOutcome option:selected").val())) {
 				var participantSurvey = new ParticipantSurvey();
-				participantSurvey.setSurveyId($("#selectedSurvey").data("selectedSurvey"));
+				participantSurvey.setSurveyId($("#selectedSurvey").data("selectedSurvey").surveyId);
 				participantSurvey.setSurveyDate(dateTimeConvertor.getCurrentDate());
 				participantSurvey.setInterviewCode($("#interviewerId").val());
 				participantSurvey.setParticipantCode($("#participantId").val());
@@ -115,8 +122,13 @@
 		}
 		return false;
 	}
-	/*
+	
 	function validateField() {
-		return $("#interviewerId").val() != "" && $("#participantId").val() !="" && ;
-	}*/
+		return $("#interviewerId").val() != "" 
+			&& $("#participantId").val() !="" 
+			&& $("#placeOfInterview").val() != ""
+			&& $("#province option:selected").val() != -1
+			&& $("#evaluationOutcome options:selected").val() != -1
+			&& $("#language option:selected").val() != -1;
+	}
 </script>

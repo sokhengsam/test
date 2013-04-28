@@ -17,28 +17,29 @@
 		});
 		surveyDao.getAll(function(surveys) {
 			for(var i = 0; i < surveys.length; i++) {
-				$("#survey-list").append("<li onclick='loadSection("+surveys[i].getSurveyId()+");'>"+ surveys[i].getDescription1() + " | Last Downloaded: " + surveys[i].getLastDownload()+"</li>");
+				$("#survey-list").append("<li onclick='loadSection("+surveys[i].getSurveyId()+", \""+ surveys[i].getDescription1()+"\");'>"+ surveys[i].getDescription1() + " | Last Downloaded: " + surveys[i].getLastDownload()+"</li>");
 			}
 		});
 	});
-	function loadSection(surveyId) {
+	function loadSection(surveyId, description1) {
 		sectionDao.getBySurvey(surveyId, function(sections) {
 			//questionDao.getBySection(surveyId, function(questions) {
 				$("body").data("sections", sections);
 			//});
 		});
-		$("#selectedSurvey").data("selectedSurvey", surveyId);
+		$("#selectedSurvey").data("selectedSurvey", {"surveyId": surveyId, "description": description1});
 		$("#content").load("static/view/interviewerParticipantIdentifier.html");
 	}
 	function refreshSurvey() {
-		request.downloadSurvey(function() {
-			//setTimeout(function(){
+		showLoadingDialog();
+		request.downloadSurvey();
+			setTimeout(function(){
 				surveyDao.getAll(function(surveys){
+					console.debug("called back ");
 					for(var i = 0; i < surveys.length; i++) {
-						$("#survey-list").append("<li onclick='loadQuestion("+surveys[i].getSurveyId()+");'>"+ surveys[i].getDescription1() + " | Last Downloaded: " + surveys[i].getLastDownload()+"</li>");
+						$("#survey-list").append("<li onclick='loadSection("+surveys[i].getSurveyId()+", \""+ surveys[i].getDescription1()+"\");'>"+ surveys[i].getDescription1() + " | Last Downloaded: " + surveys[i].getLastDownload()+"</li>");
 					}
 				});
-			//}, 5000);
-		});
+			}, 8000);
 	}
 </script>

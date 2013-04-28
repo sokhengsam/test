@@ -17,7 +17,6 @@ var surveyDao = null,
 	mobile = null;
 
 
-
 var sampleJson = 
 {
 	    "survey": [
