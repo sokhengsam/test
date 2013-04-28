@@ -908,6 +908,10 @@ var ParticipantLog = new Class({
 			isPrimaryKey: true,
 			isAutoIncrease: true
 		},
+		participantSurveyId: {
+			name: 'participantSurveyId',
+			dataType: "INTEGER"
+		},
 		participantCode: {
 			name: 'participantCode',
 			dataType: 'TEXT',
@@ -930,7 +934,8 @@ var ParticipantLog = new Class({
 		participantCode: '',
 		startDateTime: '',
 		endDateTime: '',
-		lastQuestion: ''
+		lastQuestion: '',
+		participantSurveyId: ''
 	},
 	setParticipantLogId: function(id){
 		this.options.participantLogId = id;
@@ -946,6 +951,12 @@ var ParticipantLog = new Class({
 	},
 	setLastQuestion: function(i) {
 		this.options.lastQuestion = i;
+	},
+	setParticipantSurveyId: function(id) {
+		this.options.participantSurveyId = id;
+	},
+	getParticipantSurveyId: function() {
+		return this.options.participantSurveyId;
 	},
 	getParticipantLogId: function(){
 		return this.options.participantLogId;

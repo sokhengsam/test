@@ -51,7 +51,7 @@
 		$("#begin").click(function(){
 			$("body").data("language", $("#language option:selected").val());
 			//save participant survey + log
-			if(!isParticipantExist($("#participantId").val())) {
+			if(!isParticipantExist($("#participantId").val(), $("#evaluationOutcome option:selected").val())) {
 				var participantSurvey = new ParticipantSurvey();
 				participantSurvey.setSurveyId($("#selectedSurvey").data("selectedSurvey"));
 				participantSurvey.setSurveyDate(dateTimeConvertor.getCurrentDate());
@@ -76,17 +76,18 @@
 				participantSurveyDao.persist(participantSurvey, function(index) {
 					participantSurvey.setParticipantSurveyId(index);
 					$("#participant").data("participant", participantSurvey);
+					var participantLog = new ParticipantLog();
+					participantLog.setParticipantSurveyId(participantSurvey.getParticipantSurveyId());
+					participantLog.setParticipantCode($("#interviewerId").val());
+					participantLog.setStartDateTime(dateTimeConvertor.getCurrentDate());
+					participantLog.setEndDateTime("");
+					participantLog.setLastQuestion("");
+					participantLogDao.persist(participantLog, function(i) {
+						participantLog.setParticipantLogId(i)
+						$("#participantLog").data("participantLog", participantLog);
+					});
 				});
 				
-				var participantLog = new ParticipantLog();
-				participantLog.setParticipantCode($("#interviewerId").val());
-				participantLog.setStartDateTime(dateTimeConvertor.getCurrentDate());
-				participantLog.setEndDateTime("");
-				participantLog.setLastQuestion("");
-				participantLogDao.persist(participantLog, function(i) {
-					participantLog.setParticipantLogId(i)
-					$("#participantLog").data("participantLog", participantLog);
-				});
 			}
 			
 			//participantLogDao.persist();
@@ -98,14 +99,17 @@
 		$("#startDateTime").text(dateTimeConvertor.getCurrentUSDate() + " " + dateTimeConvertor.getCurrentTime());
 	});
 	
-	function isParticipantExist(participantCode) {
+	function isParticipantExist(participantCode, evaluationOutcome) {
 		if(typeof partic === 'undefined') {
 			return false;
 		}
 		for(var i = 0; i < partic.length; i++) {
 			var p = partic[i];
-			if(p.getParticipantCode() == participantCode) {
+			if(p.getParticipantCode() == participantCode &&  p.getOutComeEvaluationId() == evaluationOutcome) {
 				$("#participant").data("participant", p);
+				participantLogDao.getByParticipantCode(function(participantLog) {
+					$("#participantLog").data("participantLog", participantLog);
+				});
 				return true;
 			}
 		}

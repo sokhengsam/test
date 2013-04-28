@@ -270,12 +270,40 @@ function suspend() {
 	var pLog = $("#participantLog").data("participantLog");
 	pLog.setLastQuestion(lastQid);
 	participantLogDao.update(pLog);
+	deleteData();
 	$("#content").load("static/view/home.html");
+}
+function deleteData() {
+	delete qIndex;
+	delete totalQ;
+	delete sectionId;
+	delete progress;
+	delete participantAnswerList;
+	delete lastQid;
+	sectionDisplayed = Number(-1);
+	delete $("body").data("sections");
+	delete $("body").data("language");
+	delete $("body").data("questionaire");
+	delete $("#selectedSurvey").data("selectedSurvey");
+	delete $("#participant").data("participant");
+	delete $("#participantLog").data("participantLog");
 }
 function showDailog(){
 	buildPopUpPage(240,110);
 	var actionBlock = $("<div class='dialog-action'></div>");
-	actionBlock.append($('<button></button>').text("Yes").addClass("dialog-button").click(function(){enablepage();$("#content").load("static/view/home.html");}));
+	actionBlock.append($('<button></button>').text("Yes").addClass("dialog-button").click(function(){
+		enablepage();
+		var participantSurvey = $("#participant").data("participant");
+		var dateTimeConvertor = new DateTimeConvertor();
+		participantSurvey.setEndDateTime(dateTimeConvertor.getCurrentDate());
+		participantSurvey.setStatus(1);
+		participantSurveyDao.update(participantSurvey);
+		var participantSurveyLog = $("#participantLog").data("participantLog");
+		participantSurveyLog.setEndDateTime(dateTimeConvertor.getCurrentDate());
+		participantLogDao.update(participantSurveyLog);
+		deleteData();
+		$("#content").load("static/view/home.html");
+	}));
 	actionBlock.append($('<button></button>').text("No").addClass("dialog-button").click(enablepage));
 	$("#popup").append($("<div class='dialog-title'></div>").text("Confirm"));
 	$("#popup").append($("<div class='dialog-message'></div>").text("Are you satify with your answer?"));

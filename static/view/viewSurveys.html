@@ -12,28 +12,26 @@
 
 <script>
 $(function(){
-	var surveys = surveyDao.getAll();
-	setTimeout(function(){
+	surveyDao.getAll(function(surveys) {
 		for(var i = 0; i < surveys.length; i++) {
-			var onclick = "loadQuestion("+surveys[i].getSurveyId()+");";
-			var complete = "Incomplete";
-			if(surveys[i].getStatus() == 1) {
-				onclick = "";
-				complete = "Complete";
-			}
-			$("#survey-list").append("<li onclick='"+onclick+"'>"+ surveys[i].getDescription1()+"<span class='survey-status'>"+complete+"</span></li>");
+			var surveyId = surveys[i].getSurveyId();
+			var participantSurveys;
+			$.when(participantSurveyDao.getBySurvey(surveyId, function(pSurveys){
+				participantSurveys = pSurveys;
+			})).done(function(){
+				var onclick = "loadHistoryDetail("+surveyId+");";
+				$("#survey-list").append("<li onclick='"+onclick+"'>"+ surveys[i].getDescription1()+"<span class='survey-status'>ppl</span></li>");
+			});
 		}
-	}, 200);
-	
+	});
 	$(".back").click(function(){
 		$("#content").load("static/view/home.html");
-	})
+	});
 });
-function loadQuestion(surveyId) {
-	var questions = questionDao.getBySurvey(surveyId);
-	setTimeout(function(){
-		$("body").data("questionaire", questions);
-		$("#content").load("static/view/questionaire.html");
-	}, 500);
+function loadHistoryDetail(surveyId) {
+	participantSurveyDao.getBySurvey(surveyId, function(participants) {
+		$("body").data("participantSurvey", participants);
+		$("#content").load("static/view/viewHistoryDetail.html");
+	});
 }
 </script>

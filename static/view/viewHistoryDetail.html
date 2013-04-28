@@ -4,9 +4,11 @@
 </div>
 <div class="home">
 	<div class="survey-block">
-		<div class="survey-title">SMART GIRL</div>
+		<div class="survey-title"></div>
 		<div class="home-menu-list">
-			<ul id="survey-list"><li>testing</li></ul>
+			<ul id="participant-list">
+				<li>testing</li>
+			</ul>
 		</div>
 	</div>
 </div>
@@ -14,5 +16,9 @@
 <script>
 $(".back").click(function(){
 	$("#content").load("static/view/viewSurveys.html");
+})
+$(function() {
+	var participantSurvey = $("body").data("participantSurvey");
+	
 })
 </script>
