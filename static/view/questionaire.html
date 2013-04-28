@@ -236,8 +236,10 @@ $(function(){
 	$("#previousQuestion").click(function(){
 		if(sectionDisplayed > 0 && qIndex == 0) {
 			sectionDisplayed--;
-			var sections = $("body").data("sections");
-			var section = sections[sectionDisplayed];
+			//var sections = $("body").data("sections");
+			//var section = sections[sectionDisplayed];
+			$("#content").load("static/view/section.html");
+			/*
 			questionDao.getBySection(section.getSectionId(), function(questions){
 				$("body").data("questionaire", questions);
 				$(".question-header").remove();
@@ -246,7 +248,7 @@ $(function(){
 				$("#scrollWrapper").remove();
 				qIndex = questions.length -1;
 				getQuestion();
-			});
+			});*/
 		}
 		else {
 			$(".question-header").remove();

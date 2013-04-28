@@ -43,7 +43,8 @@ var CASIAPIRequests = new Class({
 			participantanswers = sampleJson.participantanswer,
 			provinces = sampleJson.province,
 			languages = sampleJson.language,
-			evaluationOutcome = sampleJson.outcomeevaluation;
+			evaluationOutcome = sampleJson.outcomeevaluation,
+			answerType = sampleJson.answertype;
 		
 		this.countPersistProcess((surveys.length + sections.length))
 		
@@ -56,6 +57,8 @@ var CASIAPIRequests = new Class({
 		this.parseProvince(provinces);
 		this.parseLanguages(languages);
 		this.parseEvaluationOutcome(evaluationOutcome);
+		console.log(answerType);
+		this.parseAnswerType(answerType);
 	},
 	processPersistCompleteCallback: function(){
 		console.log(persistLength);

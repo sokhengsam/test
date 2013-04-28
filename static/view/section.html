@@ -14,6 +14,8 @@
 		var sections = $("body").data("sections");
 		sectionDisplayed++;
 		var section = sections[sectionDisplayed];
+		console.log($("body").data("sections"));
+		console.log(section);
 		$("#sectionCode").text("Section " + section.getSectionCode() + ": ");
 		$("#description").text(section.getDescription1());
 		$(".section").css("height", $(window).height() - $(".footer").height());

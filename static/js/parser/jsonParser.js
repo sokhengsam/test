@@ -119,6 +119,17 @@ var JSONParser = new Class({
 	parseParticipantAnswer: function(participantAnswers) {
 		
 	},
+	
+	parseAnswerType: function(answerTypeResponse) {
+		console.log("xxxx");
+		for(var i = 0; i < answerTypeResponse.length ; i++) {
+			var answerType = new AnswerType()
+			var a = answerTypeResponse[i];
+			answerType.setAnswerTypeId(a.AnswerTypeID);
+			answerType.setAnswerTypeCode(a.Description1);
+			answerTypeDao.persist(answerType);
+		}
+	},
 	storeMobileKey: function(response, successCallback) {
 		var key = response.mobilekey;
 		var mobile = new Mobile();
