@@ -1,7 +1,7 @@
 var persistLength = [];
 var CASIAPIRequests = new Class({
-	Extends: BaseJSNetwork,
-	Implements: JSONParser,
+	Extends: BaseJSNetwork, 
+	Implements: [JSONParser, DateTimeConvertor],
 	initailize: function(options){
 		this.parent();
 		this.baseUrl = "http://cenat.gov.kh:8090/CASIMS/index.php/home/getjsondata";
@@ -11,9 +11,20 @@ var CASIAPIRequests = new Class({
 		this.postRequest(this.baseUrl,requestData,responseHandler,failureHandler);
 	},
 	downloadSurvey: function() {
-		requestData=[];
+		var mobileKey = mobile.getMobileKey();
+		
+		requestData={
+			"last-modified-since": this.getTimeStamp(),
+			"mobilekey": mobileKey 
+		};
 		var self = this;
 		this.getRequest("http://cenat.gov.kh:8090/CASIMS/index.php/home/getjsondata", requestData, function(response){self.insertDB(response);}, function(){self.downloadSurveyFail();});
+	},
+	getMobileKey: function(successCallback) {
+		var self = this;
+		this.getRequest("http://cenat.gov.kh:8090/CASIMS/index.php/home/getmobilekey", {}, function(response){
+			self.storeMobileKey(response, successCallback);
+		});
 	},
 	insertDB: function(response){
 		$.when(this.parseJson(response)).done(function(){console.log("done");});

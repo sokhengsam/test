@@ -85,8 +85,16 @@ $(function(){
 	mobileDao = new MobileDao(),
 	answerTypeDao = new AnswerTypeDao(),
 	evaluationOutcomeDao = new OutComeEvaluationDao(),
-	participantLogDao = new ParticipantLogDao();
-	
+	participantLogDao = new ParticipantLogDao(),
+	request = new CASIAPIRequests();
+	mobileDao.getAll(function(m){
+		mobile = m;
+		if(mobile == undefined) {
+			request.getMobileKey(function(m){
+				mobile = m;
+			});
+		}
+	});
 	$("#bodyWrapper").css("height", $(window).height()+"px");
 	//$("#content").load("static/view/home.html");
 	$("#content").load("static/view/login.html");

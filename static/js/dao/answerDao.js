@@ -39,6 +39,7 @@ var AnswerDao = new Class({
 					item.setAnswerId(dataset.item(i)["answerId"]);
 					item.setDescription1(dataset.item(i)["description1"]);
 					item.setDescription2(dataset.item(i)["description2"]);
+					item.setAnswerTypeId(dataset.item(i)["answerTypeId"]);
 					item.setValue(dataset.item(i)["value"]);
 					item.setGoToQuestionId(dataset.item(i)["goToQuestionId"]);
 					items.push(item);
@@ -60,6 +61,7 @@ var AnswerDao = new Class({
 					item.setAnswerId(dataset.item(i)["answerId"]);
 					item.setDescription1(dataset.item(i)["description1"]);
 					item.setDescription2(dataset.item(i)["description2"]);
+					item.setAnswerTypeId(dataset.item(i)["answerTypeId"]);
 					item.setValue(dataset.item(i)["value"]);
 					item.setGoToQuestionId(dataset.item(i)["goToQuestionId"]);
 					items.push(item);

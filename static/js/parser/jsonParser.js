@@ -77,6 +77,7 @@ var JSONParser = new Class({
 			answer.setQuestionId(a.QuestionID);
 			answer.setDescription1(a.Description1);
 			answer.setDescription2(a.Description2);
+			answer.setAnswerTypeId(a.AnswerTypeId);
 			answer.setValue(a.Value);
 			answer.setGoToQuestionId(a.GoToQuestionID);
 			answerDao.persist(answer);
@@ -118,5 +119,12 @@ var JSONParser = new Class({
 	parseParticipantAnswer: function(participantAnswers) {
 		
 	},
-	
+	storeMobileKey: function(response, successCallback) {
+		var key = response.mobilekey;
+		var mobile = new Mobile();
+		mobile.setMobileId(1);
+		mobile.setMobileKey(key);
+		mobileDao.persist(mobile);
+		successCallback(mobile);
+	}
 });

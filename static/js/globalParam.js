@@ -13,7 +13,8 @@ var surveyDao = null,
 	answerTypeDao = null,
 	evaluationOutcomeDao= null,
 	scroller = null,
-	request = null;
+	request = null,
+	mobile = null;
 
 
 

@@ -12,6 +12,7 @@ var BaseJSNetwork = new Class({
 			type: "GET",
 			url: requestUrl,
 			dataType: "json",
+			data:requestData,
 			success: function(data, textStatus, jqXHR) {
 				responseHandler(data);
 			},

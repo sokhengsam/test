@@ -37,5 +37,10 @@ var DateTimeConvertor = new Class({
 		}
 		today = yyyy+'-'+mm+'-'+dd;
 		return today;
+	},
+	getTimeStamp: function() {
+		var today = new Date();
+		console.log(today.getTime());
+		return today.getTime();
 	}
 });

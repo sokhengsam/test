@@ -428,6 +428,10 @@ var Answer = new Class({
 			name: 'description2',
 			dataType: 'TEXT'
 		},
+		answerTypeId: {
+			name: 'answerTypeId',
+			dataType: 'INTEGER'
+		},
 		value:{
 			name: 'value', //number value pair to each question used for generating report
 			dataType: 'INTEGER'
@@ -446,6 +450,7 @@ var Answer = new Class({
 		questionId: '',
 		description1: '',
 		description2: '',
+		answerTypeId: '',
 		value: '',
 		goToQuestionId: '',
 		status: ''
@@ -470,6 +475,12 @@ var Answer = new Class({
 	},
 	setStatus: function(status) {
 		this.options.status = status;
+	},
+	setAnswerTypeId: function(id) {
+		this.options.answerTypeId = id;
+	},
+	getAnswerTypeId: function() {
+		return this.options.answerTypeId;
 	},
 	getGoToQuestionId: function() {
 		return this.options.goToQuestionId;
@@ -984,16 +995,29 @@ var Mobile = new Class({
 		primaryKey: {
 			name: "mobileId",
 			isPrimaryKey: true,
-			dataType: "INTEGER"
+			dataType: "INTEGER",
+			isAutoIncrease: true
 		},
 		mobileKey: {
 			name: "mobileKey",
 			dataType: "TEXT"
 		}
 	},
-	optoins: {
+	options: {
 		mobileId: "",
 		mobileKey: ""
+	},
+	setMobileId: function(id) {
+		this.options.mobileId = id;
+	},
+	setMobileKey: function(mobileKey) {
+		this.options.mobileKey = mobileKey;
+	},
+	getMobileId: function() {
+		return this.options.mobileId;
+	},
+	getMobileKey: function() {
+		return this.options.mobileKey;
 	}
 });
 
