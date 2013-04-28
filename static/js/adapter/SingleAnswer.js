@@ -8,6 +8,7 @@ var SingleAnswer = new Class({
 	mergeTemplate: function(){
 		// merge template
 		var singleAnswerTemplate = $('#singleTemplate').tmpl(this.answer);
+		singleAnswerTemplate.find("input[type='radio']").data("goToQuestionId",this.answer.goToQuestionId);
 		//auto add input box if answer type is other
 		if(this.answer.answerTypeId == this.ANSWERTYPE){
 			singleAnswerTemplate.append($("<input type='text' />"))

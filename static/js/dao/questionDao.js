@@ -23,7 +23,7 @@ var QuestionDao = new Class({
 				for (var i = 0; i < dataset.length; i++) {
 					var item = new Question();
 					item.setQuestionId(dataset.item(i)["questionId"]);
-					item.setSurveyId(dataset.item(i)["surveyId"]);
+					item.setSurveyId(dataset.item(i)["sectionId"]);
 					item.setQuestionCode(dataset.item(i)["questionCode"]);
 					item.setQuestionName(dataset.item(i)["questionName"]);
 					item.setText(dataset.item(i)["text"]);
@@ -42,7 +42,7 @@ var QuestionDao = new Class({
 				for (var i = 0; i < dataset.length; i++) {
 					var item = new Question();
 					item.setQuestionId(dataset.item(i)["questionId"]);
-					item.setSectionId(dataset.item(i)["surveyId"]);
+					item.setSectionId(dataset.item(i)["sectionId"]);
 					item.setQuestionCode(dataset.item(i)["questionCode"]);
 					item.setDescription1(dataset.item(i)["description1"]);
 					item.setDescription2(dataset.item(i)["description2"]);
@@ -63,7 +63,7 @@ var QuestionDao = new Class({
 				for (var i = 0; i < dataset.length; i++) {
 					var item = new Question();
 					item.setQuestionId(dataset.item(i)["questionId"]);
-					item.setSectionId(dataset.item(i)["surveyId"]);
+					item.setSectionId(dataset.item(i)["sectionId"]);
 					item.setQuestionCode(dataset.item(i)["questionCode"]);
 					item.setDescription1(dataset.item(i)["description1"]);
 					item.setDescription2(dataset.item(i)["description2"]);
@@ -75,4 +75,17 @@ var QuestionDao = new Class({
 			});
 		});
 	},
+	findSectionKeyByQuestionKey: function(questionId,successCallback){
+		var sql = "SELECT sectionId FROM " + this.options.tableName + " WHERE questionId=" + questionId;
+		var sectionId;
+		this.options.db.transaction(function(tx){
+			tx.executeSql(sql, [], function(tx, result) {
+				dataset = result.rows;
+				for (var i = 0; i < dataset.length; i++) {
+					sectionId = dataset.item(i)["sectionId"];
+				}
+				successCallback(sectionId);
+			});
+		});	
+	}
 });

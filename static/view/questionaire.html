@@ -108,6 +108,7 @@ function getQuestion() {
 		if($("body").data("language") == 2) {
 			qOption.text = question.getDescription2();
 		}
+					
 		if(qOption.questionTypeId == 6) {
 			getGroupQuesion(qOption);
 		}
@@ -129,6 +130,16 @@ function getQuestion() {
 	}, 100);
 }
 
+/**
+ * 
+ */
+function findSectionKeyByQuestionKey(questionId,successCallback){
+	var returnValue;
+	questionDao.findSectionKeyByQuestionKey(questionId,function(sectionId){
+		successCallback(sectionId);
+	});
+}
+
 function getGroupQuesion(qOption) {
 	var lang = $("body").data("language");
 	var groupQuestionAdapter = new GroupQuestionAdapter();
@@ -146,8 +157,6 @@ function getGroupQuesion(qOption) {
 			if(lang == 2) {
 				question.text = question.getDescription2();
 			}
-			//groupQuestionAdapter.mergeChildQuestionTemplate(question);
-			
 			$.when(answerDao.getByQuestion(question.getQuestionId(), function(answers){
 				lsAnswers = answers;
 			}))                
@@ -155,13 +164,14 @@ function getGroupQuesion(qOption) {
             	groupQuestionAdapter.mergeChildQuestionTemplate(question);
             	groupQuestionAdapter.mergeChildQuestionAnswerTemplate(question.getQuestionTypeId(),lsAnswers,lang);
             });
-    		/*
-			answerDao.getByQuestion(question.getQuestionId(), function(answers){
-				groupQuestionAdapter.mergeChildQuestionAnswerTemplate(question.getQuestionTypeId(),answers,lang);
-			});*/
 		}
 	});
 }
+
+function getSelectedSingleAnswer(parentSelector){
+	return $(".answer-block input[type='radio']:checked");
+}
+
 function parseValue(child, type, participantA) {
 	if(Number(type) == 1 || Number(type) == 2 || Number(type) == 3 || Number(type) == 6) {
 		participantA.setDescriptoin(child.find("input").val());
@@ -211,65 +221,107 @@ $(function(){
 		$("#content").load("static/view/home.html");
 	});
 	$("#nextQuestion").click(function(){
-		if(qIndex == totalQ) {
-			return;
+		var goToQuestionId = getSelectedSingleAnswer().data("goToQuestionId");
+		if(null != goToQuestionId){
+			var currentQuestionInfo = sectionId + "," + lastQid + "," +  sectionDisplayed + "," + qIndex;
+			// maintain question index and section
+			findSectionKeyByQuestionKey(goToQuestionId,function(secId){
+				//iterator section to get section index
+				var sections = $("body").data("sections");
+				for(i=0;i<sections.length;i++){
+					if(sections[i].getSectionId() == secId){
+						sectionDisplayed = i;
+						break;
+					}
+				}
+				questionDao.getBySection(secId, function(questions) {
+					//iterator question to get section index 
+					for(i=0;i<questions.length;i++){
+						if(questions[i].getQuestionId() == goToQuestionId){
+							qIndex = i;
+							break;
+						}
+					}
+					$("body").data("questionaire", {"questions": questions, fromPrevious: false});
+					parseAnswer();
+					$("#previousQuestion").show();
+					clearQuestionBlock();
+					getQuestion();
+					skipQuestionHistory[eval(secId+questions[qIndex].getQuestionId())] = currentQuestionInfo; //keep to back state 
+				});
+			});
 		}
-		//validate answer before going next
-		var valid = answerValidated();
-		if(valid) {
-			qIndex = qIndex + 1;
-			if(qIndex < totalQ) {
-				parseAnswer();
-				$(".question-header").remove();
-				$("#previousQuestion").show();
-				$(".question-code").remove();
-				$(".question-block").remove();
-				$("#scrollWrapper").remove();
-				getQuestion();
-			}
-			else {
-				//check the survey displayed. 
-				//if all the survey already displayed meant they are at the end so, show dialog. Otherwise, load next section
-				//sectionDisplayed started from 0
-				if(sectionDisplayed < $("body").data("sections").length -1) {
-					$("#content").load("static/view/section.html");
+		else{
+			//validate answer before going next
+			var valid = answerValidated();
+			if(valid) {
+				if(qIndex == totalQ) {
+					return;
+				}
+				qIndex = qIndex + 1;
+				if(qIndex < totalQ) {
+					parseAnswer();
+					$("#previousQuestion").show();
+					clearQuestionBlock();
+					getQuestion();
 				}
 				else {
-					//total score and show dialog
-					showDailog();
-				}
+					//check the survey displayed. 
+					//if all the survey already displayed meant they are at the end so, show dialog. Otherwise, load next section
+					//sectionDisplayed started from 0
+					if(sectionDisplayed < $("body").data("sections").length -1) {
+						$("#content").load("static/view/section.html");
+					}
+					else {
+						//total score and show dialog
+						showDailog();
+					}
+				}	
 			}
 		}
-		
 	});
 	
 	$("#previousQuestion").click(function(){
-		if(sectionDisplayed > 0 && qIndex == 0) {
-			sectionDisplayed--;
-			//var sections = $("body").data("sections");
-			//var section = sections[sectionDisplayed];
-			$("#content").load("static/view/section.html");
-			/*
-			questionDao.getBySection(section.getSectionId(), function(questions){
-				$("body").data("questionaire", questions);
-				$(".question-header").remove();
-				$(".question-code").remove();
-				$(".question-block").remove();
-				$("#scrollWrapper").remove();
-				qIndex = questions.length -1;
+		if(skipQuestionHistory[eval(sectionId+lastQid)] != null){
+			var questionData = skipQuestionHistory[eval(sectionId+lastQid)].split(",");
+			delete skipQuestionHistory[eval(sectionId+lastQid)];
+			questionDao.getBySection(questionData[0], function(questions) {
+				$("body").data("questionaire", {"questions": questions, fromPrevious: false});
+				sectionDisplayed = questionData[2]
+				qIndex = questionData[3];
+				clearQuestionBlock();
+				questionaires.fromPrevious = false;
 				getQuestion();
-			});*/
+				if(qIndex == 0 && sectionDisplayed == 0) {
+					$(this).hide();
+				}
+			});
 		}
-		else {
-			$(".question-header").remove();
-			$(".question-code").remove();
-			$(".question-block").remove();
-			$("#scrollWrapper").remove();
-			questionaires.fromPrevious = false;
-			qIndex--;
-			getQuestion();
-			if(qIndex == 0 && sectionDisplayed == 0) {
-				$(this).hide();
+		else{
+			if(sectionDisplayed > 0 && qIndex == 0) {
+				sectionDisplayed--;
+				//var sections = $("body").data("sections");
+				//var section = sections[sectionDisplayed];
+				$("#content").load("static/view/section.html");
+				/*
+				questionDao.getBySection(section.getSectionId(), function(questions){
+					$("body").data("questionaire", questions);
+					$(".question-header").remove();
+					$(".question-code").remove();
+					$(".question-block").remove();
+					$("#scrollWrapper").remove();
+					qIndex = questions.length -1;
+					getQuestion();
+				});*/
+			}
+			else {
+				clearQuestionBlock();
+				questionaires.fromPrevious = false;
+				qIndex--;
+				getQuestion();
+				if(qIndex == 0 && sectionDisplayed == 0) {
+					$(this).hide();
+				}
 			}
 		}
 	});
@@ -279,6 +331,14 @@ $(function(){
 		scroller = new iScroll("scrollWrapper");
 	}, 100);
 });
+
+function clearQuestionBlock(){
+	$(".question-header").remove();
+	$(".question-code").remove();
+	$(".question-block").remove();
+	$("#scrollWrapper").remove();
+}
+
 function suspend() {
 	var pLog = $("#participantLog").data("participantLog");
 	pLog.setLastQuestion(lastQid);
