@@ -86,14 +86,19 @@ var qIndex = 0,
 	sectionId,
 	progress,
 	participantAnswerList=[],
-	lastQid;
+	lastQid,
+	questionaires;
 
 function getQuestion() {
-	var questionaire = $("body").data("questionaire");
-	totalQ = questionaire.length;
+	questionaires = $("body").data("questionaire");
+	totalQ = questionaires.questions.length;
+	isFromPrivious = questionaires.fromPrevious;
+	if(isFromPrivious) {
+		qIndex = totalQ -1;
+	}
 	if(Number(qIndex)+1 <= totalQ) {
 		$(".pagination-label").text(Number(qIndex)+1 +"/"+totalQ);
-		var question = questionaire[qIndex];
+		var question =  questionaires.questions[qIndex];
 		lastQid = question.getQuestionId();
 		sectionId = question.getSectionId();
 		var qOption = question.options;
@@ -197,7 +202,7 @@ $(function(){
 	$("input[type='radio']").radio("add",{imageOn: "static/css/images/radio-on.png",imageOff: "static/css/images/radio-off.png"});
 	
 	getQuestion();
-	if(sectionDisplayed == 0) {
+	if(sectionDisplayed == 0 && qIndex == 0) {
 		$("#previousQuestion").hide();
 	}
 	$("#homePage").click(function(){
@@ -255,8 +260,11 @@ $(function(){
 			$(".question-code").remove();
 			$(".question-block").remove();
 			$("#scrollWrapper").remove();
+			console.log(qIndex);
+			questionaires.fromPrevious = false;
 			qIndex--;
 			getQuestion();
+			console.log(qIndex);
 			if(qIndex == 0 && sectionDisplayed == 0) {
 				$(this).hide();
 			}

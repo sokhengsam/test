@@ -14,21 +14,24 @@
 		var sections = $("body").data("sections");
 		sectionDisplayed++;
 		var section = sections[sectionDisplayed];
-		console.log($("body").data("sections"));
-		console.log(section);
 		$("#sectionCode").text("Section " + section.getSectionCode() + ": ");
 		$("#description").text(section.getDescription1());
 		$(".section").css("height", $(window).height() - $(".footer").height());
-		//$(".space").css("height", ($(window).height()/2.7));
 		$("#nextQuestion").click(function() {
 			questionDao.getBySection(section.getSectionId(), function(questions) {
-				$("body").data("questionaire", questions);
+				$("body").data("questionaire", {"questions": questions, fromPrevious: false});
 				$("#content").load("static/view/questionaire.html");
 			});
 		});
 		//load the last question of the last section
 		$("#previousQuestion").click(function(){
-			
+			sectionDisplayed--;
+			var sections = $("body").data("sections");
+			var section = sections[sectionDisplayed];
+			questionDao.getBySection(section.getSectionId(), function(questions) {
+				$("body").data("questionaire", {"questions": questions, fromPrevious: true});
+				$("#content").load("static/view/questionaire.html");
+			});
 		});
 	});
 </script>
