@@ -12,6 +12,7 @@ var AnswerAdapter = new Class({
 		this.lang = lang;
 	},
 	mergeTemplate: function(){
+		console.log("Question type : " + this.options.questionType)
 		if(Number(this.options.questionType) == 1 || Number(this.options.questionType) == 2 
 				|| Number(this.options.questionType) == 3 || Number(this.options.questionType) == 6) {
 			switch(Number(this.options.questionType)) {
@@ -36,9 +37,10 @@ var AnswerAdapter = new Class({
 				var answer = this.answers[a];
 				var aOption = answer.options;
 				aOption.text = answer.getDescription1();
-				if(this.lang === 'KH') {
+				if(this.lang == 2) {
 					aOption.text = answer.getDescription2();
 				}
+				console.log(aOption.answerTypeId);
 				switch(Number(this.options.questionType)) {
 					case 4: //single question type
 						var singleAnswer = new SingleAnswer(aOption);

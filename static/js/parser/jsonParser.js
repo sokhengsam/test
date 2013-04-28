@@ -77,7 +77,7 @@ var JSONParser = new Class({
 			answer.setQuestionId(a.QuestionID);
 			answer.setDescription1(a.Description1);
 			answer.setDescription2(a.Description2);
-			answer.setAnswerTypeId(a.AnswerTypeId);
+			answer.setAnswerTypeId(a.AnswerTypeID);
 			answer.setValue(a.Value);
 			answer.setGoToQuestionId(a.GoToQuestionID);
 			answerDao.persist(answer);
@@ -121,7 +121,6 @@ var JSONParser = new Class({
 	},
 	
 	parseAnswerType: function(answerTypeResponse) {
-		console.log("xxxx");
 		for(var i = 0; i < answerTypeResponse.length ; i++) {
 			var answerType = new AnswerType()
 			var a = answerTypeResponse[i];
