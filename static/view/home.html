@@ -32,14 +32,17 @@ $(function(){
 		$("#content").load("static/view/viewSurveys.html");
 	});
 	$(".home-menu-list ul li:first").next().next().click(function(){
-		participantAnswerDao.clear();
-		questionTypeDao.clear();
-		answerDao.clear();
-		questionDao.clear();
-		sectionDao.clear();
-		surveyDao.clear();
-		provinceDao.clear();
-		languageDao.clear();
+		showConfirmDialog("Are you sure you want to clear data?",function(){
+			enablepage();
+			participantAnswerDao.clear();
+			questionTypeDao.clear();
+			answerDao.clear();
+			questionDao.clear();
+			sectionDao.clear();
+			surveyDao.clear();
+			provinceDao.clear();
+			languageDao.clear();
+		},enablepage,240,137);
 	});
 });
 </script>

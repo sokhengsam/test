@@ -89,3 +89,18 @@ function enablepage() {
 	$("#popup").remove();
 	$("#maskLayer").remove();
 } 
+
+function showConfirmDialog(showMessage,acceptCallback,denyCallback,width,height){
+	buildPopUpPage(width,height);
+	var actionBlock = $("<div class='dialog-action'></div>");
+	actionBlock.append($('<button></button>').text("Yes").addClass("dialog-button").click(function(){
+		acceptCallback();
+	}));
+	actionBlock.append($('<button></button>').text("No").addClass("dialog-button").click(function(){
+		denyCallback();
+	}));
+	$("#popup").append($("<div class='dialog-title'></div>").text("Confirm"));
+	$("#popup").append($("<div class='dialog-message'></div>").text(showMessage));
+	$("#popup").append(actionBlock);
+	$("#popup").css("background-color", "#385676");
+}

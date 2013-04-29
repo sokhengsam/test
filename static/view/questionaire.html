@@ -274,7 +274,7 @@ $(function(){
 					}
 					else {
 						//total score and show dialog
-						showDailog();
+						showConfirmDialog("Are you satify with your answer?",invokeOKConfirm,enablepage,240,110);
 					}
 				}	
 			}
@@ -287,7 +287,7 @@ $(function(){
 			delete skipQuestionHistory[eval(sectionId+lastQid)];
 			questionDao.getBySection(questionData[0], function(questions) {
 				$("body").data("questionaire", {"questions": questions, fromPrevious: false});
-				sectionDisplayed = questionData[2]
+				sectionDisplayed = questionData[2];
 				qIndex = questionData[3];
 				clearQuestionBlock();
 				questionaires.fromPrevious = false;
@@ -435,10 +435,8 @@ function deleteData() {
 	delete $("#participant").data("participant");
 	delete $("#participantLog").data("participantLog");
 }
-function showDailog(){
-	buildPopUpPage(240,110);
-	var actionBlock = $("<div class='dialog-action'></div>");
-	actionBlock.append($('<button></button>').text("Yes").addClass("dialog-button").click(function(){
+
+function invokeOKConfirm(){
 		enablepage();
 		var participantSurvey = $("#participant").data("participant");
 		var dateTimeConvertor = new DateTimeConvertor();
@@ -450,11 +448,5 @@ function showDailog(){
 		participantLogDao.update(participantSurveyLog);
 		deleteData();
 		$("#content").load("static/view/home.html");
-	}));
-	actionBlock.append($('<button></button>').text("No").addClass("dialog-button").click(enablepage));
-	$("#popup").append($("<div class='dialog-title'></div>").text("Confirm"));
-	$("#popup").append($("<div class='dialog-message'></div>").text("Are you satify with your answer?"));
-	$("#popup").append(actionBlock);
-	$("#popup").css("background-color", "#385676");
 }
 </script>
