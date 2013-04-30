@@ -66,23 +66,16 @@ function getGroupQuesion(qOption) {
 	groupQuestionAdapter.mergeGroupQuestionParent(groupQuestion); // merge parent question info 
 	
 	questionDao.getChild(qOption.questionId, function(questions) {
-		for(var i = 0;i < questions.length;i++){
-			var question = questions[i];
-			var lsAnswers;
+		$.each(questions,function(index,question){
 			question.text = question.getDescription1();
 			if(lang == 2) {
 				question.text = question.getDescription2();
 			}
-			$.when(answerDao.getByQuestion(question.getQuestionId(), function(answers){
-				console.debug(answers);
-				lsAnswers = answers;
-			}))                
-            .done(function () {
-            	console.debug("done")
-            	groupQuestionAdapter.mergeChildQuestionTemplate(question);
-            	groupQuestionAdapter.mergeChildQuestionAnswerTemplate(question.getQuestionTypeId(),lsAnswers,lang);
-            });
-		}
+			answerDao.getByQuestion(question.getQuestionId(), function(answers){
+				groupQuestionAdapter.mergeChildQuestionTemplate(question);
+				groupQuestionAdapter.mergeChildQuestionAnswerTemplate(question.getQuestionTypeId(),answers,lang);
+			});
+		});
 	});
 }
 

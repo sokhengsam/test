@@ -63,5 +63,20 @@ var ParticipantSurveyDao = new Class({
 				successCallback(items);
 			});
 		});
+	},
+	countParticipantBySurveyKey: function(surveyId,successCallback){
+		var sqlCountSurvey = "SELECT count(*) as count FROM "+this.options.tableName + " WHERE surveyId = " + surveyId;
+		var returnValue;
+		this.options.db.transaction(function(tx){
+			tx.executeSql(sqlCountSurvey, [], function(tx, result) {
+				dataset = result.rows;
+				for (var i = 0; i < dataset.length; i++) {
+					returnValue = dataset.item(i)["count"];
+					break;
+					
+				}
+				successCallback(returnValue);
+			});
+		});
 	}
 });

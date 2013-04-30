@@ -13,17 +13,15 @@
 <script>
 $(function(){
 	surveyDao.getAll(function(surveys) {
-		for(var i = 0; i < surveys.length; i++) {
-			var surveyId = surveys[i].getSurveyId();
-			var participantSurveys;
-			$.when(participantSurveyDao.getBySurvey(surveyId, function(pSurveys){
-				participantSurveys = pSurveys;
-			})).done(function(){
+		$.each(surveys,function(index,survey){
+			var surveyId = survey.getSurveyId();
+			participantSurveyDao.countParticipantBySurveyKey(surveyId, function(recordLength){
 				var onclick = "loadHistoryDetail("+surveyId+");";
-				$("#survey-list").append("<li onclick='"+onclick+"'>"+ surveys[i].getDescription1()+"<span class='survey-status'>ppl</span></li>");
+				$("#survey-list").append("<li onclick='"+onclick+"'>"+ survey.getDescription1()+"<span class='survey-status'>" + recordLength + "</span></li>");
 			});
-		}
+		});
 	});
+	
 	$(".back").click(function(){
 		$("#content").load("static/view/home.html");
 	});
