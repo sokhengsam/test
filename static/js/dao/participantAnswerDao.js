@@ -2,7 +2,7 @@ var ParticipantAnswerDao = new Class({
 	Extends: SQLiteHelper,
 	Implements: ParticipantAnswer,
 	options: {
-		tableName: "ParticipantAnswerDao",
+		tableName: "ParticipantAnswer",
 	},
 	initialize: function(options){
 		if(typeof this.getDB() === 'undefined' || this.getDB() === '') {

@@ -43,6 +43,8 @@ js/utils/dateTimeConvertor.js
 js/utils/hashString.js
 js/utils/popuphelper.js
 
+js/questionaireNavigationHelper.js
+
 css/fonts/Kh-Battambang.ttf
 css/images/back.png
 css/images/check-off.png

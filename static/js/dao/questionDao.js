@@ -15,7 +15,7 @@ var QuestionDao = new Class({
 		});
 */	},
 	getAll: function() {
-		var selectAll = "SELECT * FROM "+this.options.tableName;
+		var selectAll = "SELECT * FROM "+this.options.tableName + " Order By orderNo asc";
 		var items = [];
 		this.options.db.transaction(function(tx){
 			tx.executeSql(selectAll, [], function(tx, result) {
@@ -34,7 +34,7 @@ var QuestionDao = new Class({
 		return items;
 	},
 	getChild: function(id, success) {
-		var selectAll = "SELECT * FROM "+this.options.tableName + " WHERE parentId = " + id;
+		var selectAll = "SELECT * FROM "+this.options.tableName + " WHERE parentId = " + id + " Order By orderNo asc";
 		var items = [];
 		this.options.db.transaction(function(tx){
 			tx.executeSql(selectAll, [], function(tx, result) {
@@ -55,7 +55,7 @@ var QuestionDao = new Class({
 		});
 	},
 	getBySection: function(sectionId, successCallback) {
-		var selectAll = "SELECT * FROM "+this.options.tableName + " WHERE sectionId = " + sectionId;
+		var selectAll = "SELECT * FROM "+this.options.tableName + " WHERE sectionId = " + sectionId + " Order By orderNo asc";
 		var items = [];
 		this.options.db.transaction(function(tx){
 			tx.executeSql(selectAll, [], function(tx, result) {

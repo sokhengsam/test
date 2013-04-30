@@ -16,6 +16,10 @@
 		var section = sections[sectionDisplayed];
 		$("#sectionCode").text("Section " + section.getSectionCode() + ": ");
 		$("#description").text(section.getDescription1());
+		if($("body").data("language") == 2) {
+			$("#sectionCode").text("ផ្នែក " + section.getSectionCode() + ": ");
+			$("#description").text(section.getDescription2());
+		}
 		$(".section").css("height", $(window).height() - $(".footer").height());
 		$("#nextQuestion").click(function() {
 			questionDao.getBySection(section.getSectionId(), function(questions) {

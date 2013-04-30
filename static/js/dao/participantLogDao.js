@@ -2,7 +2,7 @@ var ParticipantLogDao = new Class({
 	Extends: SQLiteHelper,
 	Implements: ParticipantLog,
 	options: {
-		tableName: "ParticipantLogDao",
+		tableName: "ParticipantLog",
 	},
 	initialize: function(options){
 		if(typeof this.getDB() === 'undefined' || this.getDB() === '') {

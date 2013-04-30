@@ -50,6 +50,7 @@ var AnswerDao = new Class({
 	},
 	getByQuestion: function(id, success) {
 		var select = "SELECT * FROM " + this.options.tableName + " WHERE questionId = " + id;
+		console.log(select);
 		var items = [];
 		this.options.db.transaction(function(tx){
 			tx.executeSql(select, [], function(tx, result) {

@@ -256,6 +256,10 @@ var Question = new Class({
 			name: 'image', //binary string image. some question can be the image question
 			dataType: 'BLOB'
 		},
+		orderNo: {
+			name: 'orderNo',
+			dataType: 'INTEGER',
+		},
 		status: {
 			name: 'status',
 			dataType: 'INTEGER'
@@ -274,6 +278,7 @@ var Question = new Class({
 		numberRange:'',
 		dateRange:'',
 		image: '',
+		orderNo: '',
 		status: ''
 	},
 	jQuery: "Question",
@@ -321,6 +326,9 @@ var Question = new Class({
 	setAllowNull: function(allowNull) {
 		this.options.allowNull = allowNull;
 	},
+	setOrder: function(order) {
+		this.options.orderNo = order;
+	},
 	setStatus: function(status) {
 		this.options.status = status;
 	},
@@ -356,6 +364,9 @@ var Question = new Class({
 	},
 	getDateRange: function() {
 		return this.options.dateRange;
+	},
+	getOrder: function() {
+		return this.options.orderNo;
 	},
 	getStatus: function() {
 		return this.options.status;
@@ -938,6 +949,10 @@ var ParticipantLog = new Class({
 		lastQuestion: {
 			name: 'lastQuestion',
 			dataType: 'INTEGER'
+		},
+		lastScore: {
+			name: 'lastScore',
+			dataType: 'INTEGER'
 		}
 	},
 	options: {
@@ -946,7 +961,8 @@ var ParticipantLog = new Class({
 		startDateTime: '',
 		endDateTime: '',
 		lastQuestion: '',
-		participantSurveyId: ''
+		participantSurveyId: '',
+		lastScore: ''
 	},
 	setParticipantLogId: function(id){
 		this.options.participantLogId = id;
@@ -965,6 +981,12 @@ var ParticipantLog = new Class({
 	},
 	setParticipantSurveyId: function(id) {
 		this.options.participantSurveyId = id;
+	},
+	setLastScore: function(score) {
+		this.options.lastScore = score;
+	},
+	getLastScore: function() {
+		return this.options.lastScore;
 	},
 	getParticipantSurveyId: function() {
 		return this.options.participantSurveyId;
