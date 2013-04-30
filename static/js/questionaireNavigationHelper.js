@@ -5,7 +5,8 @@ var qIndex = 0,
 	participantAnswerList=[],
 	lastQid,
 	questionaires,
-	answerVal = 0 ;
+	answerVal = 0, 
+	yes = true;
 
 function getQuestion() {
 	questionaires = $("body").data("questionaire");
@@ -161,6 +162,8 @@ $(function(){
 					}
 					$("body").data("questionaire", {"questions": questions, fromPrevious: false});
 					parseAnswer();
+					//we have speciall case for the surveyId =3
+					parseAnswerSpecialCase();
 					$("#previousQuestion").show();
 					clearQuestionBlock();
 					getQuestion();
@@ -171,13 +174,15 @@ $(function(){
 		else{
 			//validate answer before going next
 			var valid = answerValidated();
-			if(true) {
+			if(valid) {
 				if(qIndex == totalQ) {
 					return;
 				}
 				qIndex = qIndex + 1;
 				if(qIndex < totalQ) {
 					//parseAnswer();
+					//we have speciall case for the surveyId =3
+					parseAnswerSpecialCase();
 					$("#previousQuestion").show();
 					clearQuestionBlock();
 					getQuestion();
@@ -237,6 +242,39 @@ $(function(){
 	}, 100);
 });
 
+function parseAnswerSpecialCase() {
+	var selectedSurvey = $("#selectedSurvey").data("selectedSurvey");
+	if(selectedSurvey.surveyId == 3) {
+		var qType = $(".question-block > .question").attr("qtype");
+		//parent child question doesn't stored question type in the parent div
+		if(qType == undefined) {
+			//loop through the children
+			var t = true;
+			var child = $(".child-question");
+			for(var i = 0; i < child.length ; i++) {
+				var qType = $(child[i]).find(".group-question-row").attr("qtype");
+				var tq;
+				if(Number(qType) == 4) {
+					tq = $(child[i]).find(".answer > input[type='radio']:checked").val();
+					if(tq == "No") {
+						yes = false;
+						return;
+					}
+				}
+			}
+		}
+		else {
+			//can't be null
+			if(Number(qType) == 4 ) {
+				t = $(".answer-block input[type='radio']:checked").val();
+				if(t == "No") {
+					yes = false;
+					return;
+				}
+			}
+		}
+	}
+}
 function clearQuestionBlock(){
 	$(".question-header").remove();
 	$(".question-code").remove();
@@ -344,15 +382,26 @@ function showDailog(){
 	buildPopUpPage(240,110);
 	var actionBlock = $("<div class='dialog-action'></div>");
 	actionBlock.append($('<button></button>').text("Yes").addClass("dialog-button").click(function(){
+		var selectedSurvey = $("#selectedSurvey").data("selectedSurvey");
 		enablepage();
-		var participantSurvey = $("#participant").data("participant");
-		var dateTimeConvertor = new DateTimeConvertor();
-		participantSurvey.setEndDateTime(dateTimeConvertor.getCurrentDate());
-		participantSurvey.setStatus(1);
-		participantSurveyDao.update(participantSurvey);
-		var participantSurveyLog = $("#participantLog").data("participantLog");
-		participantSurveyLog.setEndDateTime(dateTimeConvertor.getCurrentDate());
-		participantLogDao.update(participantSurveyLog);
+		if(selectedSurvey.surveyId != 3) {
+			var participantSurvey = $("#participant").data("participant");
+			var dateTimeConvertor = new DateTimeConvertor();
+			participantSurvey.setEndDateTime(dateTimeConvertor.getCurrentDate());
+			participantSurvey.setStatus(1);
+			participantSurveyDao.update(participantSurvey);
+			var participantSurveyLog = $("#participantLog").data("participantLog");
+			participantSurveyLog.setEndDateTime(dateTimeConvertor.getCurrentDate());
+			participantLogDao.update(participantSurveyLog);
+		}
+		else {
+			if(!yes) {
+				alert("You are fail in this section.");
+			}
+			else {
+				alert("You are pass in this section");
+			}
+		}
 		deleteData();
 		$("#content").load("static/view/home.html");
 	}));

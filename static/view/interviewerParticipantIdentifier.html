@@ -95,13 +95,9 @@
 						$("#participantLog").data("participantLog", participantLog);
 					});
 				});
-				$("#content").load("static/view/section.html");
 			}
+			$("#content").load("static/view/section.html");
 			//got to the last question of the participant
-			else {
-				$("#content").load("static/view/questionaire.html");
-			}
-				
 		});
 		$("#backToSurveyList").click(function(){
 			$("#content").load("static/view/surveyList.html");
@@ -120,9 +116,6 @@
 				participantLogDao.getByParticipantCode(function(participantLog) {
 					$("#participantLog").data("participantLog", participantLog);
 					var lastQuestionId = participantLog.getLastQuestion();
-					sectionDao.getByQuestion(lastQuestionId, function(){
-						
-					});
 					//get the question 
 				});
 				return true;
