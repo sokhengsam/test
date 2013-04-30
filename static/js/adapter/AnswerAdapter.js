@@ -18,12 +18,12 @@ var AnswerAdapter = new Class({
 				case 1: //input text
 					var inputTextAnswer = new InputTextAnswer(aOption);
 					inputTextAnswer.mergeTemplate();
-					$("input[type='text']:first").focus();
+					//$("input[type='text']:first").focus();
 					break;
 				case 2: //number
 					var inputNumberAnswer = new InputNumberAnswer(aOption);
 					inputNumberAnswer.mergeTemplate();
-					$("input[type='number']:first").focus();
+					//$("input[type='number']:first").focus();
 					break;
 				case 3: //date
 					break;

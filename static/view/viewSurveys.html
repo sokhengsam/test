@@ -17,7 +17,7 @@ $(function(){
 			var surveyId = survey.getSurveyId();
 			participantSurveyDao.countParticipantBySurveyKey(surveyId, function(recordLength){
 				var onclick = "loadHistoryDetail("+surveyId+");";
-				$("#survey-list").append("<li onclick='"+onclick+"'>"+ survey.getDescription1()+"<span class='survey-status'>" + recordLength + "</span></li>");
+				$("#survey-list").append("<li onclick='"+onclick+"'>"+ survey.getDescription1()+"<span class='survey-status'>" + recordLength + " ppl</span></li>");
 			});
 		});
 	});
@@ -28,7 +28,7 @@ $(function(){
 });
 function loadHistoryDetail(surveyId) {
 	participantSurveyDao.getBySurvey(surveyId, function(participants) {
-		$("body").data("participantSurvey", participants);
+		$("body").data("participantSurveys", participants);
 		$("#content").load("static/view/viewHistoryDetail.html");
 	});
 }

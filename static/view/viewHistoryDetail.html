@@ -7,7 +7,7 @@
 		<div class="survey-title"></div>
 		<div class="home-menu-list">
 			<ul id="participant-list">
-				<li>testing</li>
+				
 			</ul>
 		</div>
 	</div>
@@ -18,7 +18,10 @@ $(".back").click(function(){
 	$("#content").load("static/view/viewSurveys.html");
 })
 $(function() {
-	var participantSurvey = $("body").data("participantSurvey");
-	
+	var participantSurveys = $("body").data("participantSurveys");
+	$.map(participantSurveys,function(participantSurvey){
+		$("#participant-list").append($("<li></li>").text(participantSurvey.getInterviewCode() + 
+				" | " + participantSurvey.getParticipantCode() + " | " + participantSurvey.getStartDateTime()).append($("<span class='survey-status'></span>").text(participantSurvey.getStatus()  == 0 ? "incomplete": "complete")));
+	})
 })
 </script>
