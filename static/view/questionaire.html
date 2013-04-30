@@ -19,7 +19,7 @@
 <script id="singleTemplate" type="x-jquery-tmpl">
 	<div class="answer">
 		<img src="static/css/images/radio-off.png">
-		<input svalue="${value}" type="radio" name="signAnswer"><label>${text}</label>
+		<input svalue="${value}" type="radio" name="${questionId}"><label>${text}</label>
 	</div>
 </script>
 
@@ -150,21 +150,20 @@ function getGroupQuesion(qOption) {
 	groupQuestionAdapter.mergeGroupQuestionParent(groupQuestion); // merge parent question info 
 	
 	questionDao.getChild(qOption.questionId, function(questions) {
-		for(var i = 0;i < questions.length;i++){
-			var question = questions[i];
+		//for(var i = 0;i < questions.length;i++){
+		$.each(questions,function(index,question){
+			console.log(question);
 			var lsAnswers;
 			question.text = question.getDescription1();
 			if(lang == 2) {
 				question.text = question.getDescription2();
 			}
-			$.when(answerDao.getByQuestion(question.getQuestionId(), function(answers){
-				lsAnswers = answers;
-			}))                
-            .done(function () {
+			answerDao.getByQuestion(question.getQuestionId(), function(answers){
             	groupQuestionAdapter.mergeChildQuestionTemplate(question);
-            	groupQuestionAdapter.mergeChildQuestionAnswerTemplate(question.getQuestionTypeId(),lsAnswers,lang);
-            });
-		}
+            	groupQuestionAdapter.mergeChildQuestionAnswerTemplate(question.getQuestionTypeId(),answers,lang);
+				
+			});
+		});
 	});
 }
 
