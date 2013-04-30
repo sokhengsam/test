@@ -5,7 +5,6 @@ var qIndex = 0,
 	participantAnswerList=[],
 	lastQid,
 	questionaires,
-	answerVal = 0, 
 	yes = true;
 
 function getQuestion() {
@@ -44,7 +43,7 @@ function getQuestion() {
 			scroller.destroy();
 			scroller = new iScroll("scrollWrapper");
 		}
-	}, 100);
+	}, 400);
 }
 
 /**
@@ -108,12 +107,12 @@ function parseAnswer() {
 	var childQuestions = $(".child-question");
 	//parent child question
 	if(childQuestions.length > 0) {
-		childQuestion.each(function(i, child){
+		childQuestions.each(function(i, child){
 			var participantA = new ParticipantAnswer();
-			var q = child.find("group-question-row");
+			var q = $(child).find(".group-question-row");
 			participantA.setQuestionId(q.attr("id"));
 			var type = q.attr("qtype");
-			parseValue($(this), type, participantA);
+			parseValue($(child), type, participantA);
 			participantAnswerList.push(participantA);
 		});
 	}
@@ -122,7 +121,7 @@ function parseAnswer() {
 		participantA.setQuestionId($(".question").attr("id"));
 		parseValue($(".answer"), $(".question").attr("qtype"), participantA);
 	}
-	alert(answerVal);
+	//alert(answerVal);
 }
 
 
@@ -167,8 +166,10 @@ $(function(){
 							break;
 						}
 					}
-					$("body").data("questionaire", {"questions": questions, fromPrevious: false});
-					parseAnswer();
+					$("body").data("questionaire", {"questions": questions, fromPrevious: false, "sectionId": secId});
+					if(secId == 9) {
+						parseAnswer();
+					}
 					//we have speciall case for the surveyId =3
 					parseAnswerSpecialCase();
 					$("#previousQuestion").show();
@@ -180,6 +181,7 @@ $(function(){
 		}
 		else{
 			//validate answer before going next
+			var selectedSectionId = $("body").data("questionaire").sectionId;
 			var valid = answerValidated();
 			if(valid) {
 				if(qIndex == totalQ) {
@@ -187,7 +189,9 @@ $(function(){
 				}
 				qIndex = qIndex + 1;
 				if(qIndex < totalQ) {
-					//parseAnswer();
+					if(selectedSectionId == 9) {
+						parseAnswer();
+					}
 					//we have speciall case for the surveyId =3
 					parseAnswerSpecialCase();
 					$("#previousQuestion").show();
@@ -246,7 +250,7 @@ $(function(){
 	setTimeout(function() {
 		$("#scrollWrapper").css("height", ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15) + "px");
 		scroller = new iScroll("scrollWrapper");
-	}, 100);
+	}, 400);
 });
 
 function parseAnswerSpecialCase() {
@@ -405,6 +409,7 @@ function showDailog(){
 			var participantSurveyLog = $("#participantLog").data("participantLog");
 			participantSurveyLog.setEndDateTime(dateTimeConvertor.getCurrentDate());
 			participantLogDao.update(participantSurveyLog);
+			//$("#content").load("static/view/emptyScreen.html");
 		}
 		else {
 			if(!yes) {

@@ -15,7 +15,8 @@ var surveyDao = null,
 	scroller = null,
 	request = null,
 	mobile = null;
-	skipQuestionHistory = [];
+	skipQuestionHistory = [],
+	answerVal = 0;
 
 
 var sampleJson = 

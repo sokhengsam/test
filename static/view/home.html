@@ -22,8 +22,12 @@
 $(function(){
 	
 	if(navigator.onLine) {
-		showLoadingDialog();
-		request.downloadSurvey();
+		surveyDao.getAll(function(surveys) {
+			if(surveys.length == 0) {
+				showLoadingDialog();
+				request.downloadSurvey();
+			}
+		});
 	}
 	$(".home-menu-list ul li:first").click(function(){
 		$("#content").load("static/view/surveyList.html");

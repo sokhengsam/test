@@ -1,0 +1,16 @@
+<div class="home-navigation">
+	
+</div>
+<script type="text/javascript">
+$(function(){
+	buildPopUpPage(240,110);
+	var actionBlock = $("<div class='dialog-action'></div>");
+	actionBlock.append($('<button></button>').text("Ok").addClass("dialog-button").click(function(){
+		$("#content").load("static/view/home.html");
+	});
+	$("#popup").append($("<div class='dialog-title'></div>").text("Confirm"));
+	$("#popup").append($("<div class='dialog-message'></div>").text("Your score is " + answerVal + "<br/> Thank you for your participation in the survey!"));
+	$("#popup").append(actionBlock);
+	$("#popup").css("background-color", "#385676");
+});
+</script>

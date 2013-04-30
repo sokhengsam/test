@@ -23,8 +23,14 @@
 		$(".section").css("height", $(window).height() - $(".footer").height());
 		$("#nextQuestion").click(function() {
 			questionDao.getBySection(section.getSectionId(), function(questions) {
-				$("body").data("questionaire", {"questions": questions, fromPrevious: false});
-				$("#content").load("static/view/questionaire.html");
+				if(questions.length > 0) {
+					$("body").data("questionaire", {"questions": questions, fromPrevious: false, "sectionId": section.getSectionId()});
+					$("#content").load("static/view/questionaire.html");
+				}
+				else {
+					//sectionDisplayed++;
+					$("#content").load("static/view/section.html");
+				}
 			});
 		});
 		//load the last question of the last section
@@ -33,8 +39,14 @@
 			var sections = $("body").data("sections");
 			var section = sections[sectionDisplayed];
 			questionDao.getBySection(section.getSectionId(), function(questions) {
-				$("body").data("questionaire", {"questions": questions, fromPrevious: true});
-				$("#content").load("static/view/questionaire.html");
+				if(questions.length > 0) {
+					$("body").data("questionaire", {"questions": questions, fromPrevious: true, "sectionId": section.getSectionId()});
+					$("#content").load("static/view/questionaire.html");
+				}
+				else {
+					sectionDisplayed--;
+					$("#content").load("static/view/section.html");
+				}
 			});
 		});
 	});
