@@ -20,8 +20,34 @@ $(".back").click(function(){
 $(function() {
 	var participantSurveys = $("body").data("participantSurveys");
 	$.map(participantSurveys,function(participantSurvey){
-		$("#participant-list").append($("<li></li>").text(participantSurvey.getInterviewCode() + 
-				" | " + participantSurvey.getParticipantCode() + " | " + participantSurvey.getStartDateTime()).append($("<span class='survey-status'></span>").text(participantSurvey.getStatus()  == 0 ? "incomplete": "complete")));
-	})
-})
+		var li = $("<li></li>").text(participantSurvey.getInterviewCode() + 
+				" | " + participantSurvey.getParticipantCode() + " | " + participantSurvey.getStartDateTime());
+		participantLogDao.findParticipantLogByParticipantSurvey(participantSurvey.getParticipantSurveyId(),function(participantLog){
+			var embededData = {
+								lastQuestionId: participantLog.getLastQuestion(),
+								lastSectionId: participantLog.getLastSectionId(),
+								lastSectionIndex: participantLog.getLastSectionIndex(),
+								lastQuestionIndex: participantLog.getLastQuestionIndex(),
+								participantLog: participantLog
+							  }
+			li.data("continueSurvey",embededData);
+		});
+		
+		li.bind("click",function(){
+			continueSurvey($(this));
+		});
+		
+		$("#participant-list").append(li.append($("<span class='survey-status'></span>").text(participantSurvey.getStatus()  == 0 ? "incomplete": "complete")));
+	});
+});
+
+function continueSurvey(li){
+	var liData = li.data("continueSurvey");
+	questionDao.getBySection(liData.lastSectionId,function(questions){
+		$("#participantLog").data("participantLog", liData.participantLog);
+		$("body").data("startQuestionData",liData);
+		$("body").data("questionaire", {"questions": questions, fromPrevious: false});
+		$("#content").load("static/view/questionaire.html");
+	});
+}
 </script>

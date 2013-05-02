@@ -41,16 +41,16 @@ var JSONParser = new Class({
 			sectionDao.persist(section,persistCallback);
 		}
 	},
-	parseQuestionType: function(questionTypes) {
+	parseQuestionType: function(questionTypes,persistCallback) {
 		for(var i = 0; i < questionTypes.length; i++) {
 			var questionType = new QuestionType();
 			var q = questionTypes[i];
 			questionType.setQuestionTypeId(q.QuestionTypeID);
 			questionType.setQuestionTypeName(q.QuestionTypeName);
-			questionTypeDao.persist(questionType);
+			questionTypeDao.persist(questionType,persistCallback);
 		}
 	},
-	parseQuestion: function(questions) {
+	parseQuestion: function(questions,persistCallback) {
 		for(var i = 0; i < questions.length; i++) {
 			var question = new Question();
 			var q = questions[i];
@@ -67,10 +67,10 @@ var JSONParser = new Class({
 			question.setDateRange(q.DateRangeFrom + "-" + q.DateRangeTo);
 			question.setOrder(q.OrderNo);
 			question.setImage(q.Image);
-			questionDao.persist(question);
+			questionDao.persist(question,persistCallback);
 		}
 	},
-	parseAnswer: function(answers) {
+	parseAnswer: function(answers,persistCallback) {
 		for(var i = 0; i < answers.length; i++) {
 			var answer = new Answer();
 			var a = answers[i];
@@ -81,30 +81,30 @@ var JSONParser = new Class({
 			answer.setAnswerTypeId(a.AnswerTypeID);
 			answer.setValue(a.Value);
 			answer.setGoToQuestionId(a.GoToQuestionID);
-			answerDao.persist(answer);
+			answerDao.persist(answer,persistCallback);
 		}
 	},
-	parseProvince: function(provinces) {
+	parseProvince: function(provinces,persistCallback) {
 		for(var i = 0; i < provinces.length; i++) {
 			var province = new Province();
 			var p = provinces[i];
 			province.setProvinceId(p.ProvinceID);
 			province.setProvinceCode(p.ProvinceCode);
 			province.setProvinceName(p.Description1);
-			provinceDao.persist(province);
+			provinceDao.persist(province,persistCallback);
 		}
 	},
-	parseLanguages: function(languages) {
+	parseLanguages: function(languages,persistCallback) {
 		for(var i = 0; i < languages.length; i++) {
 			var language = new Language();
 			var p = languages[i];
 			language.setLanguageId(p.LanguageID);
 			language.setLanguageCode(p.LanguageCode);
 			language.setLanguageName(p.LanguageName);
-			languageDao.persist(language);
+			languageDao.persist(language,persistCallback);
 		}
 	},
-	parseEvaluationOutcome: function(evaluationOutcome) {
+	parseEvaluationOutcome: function(evaluationOutcome,persistCallback) {
 		for(var i = 0; i < evaluationOutcome.length; i++) {
 			var eva = new OutcomeEvaluation();
 			var e = evaluationOutcome[i];
@@ -113,7 +113,7 @@ var JSONParser = new Class({
 			eva.setDescription1(e.Description1);
 			eva.setDescription2(e.Description2);
 			eva.setStatus(e.Status);
-			evaluationOutcomeDao.persist(eva);
+			evaluationOutcomeDao.persist(eva,persistCallback);
 		}
 	},
 	//shouldn't be nothing to parse
@@ -121,13 +121,13 @@ var JSONParser = new Class({
 		
 	},
 	
-	parseAnswerType: function(answerTypeResponse) {
+	parseAnswerType: function(answerTypeResponse,persistCallback) {
 		for(var i = 0; i < answerTypeResponse.length ; i++) {
 			var answerType = new AnswerType()
 			var a = answerTypeResponse[i];
 			answerType.setAnswerTypeId(a.AnswerTypeID);
 			answerType.setAnswerTypeCode(a.Description1);
-			answerTypeDao.persist(answerType);
+			answerTypeDao.persist(answerType,persistCallback);
 		}
 	},
 	storeMobileKey: function(response, successCallback) {

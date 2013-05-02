@@ -46,22 +46,29 @@ var CASIAPIRequests = new Class({
 			evaluationOutcome = sampleJson.outcomeevaluation,
 			answerType = sampleJson.answertype;
 		
-		this.countPersistProcess((surveys.length + sections.length))
+		this.countPersistProcess((surveys.length + 
+								  sections.length + 
+								  questiontypes.length + 
+								  question.length + 
+								  answers.length +
+								  provinces.length + 
+								  evaluationOutcome.length + 
+								  answerType.length + 
+								  languages.length));
 		
 		this.parseSurvey(surveys,this.processPersistCompleteCallback);
 		this.parseSection(sections,this.processPersistCompleteCallback);
-		this.parseQuestionType(questiontypes);
-		this.parseQuestion(question);
-		this.parseAnswer(answers);
-		this.parseParticipantAnswer(participantanswers);
-		this.parseProvince(provinces);
-		this.parseLanguages(languages);
-		this.parseEvaluationOutcome(evaluationOutcome);
-		console.log(answerType);
-		this.parseAnswerType(answerType);
+		this.parseQuestionType(questiontypes,this.processPersistCompleteCallback);
+		this.parseQuestion(question,this.processPersistCompleteCallback);
+		this.parseAnswer(answers,this.processPersistCompleteCallback);
+		this.parseParticipantAnswer(participantanswers,this.processPersistCompleteCallback);
+		this.parseProvince(provinces,this.processPersistCompleteCallback);
+		this.parseLanguages(languages,this.processPersistCompleteCallback);
+		this.parseEvaluationOutcome(evaluationOutcome,this.processPersistCompleteCallback);
+		this.parseAnswerType(answerType,this.processPersistCompleteCallback);
 	},
 	processPersistCompleteCallback: function(){
-		console.log(persistLength);
+		//console.log(persistLength);
 		persistLength.shift();
 		if(persistLength.length == 0){
 			enablepage();

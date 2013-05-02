@@ -131,6 +131,13 @@ $(function(){
 	
 	$("input[type='radio']").radio("add",{imageOn: "static/css/images/radio-on.png",imageOff: "static/css/images/radio-off.png"});
 	
+	// continue questionnaire in incomplete questionnaire
+	var startQuestionData = $("body").data("startQuestionData");
+	if(null != startQuestionData){
+		qIndex = startQuestionData.lastQuestionIndex;
+		sectionDisplayed = startQuestionData.lastSectionIndex;
+		$("body").removeData("startQuestionData");
+	}
 	getQuestion();
 	if(sectionDisplayed == 0 && qIndex == 0) {
 		$("#previousQuestion").hide();
@@ -285,7 +292,12 @@ function clearQuestionBlock(){
 function suspend() {
 	var pLog = $("#participantLog").data("participantLog");
 	pLog.setLastQuestion(lastQid);
+	pLog.setLastScore(0);
+	pLog.setLastSectionIndex(sectionDisplayed);
+	pLog.setLastQuestionIndex(qIndex);
+	pLog.setLastSectionId(sectionId);
 	participantLogDao.update(pLog);
+	console.log(qIndex);
 	deleteData();
 	$("#content").load("static/view/home.html");
 }

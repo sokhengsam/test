@@ -953,6 +953,18 @@ var ParticipantLog = new Class({
 		lastScore: {
 			name: 'lastScore',
 			dataType: 'INTEGER'
+		},
+		lastSectionIndex:{
+			name: 'lastSectionIndex',
+			dataType: 'INTEGER'
+		},
+		lastQuestionIndex:{
+			name: 'lastQuestionIndex',
+			dataType: 'INTEGER'
+		},
+		lastSectionId: {
+			name: 'lastSectionId',
+			dataType: 'INTEGER'
 		}
 	},
 	options: {
@@ -962,7 +974,10 @@ var ParticipantLog = new Class({
 		endDateTime: '',
 		lastQuestion: '',
 		participantSurveyId: '',
-		lastScore: ''
+		lastScore: '',
+		lastSectionIndex: "",
+		lastQuestionIndex: "",
+		lastSectionId: ""
 	},
 	setParticipantLogId: function(id){
 		this.options.participantLogId = id;
@@ -985,6 +1000,15 @@ var ParticipantLog = new Class({
 	setLastScore: function(score) {
 		this.options.lastScore = score;
 	},
+	setLastSectionIndex: function(sectionIndex){
+		this.options.lastSectionIndex = sectionIndex;
+	},
+	setLastQuestionIndex: function(questionIndex){
+		this.options.lastQuestionIndex = questionIndex;
+	},
+	setLastSectionId: function(sectionId){
+		this.options.lastSectionId = sectionId;
+	},
 	getLastScore: function() {
 		return this.options.lastScore;
 	},
@@ -1005,6 +1029,15 @@ var ParticipantLog = new Class({
 	},
 	getLastQuestion: function() {
 		return this.options.lastQuestion;
+	},
+	getLastSectionIndex: function(){
+		return this.options.lastSectionIndex;
+	},
+	getLastQuestionIndex: function(){
+		return this.options.lastQuestionIndex;
+	},
+	getLastSectionId: function(){
+		return this.options.lastSectionId;
 	}
 });
 
