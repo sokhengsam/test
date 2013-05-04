@@ -544,6 +544,14 @@ var ParticipantAnswer = new Class({
 			name: 'description',
 			dataType: 'TEXT'
 		},
+		startDateTime: {
+			name: 'startDateTime',
+			dataType: 'TEXT'
+		},
+		endDateTime: {
+			name: 'endDateTime',
+			dataType: 'TEXT'
+		},
 		status: {
 			name: 'status',
 			dataType: 'INTEGER'
@@ -555,13 +563,15 @@ var ParticipantAnswer = new Class({
 		answerId: '',
 		questionId: '',
 		description: '',
+		startDateTime: '',
+		endDateTime: '',
 		status: ''
 	},
 	setParticipantAnswerId: function(id) {
-		this.options.participantAnserId = id;
+		this.options.participantAnswerId = id;
 	},
 	getParticipantAnswerId: function() {
-		return this.options.participantAnserId;
+		return this.options.participantAnswerId;
 	},
 	setInterviewCode: function(code) {
 		this.options.interviewCode = code;
@@ -604,6 +614,18 @@ var ParticipantAnswer = new Class({
 	},
 	getStatus: function() {
 		return this.options.status;
+	},
+	setStartDateTime: function(st) {
+		this.options.startDateTime = st;
+	},
+	getStartDateTime: function() {
+		return this.options.startDateTime;
+	},
+	setEndDateTime: function(et) {
+		this.options.endDateTime = et;
+	},
+	getEndDateTime: function() {
+		return this.options.endDateTime;
 	}
 });
 

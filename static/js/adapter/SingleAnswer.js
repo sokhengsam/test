@@ -9,6 +9,10 @@ var SingleAnswer = new Class({
 	},
 	mergeTemplate: function(){
 		// merge template
+		console.log(this.pAnswer);
+		if(this.pAnswer != undefined) {
+			this.answer.panswerId = this.pAnswer.getParticipantAnswerId();
+		}
 		var singleAnswerTemplate = $('#singleTemplate').tmpl(this.answer);
 		singleAnswerTemplate.find("input[type='radio']").data("goToQuestionId",this.answer.goToQuestionId);
 		//auto add input box if answer type is other

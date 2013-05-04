@@ -80,7 +80,7 @@
 				if(langId != -1) {
 					participantSurvey.setLanguageId(langId);
 				}
-				participantSurvey.setStartDateTime(dateTimeConvertor.getCurrentDate() + " " + dateTimeConvertor.getCurrentTime());
+				participantSurvey.setStartDateTime(dateTimeConvertor.getCurrentDateTime());
 				participantSurvey.setEndDateTime("");
 				participantSurvey.setStatus(0);
 				participantSurveyDao.persist(participantSurvey, function(index) {
@@ -89,7 +89,7 @@
 					var participantLog = new ParticipantLog();
 					participantLog.setParticipantSurveyId(participantSurvey.getParticipantSurveyId());
 					participantLog.setParticipantCode(participantCode);
-					participantLog.setStartDateTime(dateTimeConvertor.getCurrentDate());
+					participantLog.setStartDateTime(dateTimeConvertor.getCurrentDateTime());
 					participantLog.setEndDateTime("");
 					participantLog.setLastQuestion("");
 					participantLogDao.persist(participantLog, function(i) {
@@ -104,7 +104,7 @@
 		$("#backToSurveyList").click(function(){
 			$("#content").load("static/view/surveyList.html");
 		});
-		$("#startDateTime").text(dateTimeConvertor.getCurrentUSDate() + " " + dateTimeConvertor.getCurrentTime());
+		$("#startDateTime").text(dateTimeConvertor.getCurrentDateTime());
 	});
 	
 	function isParticipantExist(participantCode, evaluationOutcome) {

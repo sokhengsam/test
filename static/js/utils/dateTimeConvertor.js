@@ -41,5 +41,8 @@ var DateTimeConvertor = new Class({
 	getTimeStamp: function() {
 		var today = new Date();
 		return today.getTime();
+	},
+	getCurrentDateTime: function() {
+		return this.getCurrentUSDate() + " " + this.getCurrentTime();
 	}
 });

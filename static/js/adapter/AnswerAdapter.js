@@ -21,6 +21,7 @@ var AnswerAdapter = new Class({
 				case 1: //input text
 					if(this.participanAnswer != undefined) {
 						aOption.value = this.participanAnswer.getDescription();
+						aOption.panswerid = this.participanAnswer.getParticipantAnswerId();
 					}
 					var inputTextAnswer = new InputTextAnswer(aOption);
 					inputTextAnswer.mergeTemplate();
@@ -29,6 +30,7 @@ var AnswerAdapter = new Class({
 				case 2: //number
 					if(this.participanAnswer != undefined) {
 						aOption.value = this.participanAnswer.getDescription();
+						aOption.panswerid = this.participanAnswer.getParticipantAnswerId();
 					}
 					var inputNumberAnswer = new InputNumberAnswer(aOption);
 					inputNumberAnswer.mergeTemplate();
@@ -52,12 +54,17 @@ var AnswerAdapter = new Class({
 				}
 				switch(Number(this.options.questionType)) {
 					case 4: //single question type
+						console.log("single selection");
+						if(this.participanAnswer != undefined) {
+							aOption.panswerId = this.participanAnswer.getParticipantAnswerId();
+						}
 						var singleAnswer = new SingleAnswer(aOption, this.participanAnswer);
 						singleAnswer.mergeTemplate();
 						break;
 					case 5: //multiple question type
 						var multipleAnswer = new MultipleAnswer(aOption, this.participanAnswer);
 						multipleAnswer.mergeTemplate();
+						
 						break;
 						
 					default:

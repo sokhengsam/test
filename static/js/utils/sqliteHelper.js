@@ -89,10 +89,12 @@ var SQLiteHelper =  new Class({
 		for(var n in domain.options) {
 			//skip the value if the primary key is integer cos it's already autoincrease
 			if(!(p == n)) {
+				console.log(n);
 				d.push(domain.options[n]);
 			}
 		}
 		d.push(this.getPrimaryKey(domain));
+		console.log(d.length);
 		this.options.db.transaction(function(tx) {
 			tx.executeSql(self.getUpdateStatement(), d, function(){console.log("Update succed");}, function(tx, error){console.log("Update fail " + error.message);});
 		});
@@ -183,6 +185,7 @@ var SQLiteHelper =  new Class({
 		}
 		p = p.substring(0, p.length -2);
 		updateStatement += p + " WHERE " + pk + " = ?";
+		console.log(updateStatement);
 		return updateStatement;
 	},
 	getDeleteStatement: function(){

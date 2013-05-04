@@ -1,7 +1,7 @@
 <div class="home-navigation">
 	<span class="back">Back</span>
 	<span class="title">View History</span>
-	<span class="sync"></span>
+	<span class="sync" id="sync"></span>
 </div>
 <div class="home">
 	<div class="survey-block">
@@ -28,6 +28,7 @@
 </script>
 
 <script>
+dateConvertor = new DateTimeConvertor();
 $(".back").click(function(){
 	$("#content").load("static/view/viewSurveys.html");
 })
@@ -71,7 +72,86 @@ $(function() {
 		
 		$("#participant_list_" + startedDateTime[0]).append(li);
 	});
+	
+	$("#sync").click(function(){
+		sychronizeData(participantSurveys);
+	});
 });
+
+function sychronizeData(pSurveys) {
+	var participantsurvey = [];
+	var participantanswer = [];
+	var participantlog = [];
+	var sIds=[];
+	var requestData = new Object();
+	$.each(pSurveys, function(i, p){
+		var pars = {
+       		"ParticipantSurveyID": p.getParticipantSurveyId(),
+             "SurveyID": p.getSurveyId(),
+             "SurveyDate": p.getSurveyDate(),
+             "InterviewerCode": p.getInterviewCode(),
+             "ParticipantCode": p.getParticipantCode(),
+             "PlaceOfInterview": p.getPlaceOfInterview(),
+             "ProvinceID": p.getProvinceId(),
+             "OutcomeEvaluationID": p.getOutComeEvaluationId(),
+             "LanguageID": p.getLanguageId(),
+             "AddedDate": p.getStartDateTime(),
+             "EndDateTime": p.getEndDateTime(),
+             //"AddedDate": dateConvertor.getCurrentDate(),
+             "AddedBy": "Mobile_Web",
+             "Status": p.getStatus()
+        }
+		participantsurvey.push(pars);
+		requestData.participantsurvey = JSON.stringify(participantsurvey);
+		
+		sIds.push(p.getParticipantSurveyId());
+	});
+	
+	participantAnswerDao.getBySurvey(sIds, function(items) {
+		$.each(items, function(i, a){
+			var pAnswer = {
+				"ParticipantAnswerID": a.getParticipantAnswerId(),
+				"ParticipantSurveyID": a.getParticipantSurveyId(),
+				"AnswerID": a.getParticipantAnswerId(),
+				"QuestionID": a.getQuestionId(),
+				"Description" : a.getDescription(),
+				"AddedDate": a.getStartDateTime(),
+				//"EndDateTime": a.getEndDateTime()
+				"AddedBy": "Mobile_Web",
+			}
+			participantanswer.push(pAnswer);
+		});
+		requestData.participantanswer = JSON.stringify(participantanswer);
+		
+		addRequestObject(requestData);
+	});
+	participantLogDao.findParticipantLogByParticipantSurveys(sIds, function(items){
+		$.each(items, function(i, l){
+			var pLog = {
+				"ParticipantLogID": l.getParticipantLogId(),
+				"ParticipantCode": l.getParticipantCode(),
+				"StartDateTime": l.getStartDateTime(),
+				"EndDateTime": l.getEndDateTime(),
+			}
+			participantlog.push(pLog);
+		});
+		requestData.participantlog = JSON.stringify(participantlog);
+		addRequestObject(requestData);
+	});
+	/*
+	var requestData = {
+		mobilekey: '', 
+        participantsurvey: JSON.stringify(participantsurvey),
+        participantanswer: JSON.stringify(participantanswer),
+        participantlog: JSON.stringify(participantlog)
+	};*/
+	//request.uploadSurvey(requestData);
+}
+function addRequestObject(requestData) {
+	if(requestData.participantsurvey != undefined && requestData.participantanswer != undefined && requestData.participantlog != undefined) {
+		request.uploadSurvey(requestData);
+	}
+}
 
 function continueSurvey(li){
 	var liData = li.data("continueSurvey");

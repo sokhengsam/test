@@ -19,25 +19,25 @@
 <script id="singleTemplate" type="x-jquery-tmpl">
 	<div class="answer">
 		<img src="static/css/images/radio-off.png">
-		<input svalue="${value}" type="radio" name="${questionId}" id="a${answerId}"><label for="a${answerId}">${text}</label>
+		<input svalue="${value}" type="radio" name="${questionId}" id="a${answerId}" panswer="${panswerid}"><label for="a${answerId}">${text}</label>
 	</div>
 </script>
 
 <!-- number answer template -->
 <script id="numberTemplate" type="x-jquery-tmpl">
-	<div class="answer"><input type="number" name="answer" value="${value}"/>${text}</div>
+	<div class="answer"><input type="number" name="answer" value="${value}" panswer="${panswerid}"/>${text}</div>
 </script>
 
 <!-- text answer template -->
 <script id="textTemplate" type="x-jquery-tmpl">
-	<div class="answer"><input type="text" name="answer" value="${value}"/>${text}</div>
+	<div class="answer"><input type="text" name="answer" value="${value}" panswer="${panswerid}"/>${text}</div>
 </script>
 
 <!-- multiple answer template -->
 <script id="multipleTemplate" type="x-jquery-tmpl">
   <div class="answer">
 	<img src="static/css/images/check-off.png">
-	<input svalue="${value}" type="checkbox" id="a${answerId}"/><label for="a${answerId}">${text}</label>
+	<input svalue="${value}" type="checkbox" id="a${answerId}" panswer="${panswerid}"/><label for="a${answerId}">${text}</label>
   </div>
 </script>
 

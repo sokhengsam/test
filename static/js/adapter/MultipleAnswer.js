@@ -1,9 +1,11 @@
 var MultipleAnswer = new Class({
 	answer: "",
 	ANSWERTYPE: 2,
-	initialize: function(answer){
+	pAnswer:'',
+	initialize: function(answer, pAnswer){
 		// answer of question for merge template
 		this.answer = answer;
+		this.pAnswer = pAnswer;
 	},
 	mergeTemplate: function(){
 		// merge template
@@ -12,5 +14,13 @@ var MultipleAnswer = new Class({
 			multipleAnswerTemplate.append($("<input type='text' />"))
 		}
 		multipleAnswerTemplate.appendTo($(".answer-block :last"));
+		if(this.pAnswer != undefined) {
+			for(var i = 0; i < this.pAnswer.length; i++) {
+				var p = this.pAnswer[i];
+				console.log(">>>>>>>>> answer id: " + p.getAnswerId());
+				$("#a"+p.getAnswerId()).attr("checked", "checked");
+				$("#a"+p.getAnswerId()).trigger("click");
+			}
+		}
 	}
 });

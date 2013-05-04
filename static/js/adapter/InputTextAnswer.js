@@ -12,6 +12,7 @@ var InputTextAnswer = new Class({
 var InputNumberAnswer = new Class({
 	answers:[],
 	initialize: function(answers){
+		console.log(answers);
 		// answer of question for merge template
 		this.answers = answers;
 	},
