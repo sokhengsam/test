@@ -185,7 +185,12 @@ li:HOVER{
 	display: inline-block;
 	float: right;
 	font-size: 25px;
-	color: #aeaeaf;
+	background-image: url("images/exit.png");
+	background-repeat: no-repeat;
+	width: 32px;
+	height: 30px;
+	margin-top: 7px;
+	cursor: pointer;
 }
 
 .home-navigation{
@@ -491,4 +496,28 @@ input[type='checkbox'],input[type='radio']{
 .loading-dialog{
 	text-align: center;
 	padding-top: 8px;
+}
+
+.date-label{
+	margin-left: 10px;
+	font-size: 18px;
+	color: #888;
+	text-decoration: underline;
+}
+
+.incomplete{
+	color:red;
+}
+
+.sync{
+	background-image: url("images/sync.png");
+	background-repeat: no-repeat;
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	float: right;
+	padding-right: 5px;
+	vertical-align: middle;
+	margin-top: 12px;
+	cursor: pointer;
 }

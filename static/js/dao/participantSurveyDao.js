@@ -65,16 +65,21 @@ var ParticipantSurveyDao = new Class({
 		});
 	},
 	countParticipantBySurveyKey: function(surveyId,successCallback){
-		var sqlCountSurvey = "SELECT count(*) as count FROM "+this.options.tableName + " WHERE surveyId = " + surveyId;
-		var returnValue;
+		var sqlCountSurvey = "SELECT count(*) as count,status FROM "+this.options.tableName + " WHERE surveyId = " + surveyId + " group by status";
+		var returnValue = new Object();
+		var completeAndIncompleteStatusNumber = 0;
 		this.options.db.transaction(function(tx){
 			tx.executeSql(sqlCountSurvey, [], function(tx, result) {
 				dataset = result.rows;
 				for (var i = 0; i < dataset.length; i++) {
-					returnValue = dataset.item(i)["count"];
-					break;
-					
+					if(dataset.item(i)["status"] === 0 || dataset.item(i)["status"] === 1 ){
+						completeAndIncompleteStatusNumber = completeAndIncompleteStatusNumber + dataset.item(i)["count"];
+					}
+					else{
+						returnValue.sync = dataset.item(i)["count"];
+					}					
 				}
+				returnValue.notSync = completeAndIncompleteStatusNumber;
 				successCallback(returnValue);
 			});
 		});

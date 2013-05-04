@@ -1,6 +1,7 @@
 <div class="home-navigation">
 	<span class="back">Back</span>
 	<span class="title">View History</span>
+	<span class="sync"></span>
 </div>
 <div class="home">
 	<div class="survey-block">
@@ -13,15 +14,45 @@
 	</div>
 </div>
 
+<!-- survey history template -->
+<script id="groupListHistoryDetailTemplate" type="x-jquery-tmpl">
+	<div>
+		<div class="date-label">${date}</div>
+		<ul id="participant_list_${date}"></ul>
+	</div>
+</script>
+
+<!-- survey history template -->
+<script id="listHistoryDetailTemplate" type="x-jquery-tmpl">
+	<li>${interviewCode} | ${participantCode} | ${time} <span class='survey-status ${statusClass}'>${status}</span></li>
+</script>
+
 <script>
 $(".back").click(function(){
 	$("#content").load("static/view/viewSurveys.html");
 })
 $(function() {
 	var participantSurveys = $("body").data("participantSurveys");
+	var existingDate = [];
 	$.map(participantSurveys,function(participantSurvey){
-		var li = $("<li></li>").text(participantSurvey.getInterviewCode() + 
-				" | " + participantSurvey.getParticipantCode() + " | " + participantSurvey.getStartDateTime());
+		if(participantSurvey.getStatus() === 2){
+			return;
+		}
+		var startedDateTime = participantSurvey.getStartDateTime().split(/\s/);
+		// pulupate group
+		if(existingDate.indexOf(startedDateTime[0]) < 0){
+			$(".home-menu-list").append($("#groupListHistoryDetailTemplate").tmpl({date: startedDateTime[0]}));
+			existingDate.push(startedDateTime[0]);
+		}
+		
+		var li = $("#listHistoryDetailTemplate").tmpl({
+						interviewCode: participantSurvey.getInterviewCode(),
+						participantCode: participantSurvey.getParticipantCode(),
+						time: getTime(startedDateTime[1]),
+						status: participantSurvey.getStatus()  == 0 ? "Incomplete": "Complete",
+						statusClass: participantSurvey.getStatus()  == 0 ? "incomplete": ""
+						});
+		
 		participantLogDao.findParticipantLogByParticipantSurvey(participantSurvey.getParticipantSurveyId(),function(participantLog){
 			var embededData = {
 								lastQuestionId: participantLog.getLastQuestion(),
@@ -37,7 +68,7 @@ $(function() {
 			continueSurvey($(this));
 		});
 		
-		$("#participant-list").append(li.append($("<span class='survey-status'></span>").text(participantSurvey.getStatus()  == 0 ? "incomplete": "complete")));
+		$("#participant_list_" + startedDateTime[0]).append(li);
 	});
 });
 
@@ -49,5 +80,14 @@ function continueSurvey(li){
 		$("body").data("questionaire", {"questions": questions, fromPrevious: false});
 		$("#content").load("static/view/questionaire.html");
 	});
+}
+
+/**
+ * @param stringTime
+ * return time in format 00h:00mn
+ */
+function getTime(stringTime){
+	var timeArray = stringTime.split(":");
+	return timeArray[0] + "h:"+ timeArray[1] + "mn";
 }
 </script>

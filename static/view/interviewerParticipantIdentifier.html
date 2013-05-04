@@ -78,7 +78,7 @@
 				if(langId != -1) {
 					participantSurvey.setLanguageId(langId);
 				}
-				participantSurvey.setStartDateTime(dateTimeConvertor.getCurrentDate());
+				participantSurvey.setStartDateTime(dateTimeConvertor.getCurrentDate() + " " + dateTimeConvertor.getCurrentTime());
 				participantSurvey.setEndDateTime("");
 				participantSurvey.setStatus(0);
 				participantSurveyDao.persist(participantSurvey, function(index) {

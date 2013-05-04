@@ -649,11 +649,11 @@ var ParticipantSurvey = new Class({
 		},
 		startDateTime: {
 			name: 'startDateTime',
-			dataType: 'NUMERIC'
+			dataType: 'TEXT'
 		},
 		endDateTime: {
 			name: 'endDateTime',
-			dataType: 'NUMBERIC'
+			dataType: 'TEXT'
 		},
 		status: {
 			name: 'status',
