@@ -521,3 +521,7 @@ input[type='checkbox'],input[type='radio']{
 	margin-top: 12px;
 	cursor: pointer;
 }
+.scrollable {
+	padding-bottom: 10px;
+	position:relative;
+}

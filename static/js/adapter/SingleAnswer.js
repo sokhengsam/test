@@ -1,9 +1,11 @@
 var SingleAnswer = new Class({
 	answer: "",
+	pAnswer: '',
 	ANSWERTYPE: "2",
-	initialize: function(answer){
+	initialize: function(answer, pAnswer){
 		// answer of question for merge template
 		this.answer = answer;
+		this.pAnswer = pAnswer;
 	},
 	mergeTemplate: function(){
 		// merge template
@@ -14,5 +16,9 @@ var SingleAnswer = new Class({
 			singleAnswerTemplate.append($("<input type='text' />"))
 		}
 		singleAnswerTemplate.appendTo($(".answer-block :last"));
+		if(this.pAnswer != undefined) {
+			$("#a"+this.pAnswer.getAnswerId()).attr("checked", "checked");
+			$("#a"+this.pAnswer.getAnswerId()).trigger("click");
+		}
 	}
 });

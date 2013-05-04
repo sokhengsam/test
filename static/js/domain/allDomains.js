@@ -525,7 +525,8 @@ var ParticipantAnswer = new Class({
 		primaryKey:{
 			name: 'participantAnswerId',
 			dataType: 'INTEGER',
-			isPrimaryKey: true
+			isPrimaryKey: true,
+			isAutoIncrease:true
 		},
 		participantSurveyId: {
 			name: 'participantSurveyId',

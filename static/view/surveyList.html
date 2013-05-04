@@ -31,11 +31,11 @@
 		$("#content").load("static/view/interviewerParticipantIdentifier.html");
 	}
 	function refreshSurvey() {
+		$("#survey-list").empty();
 		showLoadingDialog();
 		request.downloadSurvey();
 			setTimeout(function(){
 				surveyDao.getAll(function(surveys){
-					console.debug("called back ");
 					for(var i = 0; i < surveys.length; i++) {
 						$("#survey-list").append("<li onclick='loadSection("+surveys[i].getSurveyId()+", \""+ surveys[i].getDescription1()+"\");'>"+ surveys[i].getDescription1() + " | Last Downloaded: " + surveys[i].getLastDownload()+"</li>");
 					}

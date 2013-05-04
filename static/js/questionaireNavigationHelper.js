@@ -2,7 +2,6 @@ var qIndex = 0,
 	totalQ,
 	sectionId,
 	progress,
-	participantAnswerList=[],
 	lastQid,
 	questionaires,
 	yes = true;
@@ -17,6 +16,7 @@ function getQuestion() {
 	if(Number(qIndex)+1 <= totalQ) {
 		$(".pagination-label").text(Number(qIndex)+1 +"/"+totalQ);
 		var question =  questionaires.questions[qIndex];
+		answerQ = participantAnswerList[question.getQuestionId()];
 		lastQid = question.getQuestionId();
 		sectionId = question.getSectionId();
 		var qOption = question.options;
@@ -24,7 +24,6 @@ function getQuestion() {
 		if($("body").data("language") == 2) {
 			qOption.text = question.getDescription2();
 		}
-					
 		if(qOption.questionTypeId == 6) {
 			getGroupQuesion(qOption);
 		}
@@ -32,13 +31,14 @@ function getQuestion() {
 			var questionAdapter = new QuestionAdapter(qOption);
 			questionAdapter.mergeTemplate();
 			var answers = answerDao.getByQuestion(question.getQuestionId(), function(answers){
-				var answerAdapter = new AnswerAdapter({questionType: question.getQuestionTypeId()}, answers, $("body").data("language"));
+				var answerAdapter = new AnswerAdapter({questionType: question.getQuestionTypeId()}, answers, $("body").data("language"), answerQ);
 				answerAdapter.mergeTemplate();
 			});
 		}
 	}
 	setTimeout(function(){
-		$("#scrollWrapper").css("height", ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15) + "px"); //10px maybe the margin or padding top
+		var availableH = ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15);
+		$("#scrollWrapper").css("height", availableH + "px");
 		if(typeof scroller !== 'undefined' && scroller != null) {
 			scroller.destroy();
 			scroller = new iScroll("scrollWrapper");
@@ -103,22 +103,90 @@ function parseValue(child, type, participantA) {
 		}
 	}
 }
-function parseAnswer() {
+
+function parseInputValue(child, participantA, type) {
+	if(Number(type) == 1 || Number(type) == 2 || Number(type) == 3 || Number(type) == 6) {
+		participantA.setDescription(child.find("input").val());
+	}
+	else if(Number(type) == 4 || Number(type) == 5) {
+		switch(Number(type)) {
+			case 4: //single question type
+				participantA.setAnswerId(child.find("input[type='radio']:checked").attr("id").substring(1));
+				break;
+			case 5: //multiple question type
+				//how to store the answer id in the participant answer for this???
+				var checkList = [];
+				child.find("input[type='checkbox']:checked").each(function(i, ch){
+					checkList.push(ch.attr("id").substring(1));
+				});
+				participantA.options.checkList = checkList;
+				break;
+			default:
+				console.log("unknow answer type");
+		}
+	}
+}
+function parseParticipantAnswer() {
 	var childQuestions = $(".child-question");
 	//parent child question
 	if(childQuestions.length > 0) {
+		var pAnswers = [];
 		childQuestions.each(function(i, child){
 			var participantA = new ParticipantAnswer();
 			var q = $(child).find(".group-question-row");
 			participantA.setQuestionId(q.attr("id"));
 			var type = q.attr("qtype");
-			parseValue($(child), type, participantA);
-			participantAnswerList.push(participantA);
+			parseInputValue($(child), participantA, type);
+			participantAnswerList[participantA.getQuestionId()] = participantA;
 		});
 	}
 	else {
+		var type = $(".question").attr("qtype");
 		var participantA = new ParticipantAnswer();
-		participantA.setQuestionId($(".question").attr("id"));
+		var pSurvey = $("#participant").data("participant");
+		if(Number(type) == 1 || Number(type) == 2 || Number(type) == 3 || Number(type) == 6) {
+			participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
+			participantA.setAnswerId("");
+			participantA.setQuestionId($(".question").attr("id"));
+			participantA.setDescription($(".answer").find("input").val());
+			participantAnswerDao.persist(participantA);
+		}
+		else if(Number(type) == 4 || Number(type) == 5) {
+			switch(Number(type)) {
+				case 4: //single question type
+					participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
+					participantA.setAnswerId($(".answer").find("input[type='radio']:checked").attr("id").substring(1));
+					participantA.setQuestionId($(".question").attr("id"));
+					participantAnswerDao.persist(participantA);
+					break;
+				case 5: //multiple question type
+					//how to store the answer id in the participant answer for this???
+					$(".answer-block").find("input[type='checkbox']:checked").each(function(i, ch){
+						participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
+						participantA.setAnswerId(ch.attr("id").substring(1));
+						participantA.setQuestionId($(".question").attr("id"));
+						participantAnswerDao.persist(participantA);
+					});
+					break;
+				default:
+					console.log("unknow answer type");
+			}
+		}
+	}
+}
+
+function parseAnswer() {
+	var childQuestions = $(".child-question");
+	//parent child question
+	if(childQuestions.length > 0) {
+		var pAnswers = [];
+		childQuestions.each(function(i, child){
+			var q = $(child).find(".group-question-row");
+			var type = q.attr("qtype");
+			parseValue($(child), type, participantA);
+		});
+	}
+	else {
 		parseValue($(".answer"), $(".question").attr("qtype"), participantA);
 	}
 	//alert(answerVal);
@@ -170,6 +238,7 @@ $(function(){
 					if(secId == 9) {
 						parseAnswer();
 					}
+					//parseParticipantAnswer();
 					//we have speciall case for the surveyId =3
 					parseAnswerSpecialCase();
 					$("#previousQuestion").show();
@@ -188,6 +257,7 @@ $(function(){
 					return;
 				}
 				qIndex = qIndex + 1;
+				//parseParticipantAnswer();
 				if(qIndex < totalQ) {
 					if(selectedSectionId == 9) {
 						parseAnswer();
@@ -248,7 +318,8 @@ $(function(){
 	});
 	
 	setTimeout(function() {
-		$("#scrollWrapper").css("height", ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15) + "px");
+		var availableH = ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15);
+		$("#scrollWrapper").css("height", availableH + "px");
 		scroller = new iScroll("scrollWrapper");
 	}, 400);
 });

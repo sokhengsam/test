@@ -7,6 +7,26 @@ var CASIAPIRequests = new Class({
 		this.baseUrl = "http://cenat.gov.kh:8090/CASIMS/index.php/home/getjsondata";
 		this.self = this;
 	},
+	uploadSurvey: function() {
+		var mobileKey = mobile.getMobileKey();
+		requestData={
+				participantsurvey:{
+					"p1": "test1",
+					"p2": "test2"
+				}, 
+				participationAnswer:{
+					"p1a" : "test3",
+					"p2a": "test4"
+				}, 
+				participanlog:{
+					"pl": "2"
+				},
+				mobilekey:{
+					"MobileKey": mobileKey
+				}
+			};
+		this.postRequest("http://cenat.gov.kh:8090/CASIMS/index.php/home/uploadjsondata", requestData, function() {console.log("success");}, function(){console.log("falt")});
+	},
 	pushAnswer: function(requestData,responseHandler,failureHandler){
 		this.postRequest(this.baseUrl,requestData,responseHandler,failureHandler);
 	},
@@ -27,11 +47,12 @@ var CASIAPIRequests = new Class({
 		});
 	},
 	insertDB: function(response){
-		$.when(this.parseJson(response)).done(function(){console.log("done");});
+		this.parseJson(sampleJson);
+		//$.when(this.parseJson(response)).done(function(){console.log("done");});
 	},
 	downloadSurveyFail: function() {
 		console.log("download survey fail. reading from static sample json");
-		this.parseJson(sampelJson);
+		this.parseJson(sampleJson);
 	},
 	parseJson: function(sampleJson) {
 		

@@ -19,25 +19,25 @@
 <script id="singleTemplate" type="x-jquery-tmpl">
 	<div class="answer">
 		<img src="static/css/images/radio-off.png">
-		<input svalue="${value}" value=${text} type="radio" name="${questionId}"><label>${text}</label>
+		<input svalue="${value}" value=${text} type="radio" name="${questionId}" id="a${answerId}"><label for="a${answerId}">${text}</label>
 	</div>
 </script>
 
 <!-- number answer template -->
 <script id="numberTemplate" type="x-jquery-tmpl">
-	<div class="answer"><input type="number" name="answer"/>${text}</div>
+	<div class="answer"><input type="number" name="answer" value="${value}"/>${text}</div>
 </script>
 
 <!-- text answer template -->
 <script id="textTemplate" type="x-jquery-tmpl">
-	<div class="answer"><input type="text" name="answer"/>${text}</div>
+	<div class="answer"><input type="text" name="answer" value="${value}"/>${text}</div>
 </script>
 
 <!-- multiple answer template -->
 <script id="multipleTemplate" type="x-jquery-tmpl">
   <div class="answer">
 	<img src="static/css/images/check-off.png">
-	<input svalue="${value}" type="checkbox" /><label>${text}</label>
+	<input svalue="${value}" type="checkbox" id="a${answerId}"/><label for="a${answerId}">${text}</label>
   </div>
 </script>
 
@@ -48,7 +48,7 @@
 	<span class="suspend-survey" onclick="suspend();"></span>
 </div>
 <div id="scrollWrapper" class="questionaire-page">
-	<div class="scrollable" id="scrollable" style="padding-bottom:10px;">
+	<div class="scrollable" id="scrollable">
   		<div class="question-block">
 			<div class="question" id="${questionId}" qtype="${questionTypeId}" allowNull="${allowNull}" qcode="${questionCode}">${questionCode}. ${text}</div>
 			<div class="answer-block"></div>
@@ -64,7 +64,7 @@
 	<span class="suspend-survey" onclick="suspend();">[-]</span>
 </div>
 <div id="scrollWrapper" class="questionaire-page">
-	<div class="scrollable" id="scrollable" style="padding-bottom:10px;">
+	<div class="scrollable" id="scrollable">
   		<div class="question-block">
 			<div class="question" qcode="${questionCode}">${questionCode}. ${text}</div>
   		</div>

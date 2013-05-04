@@ -4,23 +4,32 @@ var AnswerAdapter = new Class({
 	options: {
 		questionType: '',
 	},
+	participanAnswer: new ParticipantAnswer(),
 	answers: [],
-	initialize: function(options, answers, lang){
+	initialize: function(options, answers, lang, pAnswer){
 		//parse json to question template data
 		this.answers = answers;
 		this.setOptions(options);
 		this.lang = lang;
+		this.participanAnswer = pAnswer;
 	},
 	mergeTemplate: function(){
 		if(Number(this.options.questionType) == 1 || Number(this.options.questionType) == 2 
 				|| Number(this.options.questionType) == 3 || Number(this.options.questionType) == 6) {
+			var aOption = {};
 			switch(Number(this.options.questionType)) {
 				case 1: //input text
+					if(this.participanAnswer != undefined) {
+						aOption.value = this.participanAnswer.getDescription();
+					}
 					var inputTextAnswer = new InputTextAnswer(aOption);
 					inputTextAnswer.mergeTemplate();
 					//$("input[type='text']:first").focus();
 					break;
 				case 2: //number
+					if(this.participanAnswer != undefined) {
+						aOption.value = this.participanAnswer.getDescription();
+					}
 					var inputNumberAnswer = new InputNumberAnswer(aOption);
 					inputNumberAnswer.mergeTemplate();
 					//$("input[type='number']:first").focus();
@@ -43,11 +52,11 @@ var AnswerAdapter = new Class({
 				}
 				switch(Number(this.options.questionType)) {
 					case 4: //single question type
-						var singleAnswer = new SingleAnswer(aOption);
+						var singleAnswer = new SingleAnswer(aOption, this.participanAnswer);
 						singleAnswer.mergeTemplate();
 						break;
 					case 5: //multiple question type
-						var multipleAnswer = new MultipleAnswer(aOption);
+						var multipleAnswer = new MultipleAnswer(aOption, this.participanAnswer);
 						multipleAnswer.mergeTemplate();
 						break;
 						
@@ -58,7 +67,7 @@ var AnswerAdapter = new Class({
 		}
 	},
 	mergeAnswerTemplate: function(aOption){
-		var singleAnswer = new SingleAnswer(aOption);
+		var singleAnswer = new SingleAnswer(aOption, this.participanAnswer);
 		singleAnswer.mergeTemplate();
 	}
 });
