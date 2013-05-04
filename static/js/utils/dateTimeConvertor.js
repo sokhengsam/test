@@ -40,7 +40,6 @@ var DateTimeConvertor = new Class({
 	},
 	getTimeStamp: function() {
 		var today = new Date();
-		console.log(today.getTime());
 		return today.getTime();
 	}
 });

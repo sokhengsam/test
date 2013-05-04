@@ -30,8 +30,17 @@ function getQuestion() {
 		else {
 			var questionAdapter = new QuestionAdapter(qOption);
 			questionAdapter.mergeTemplate();
+			var pSurvey = $("#participant").data("participant");
+			var partiAnswer;
+			participantAnswerDao.getBySQuestion(question.getQuestionId(), pSurvey.getParticipantSurveyId(), function(items) {
+				partiAnswer = items;
+			});
 			var answers = answerDao.getByQuestion(question.getQuestionId(), function(answers){
-				var answerAdapter = new AnswerAdapter({questionType: question.getQuestionTypeId()}, answers, $("body").data("language"), answerQ);
+				var participantAnswer;
+				if(partiAnswer != undefined) {
+					participantAnswer = partiAnswer[0];
+				}
+				var answerAdapter = new AnswerAdapter({questionType: question.getQuestionTypeId()}, answers, $("body").data("language"), participantAnswer);
 				answerAdapter.mergeTemplate();
 			});
 		}
@@ -127,6 +136,7 @@ function parseInputValue(child, participantA, type) {
 	}
 }
 function parseParticipantAnswer() {
+	var pSurvey = $("#participant").data("participant");
 	var childQuestions = $(".child-question");
 	//parent child question
 	if(childQuestions.length > 0) {
@@ -143,7 +153,6 @@ function parseParticipantAnswer() {
 	else {
 		var type = $(".question").attr("qtype");
 		var participantA = new ParticipantAnswer();
-		var pSurvey = $("#participant").data("participant");
 		if(Number(type) == 1 || Number(type) == 2 || Number(type) == 3 || Number(type) == 6) {
 			participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
 			participantA.setAnswerId("");
@@ -163,7 +172,7 @@ function parseParticipantAnswer() {
 					//how to store the answer id in the participant answer for this???
 					$(".answer-block").find("input[type='checkbox']:checked").each(function(i, ch){
 						participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
-						participantA.setAnswerId(ch.attr("id").substring(1));
+						participantA.setAnswerId($(ch).attr("id").substring(1));
 						participantA.setQuestionId($(".question").attr("id"));
 						participantAnswerDao.persist(participantA);
 					});
@@ -238,7 +247,7 @@ $(function(){
 					if(secId == 9) {
 						parseAnswer();
 					}
-					//parseParticipantAnswer();
+					parseParticipantAnswer();
 					//we have speciall case for the surveyId =3
 					parseAnswerSpecialCase();
 					$("#previousQuestion").show();
@@ -257,7 +266,7 @@ $(function(){
 					return;
 				}
 				qIndex = qIndex + 1;
-				//parseParticipantAnswer();
+				parseParticipantAnswer();
 				if(qIndex < totalQ) {
 					if(selectedSectionId == 9) {
 						parseAnswer();
@@ -315,6 +324,7 @@ $(function(){
 				}
 			}
 		}
+		
 	});
 	
 	setTimeout(function() {
@@ -372,7 +382,6 @@ function suspend() {
 	pLog.setLastQuestionIndex(qIndex);
 	pLog.setLastSectionId(sectionId);
 	participantLogDao.update(pLog);
-	console.log(qIndex);
 	deleteData();
 	$("#content").load("static/view/home.html");
 }

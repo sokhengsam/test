@@ -18,7 +18,6 @@ var ProvinceDao = new Class({
 			tx.executeSql(selectAll, [], function(tx, result) {
 				dataset = result.rows;
 				for (var i = 0; i < dataset.length; i++) {
-					console.log("Reading dataset..");
 					var item = new Province();
 					item.setProvinceId(dataset.item(i)["provinceId"]);
 					item.setProvinceCode(dataset.item(i)["provinceCode"]);

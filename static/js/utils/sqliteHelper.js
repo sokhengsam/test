@@ -58,7 +58,6 @@ var SQLiteHelper =  new Class({
 					if(typeof(processCompleteCallback) !== "undefined"){
 						processCompleteCallback();
 					}
-					console.log("insert fail. " + error.message);
 				});
 			});
 		//}
@@ -71,13 +70,11 @@ var SQLiteHelper =  new Class({
 		this.options.db.transaction(function(tx) {
 			tx.executeSql(clearStatement, [], 
 			function(){
-				console.log("Removed all data succed");
 				if(typeof successCallBack === 'function') {
 					successCallBack();
 				}
 			}, 
 			function(tx, error){
-				console.log("Remove fail " + error.message);
 				if(typeof failCallBack === 'function') {
 					failCallBack();
 				}
@@ -169,7 +166,6 @@ var SQLiteHelper =  new Class({
 		tFields = tFields.substring(0, tFields.length -2) + ")";
 		value = value.substring(0, value.length -2) + ")";
 		insertStatement += tFields + value;
-		console.log(insertStatement);
 		return insertStatement;
 	},
 	getUpdateStatement: function(){
@@ -213,7 +209,6 @@ var SQLiteHelper =  new Class({
 				//for (var i = 0, item = null; i < dataset.length; i++) {
 				if(dataset.length > 0) {
 					item = dataset.item(dataset.length -1);
-					console.log(item["surveyId"] +"|"+ item["surveyCode"]);
 				}
 				//}
 			});

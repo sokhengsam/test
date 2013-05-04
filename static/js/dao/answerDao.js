@@ -12,20 +12,6 @@ var AnswerDao = new Class({
 		//this is mock up. so, drop the table first to avoid the duplicate data
 		this.createTable();
 	},
-	/*
-	persist: function(domain) {
-		if(typeof domain.getId !== 'undefined') {
-			this.update(domain);
-		}
-		else {
-			var self = this;
-			this.getDB().transaction(function(tx) {
-				tx.executeSql(self.getInsertStatement(), [domain.getQuestionId(), domain.getText(), domain.getAnswerType()], function(){console.log("insert success");}, function(tx, error){console.log("insert fail " + error.message);});
-			});
-		}
-		console.log("persist " + this.options.tableName);
-		
-	},*/
 	getAll: function() {
 		var selectAll = "SELECT * FROM "+this.options.tableName;
 		var items = [];
@@ -33,7 +19,6 @@ var AnswerDao = new Class({
 			tx.executeSql(selectAll, [], function(tx, result) {
 				dataset = result.rows;
 				for (var i = 0; i < dataset.length; i++) {
-					console.log("Reading dataset..");
 					var item = new Answer();
 					item.setQuestionId(dataset.item(i)["questionId"]);
 					item.setAnswerId(dataset.item(i)["answerId"]);
@@ -50,13 +35,11 @@ var AnswerDao = new Class({
 	},
 	getByQuestion: function(id, success) {
 		var select = "SELECT * FROM " + this.options.tableName + " WHERE questionId = " + id;
-		console.log(select);
 		var items = [];
 		this.options.db.transaction(function(tx){
 			tx.executeSql(select, [], function(tx, result) {
 				dataset = result.rows;
 				for (var i = 0; i < dataset.length; i++) {
-					console.log("Reading answer dataset..");
 					var item = new Answer();
 					item.setQuestionId(dataset.item(i)["questionId"]);
 					item.setAnswerId(dataset.item(i)["answerId"]);

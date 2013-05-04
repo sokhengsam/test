@@ -4,7 +4,7 @@ var AnswerAdapter = new Class({
 	options: {
 		questionType: '',
 	},
-	participanAnswer: new ParticipantAnswer(),
+	participanAnswer: '',
 	answers: [],
 	initialize: function(options, answers, lang, pAnswer){
 		//parse json to question template data

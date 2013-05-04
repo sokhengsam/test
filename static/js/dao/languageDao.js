@@ -18,7 +18,6 @@ var LanguageDao = new Class({
 			tx.executeSql(selectAll, [], function(tx, result) {
 				dataset = result.rows;
 				for (var i = 0; i < dataset.length; i++) {
-					console.log("Reading dataset..");
 					var item = new Language();
 					item.setLanguageId(dataset.item(i)["languageId"]);
 					item.setLanguageCode(dataset.item(i)["languageCode"]);

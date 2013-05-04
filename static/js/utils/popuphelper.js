@@ -14,7 +14,6 @@ function getPageSize() {
 		xScroll = document.body.offsetWidth;
 		yScroll = document.body.offsetHeight;
 	}
-	console.log(xScroll);
 	var windowWidth, windowHeight;
 	if (self.innerHeight) {
 		if (document.documentElement.clientWidth) {
@@ -35,14 +34,12 @@ function getPageSize() {
 	} else {
 		pageHeight = yScroll
 	}
-	console.log(window.innerWidth);
 	if (xScroll < windowWidth) {
 		pageWidth = xScroll;
 	} else {
 		pageWidth = windowWidth;
 	}
 	
-	console.log(pageWidth);
 	var pageSizes = new Array();
 	pageSizes[0] = window.innerWidth;
 	pageSizes[1] = pageHeight;

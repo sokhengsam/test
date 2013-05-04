@@ -16,7 +16,6 @@ var BaseJSNetwork = new Class({
 				responseHandler(data);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
-				console.log(textStatus + "| "+ errorThrown);
 				failureHandler(jqXHR, textStatus, errorThrown);
 			}
 		});

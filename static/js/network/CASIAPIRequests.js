@@ -48,7 +48,6 @@ var CASIAPIRequests = new Class({
 	},
 	insertDB: function(response){
 		this.parseJson(sampleJson);
-		//$.when(this.parseJson(response)).done(function(){console.log("done");});
 	},
 	downloadSurveyFail: function() {
 		console.log("download survey fail. reading from static sample json");
@@ -89,7 +88,6 @@ var CASIAPIRequests = new Class({
 		this.parseAnswerType(answerType,this.processPersistCompleteCallback);
 	},
 	processPersistCompleteCallback: function(){
-		//console.log(persistLength);
 		persistLength.shift();
 		if(persistLength.length == 0){
 			enablepage();

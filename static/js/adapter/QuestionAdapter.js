@@ -15,7 +15,6 @@ var QuestionAdapter = new Class({
 		
 	},
 	mergeGroupQuestionTemplate: function(question){
-		//console.log("mergeQuestionTemplate");
 		var question = $('#parentGroupQuestionTemplate').tmpl(question);
 		$("#content").prepend(question);
 	}

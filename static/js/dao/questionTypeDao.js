@@ -35,7 +35,6 @@ var QuestionTypeDao = new Class({
 			tx.executeSql(self.getFindByPrimaryKeyStatement(id), [], function(tx, result) {
 				dataset = result.rows;
 				for (var i = 0; i < dataset.length; i++) {
-					console.log(dataset.item(i)["questionTypeId"]);
 					var item = new QuestionType();
 					item.setQuestionTypeId(dataset.item(i)["questionTypeId"]);
 					item.setQuestionTypeName(dataset.item(i)["questionTypeName"]);
