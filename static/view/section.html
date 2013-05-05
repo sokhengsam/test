@@ -24,7 +24,7 @@
 		$("#nextQuestion").click(function() {
 			questionDao.getBySection(section.getSectionId(), function(questions) {
 				if(questions.length > 0) {
-					$("body").data("questionaire", {"questions": questions, fromPrevious: false, "sectionId": section.getSectionId()});
+					$("body").data("questionaire", {"questions": questions, fromPrevious: false, "sectionId": section.getSectionId(),"displaySectionName": $("body").data("language") == 2 ? section.getDescription2() : section.getDescription1()});
 					$("#content").load("static/view/questionaire.html");
 				}
 				else {

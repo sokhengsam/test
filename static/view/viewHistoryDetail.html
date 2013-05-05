@@ -59,7 +59,8 @@ $(function() {
 								lastSectionId: participantLog.getLastSectionId(),
 								lastSectionIndex: participantLog.getLastSectionIndex(),
 								lastQuestionIndex: participantLog.getLastQuestionIndex(),
-								participantLog: participantLog
+								participantLog: participantLog,
+								participant: participantSurvey
 							  }
 			li.data("continueSurvey",embededData);
 		});
@@ -74,11 +75,18 @@ $(function() {
 
 function continueSurvey(li){
 	var liData = li.data("continueSurvey");
-	questionDao.getBySection(liData.lastSectionId,function(questions){
-		$("#participantLog").data("participantLog", liData.participantLog);
-		$("body").data("startQuestionData",liData);
-		$("body").data("questionaire", {"questions": questions, fromPrevious: false});
-		$("#content").load("static/view/questionaire.html");
+	$("#participant").data("participant",liData.participant);
+	sectionDao.findSectionByPrimaryKey(liData.lastSectionId,function(section){
+		questionDao.getBySection(liData.lastSectionId,function(questions){
+			$("#participantLog").data("participantLog", liData.participantLog);
+			$("body").data("startQuestionData",liData);
+			$("body").data("questionaire", {
+				"questions": questions, 
+				fromPrevious: false,
+				sectionId: liData.lastSectionId,
+				displaySectionName: liData.participant.getLanguageId() == 1? section.getDescription1(): section.getDescription2()});
+			$("#content").load("static/view/questionaire.html");
+		});
 	});
 }
 

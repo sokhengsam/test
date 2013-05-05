@@ -4,7 +4,8 @@ var qIndex = 0,
 	progress,
 	lastQid,
 	questionaires,
-	yes = true;
+	yes = true,
+	lang=1;
 
 function getQuestion() {
 	questionaires = $("body").data("questionaire");
@@ -16,33 +17,34 @@ function getQuestion() {
 	if(Number(qIndex)+1 <= totalQ) {
 		$(".pagination-label").text(Number(qIndex)+1 +"/"+totalQ);
 		var question =  questionaires.questions[qIndex];
+		if(question.options.questionTypeId == 7){ // parent question with complete answer with GOTOQUESTION
+			qIndex++;
+			question =  questionaires.questions[qIndex];
+		}
 		answerQ = participantAnswerList[question.getQuestionId()];
 		lastQid = question.getQuestionId();
 		sectionId = question.getSectionId();
 		var qOption = question.options;
 		qOption.text = question.getDescription1();
-		if($("body").data("language") == 2) {
+		qOption.displaySectionName = questionaires.displaySectionName;
+		
+		if(lang == 2) {
 			qOption.text = question.getDescription2();
 		}
+
 		if(qOption.questionTypeId == 6) {
 			getGroupQuesion(qOption);
 		}
-		else {
-			var questionAdapter = new QuestionAdapter(qOption);
-			questionAdapter.mergeTemplate();
-			var pSurvey = $("#participant").data("participant");
-			var partiAnswer;
-			participantAnswerDao.getBySQuestion(question.getQuestionId(), pSurvey.getParticipantSurveyId(), function(items) {
-				partiAnswer = items;
-			});
-			var answers = answerDao.getByQuestion(question.getQuestionId(), function(answers){
-				var participantAnswer;
-				if(partiAnswer != undefined) {
-					participantAnswer = partiAnswer[0];
-				}
-				var answerAdapter = new AnswerAdapter({questionType: question.getQuestionTypeId()}, answers, $("body").data("language"), participantAnswer);
-				answerAdapter.mergeTemplate();
-			});
+		else if(qOption.questionTypeId != 7) {
+			if(qOption.parentId != null){
+				questionDao.findQuestionByPrimaryKey(qOption.parentId,function(parentQuestion){
+					qOption.parentQuestion = parentQuestion.getQuestionCode() + ". " + (lang == 2? parentQuestion.getDecription2(): parentQuestion.getDescription1());
+					populateSimpleQuestionAnswer(question,qOption);
+				});
+			}
+			else{
+				populateSimpleQuestionAnswer(question,qOption);
+			}
 		}
 	}
 	setTimeout(function(){
@@ -53,6 +55,25 @@ function getQuestion() {
 			scroller = new iScroll("scrollWrapper");
 		}
 	}, 400);
+}
+
+
+function populateSimpleQuestionAnswer(question,qOption){
+	var questionAdapter = new QuestionAdapter(qOption);
+	questionAdapter.mergeTemplate();
+	var pSurvey = $("#participant").data("participant");
+	var partiAnswer;
+	participantAnswerDao.getBySQuestion(question.getQuestionId(), pSurvey.getParticipantSurveyId(), function(items) {
+		partiAnswer = items;
+	});
+	var answers = answerDao.getByQuestion(question.getQuestionId(), function(answers){
+		var participantAnswer;
+		if(partiAnswer != undefined) {
+			participantAnswer = partiAnswer[0];
+		}
+		var answerAdapter = new AnswerAdapter({questionType: question.getQuestionTypeId()}, answers,lang, participantAnswer);
+		answerAdapter.mergeTemplate();
+	});
 }
 
 /**
@@ -66,12 +87,11 @@ function findSectionKeyByQuestionKey(questionId,successCallback){
 }
 
 function getGroupQuesion(qOption) {
-	var lang = $("body").data("language");
 	var groupQuestionAdapter = new GroupQuestionAdapter();
 	var groupQuestion = new Object();
 	groupQuestion.parentQuestionCode = qOption.questionCode;
 	groupQuestion.label = qOption.text;
-	
+	groupQuestion.displaySectionName = qOption.displaySectionName;
 	groupQuestionAdapter.mergeGroupQuestionParent(groupQuestion); // merge parent question info 
 	
 	questionDao.getChild(qOption.questionId, function(questions) {
@@ -207,6 +227,10 @@ $(function(){
 	
 	$("input[type='radio']").radio("add",{imageOn: "static/css/images/radio-on.png",imageOff: "static/css/images/radio-off.png"});
 	
+	//init language
+	
+	lang = $("body").data("language");
+	
 	// continue questionnaire in incomplete questionnaire
 	var startQuestionData = $("body").data("startQuestionData");
 	if(null != startQuestionData){
@@ -243,7 +267,7 @@ $(function(){
 							break;
 						}
 					}
-					$("body").data("questionaire", {"questions": questions, fromPrevious: false, "sectionId": secId});
+					$("body").data("questionaire", {"questions": questions, fromPrevious: false, "sectionId": secId,"displaySectionName": (lang == 2 ? sections[sectionDisplayed].getDescription2() : sections[sectionDisplayed].getDescription1())});
 					if(secId == 9) {
 						parseAnswer();
 					}
@@ -253,7 +277,7 @@ $(function(){
 					$("#previousQuestion").show();
 					clearQuestionBlock();
 					getQuestion();
-					skipQuestionHistory[eval(secId+questions[qIndex].getQuestionId())] = currentQuestionInfo; //keep to back state 
+					skipQuestionHistory[eval(secId+questions[qIndex].getQuestionId())] = currentQuestionInfo + "," + (lang == 2 ? sections[sectionDisplayed].getDescription2() : sections[sectionDisplayed].getDescription1()); //keep to back state 
 				});
 			});
 		}
@@ -298,7 +322,7 @@ $(function(){
 			var questionData = skipQuestionHistory[eval(sectionId+lastQid)].split(",");
 			delete skipQuestionHistory[eval(sectionId+lastQid)];
 			questionDao.getBySection(questionData[0], function(questions) {
-				$("body").data("questionaire", {"questions": questions, fromPrevious: false});
+				$("body").data("questionaire", {"questions": questions, fromPrevious: false, "sectionId": questionData[0],"displaySectionName": questionData[4]});
 				sectionDisplayed = questionData[2]
 				qIndex = questionData[3];
 				clearQuestionBlock();

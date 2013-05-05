@@ -44,12 +44,13 @@
 <!-- question template -->
 <script id="questionTemplate" type="x-jquery-tmpl">
 <div class="question-header">
-	<span class="question-code">${questionCode}</span>
+	<span class="question-code">${displaySectionName}</span>
 	<span class="suspend-survey" onclick="suspend();"></span>
 </div>
 <div id="scrollWrapper" class="questionaire-page">
 	<div class="scrollable" id="scrollable">
   		<div class="question-block">
+			<div class="question">${parentQuestion}</div>
 			<div class="question" id="${questionId}" qtype="${questionTypeId}" allowNull="${allowNull}" qcode="${questionCode}">${questionCode}. ${text}</div>
 			<div class="answer-block"></div>
   		</div>
@@ -60,8 +61,8 @@
 <!-- parent of group question template -->
 <script id="parentGroupQuestionTemplate" type="x-jquery-tmpl">
 <div class="question-header">
-	<span class="question-code">${questionCode}</span>
-	<span class="suspend-survey" onclick="suspend();">[-]</span>
+	<span class="question-code">${displaySectionName}</span>
+	<span class="suspend-survey" onclick="suspend();"></span>
 </div>
 <div id="scrollWrapper" class="questionaire-page">
 	<div class="scrollable" id="scrollable">

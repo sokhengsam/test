@@ -11,6 +11,23 @@ var SectionDao = new Class({
 		}
 		this.createTable();
 	},
+	findSectionByPrimaryKey: function(primaryKey,onSuccess){
+		var sql = "SELECT * FROM " + this.options.tableName + " WHERE sectionId=" + primaryKey;
+		var section;
+		this.options.db.transaction(function(tx){
+			tx.executeSql(sql, [], function(tx, result) {
+				dataset = result.rows;
+				for (var i = 0; i < dataset.length; i++) {
+					section = new Section();
+					section.setSectionId(dataset.item(i)["sectionId"]);
+					section.setSectionCode(dataset.item(i)["sectionCode"]);
+					section.setDescription1(dataset.item(i)["description1"]);
+					section.setDescription2(dataset.item(i)["description2"]);
+				}
+				onSuccess(section);
+			});
+		});
+	},
 	getBySurvey: function(surveyId, success) {
 		var selectAll = "SELECT * FROM "+this.options.tableName + " WHERE surveyId = " + surveyId;
 		var items = [];

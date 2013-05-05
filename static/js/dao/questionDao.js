@@ -69,6 +69,7 @@ var QuestionDao = new Class({
 					item.setDescription2(dataset.item(i)["description2"]);
 					item.setQuestionTypeId(dataset.item(i)["questionTypeId"]);
 					item.setAllowNull(dataset.item(i)["allowNull"]);
+					item.setParentId(dataset.item(i)["parentId"]);
 					items.push(item);
 				}
 				successCallback(items);
@@ -87,5 +88,26 @@ var QuestionDao = new Class({
 				successCallback(sectionId);
 			});
 		});	
+	},
+	findQuestionByPrimaryKey: function(primaryKey,successCallback){
+		var sql = "SELECT * FROM " + this.options.tableName + " WHERE questionId = " + primaryKey;
+		var item;
+		this.options.db.transaction(function(tx){
+			tx.executeSql(sql, [], function(tx, result) {
+				dataset = result.rows;
+				for (var i = 0; i < dataset.length; i++) {
+					item = new Question();
+					item.setQuestionId(dataset.item(i)["questionId"]);
+					item.setSectionId(dataset.item(i)["sectionId"]);
+					item.setQuestionCode(dataset.item(i)["questionCode"]);
+					item.setDescription1(dataset.item(i)["description1"]);
+					item.setDescription2(dataset.item(i)["description2"]);
+					item.setQuestionTypeId(dataset.item(i)["questionTypeId"]);
+					item.setAllowNull(dataset.item(i)["allowNull"]);
+					item.setParentId(dataset.item(i)["parentId"]);
+				}
+				successCallback(item);
+			});
+		});
 	}
 });

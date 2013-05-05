@@ -58,13 +58,15 @@
 				alert(validationData.message);
 				return false;
 			}
+
 			//save participant survey + log
 			if(!isParticipantExist($("#participantId").val(), $("#evaluationOutcome option:selected").val())) {
+				var participantCode = $("#participantId").val();
 				var participantSurvey = new ParticipantSurvey();
 				participantSurvey.setSurveyId($("#selectedSurvey").data("selectedSurvey").surveyId);
 				participantSurvey.setSurveyDate(dateTimeConvertor.getCurrentDate());
 				participantSurvey.setInterviewCode($("#interviewerId").val());
-				participantSurvey.setParticipantCode($("#participantId").val());
+				participantSurvey.setParticipantCode(participantCode);
 				participantSurvey.setPlaceOfInterview($("#placeOfInterview").val());
 				var provinceId = $("#province option:selected").val();
 				var outComeEval = $("#evaluationOutcome option:selected").val();
@@ -86,7 +88,7 @@
 					$("#participant").data("participant", participantSurvey);
 					var participantLog = new ParticipantLog();
 					participantLog.setParticipantSurveyId(participantSurvey.getParticipantSurveyId());
-					participantLog.setParticipantCode($("#interviewerId").val());
+					participantLog.setParticipantCode(participantCode);
 					participantLog.setStartDateTime(dateTimeConvertor.getCurrentDate());
 					participantLog.setEndDateTime("");
 					participantLog.setLastQuestion("");
@@ -113,7 +115,7 @@
 			var p = partic[i];
 			if(p.getParticipantCode() == participantCode &&  p.getOutComeEvaluationId() == evaluationOutcome) {
 				$("#participant").data("participant", p);
-				participantLogDao.getByParticipantCode(function(participantLog) {
+				participantLogDao.getByParticipantCode(participantCode,function(participantLog) {
 					$("#participantLog").data("participantLog", participantLog);
 					var lastQuestionId = participantLog.getLastQuestion();
 					//get the question 

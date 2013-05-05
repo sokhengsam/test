@@ -4,7 +4,7 @@ var GroupQuestionAdapter = new Class({
 		this.data = options;
 	},
 	mergeGroupQuestionParent: function(mergeData){
-		this.mergeGroupQuestionTemplate({questionCode: mergeData.parentQuestionCode,text: mergeData.label});
+		this.mergeGroupQuestionTemplate({questionCode: mergeData.parentQuestionCode,text: mergeData.label,displaySectionName: mergeData.displaySectionName});
 	},
 	mergeChildQuestionTemplate: function(mergeData){
 		var question = $('#groupQuestionTemplate').tmpl({qcode:mergeData.getQuestionCode(), allowNull: mergeData.getAllowNull(), questionId: mergeData.getQuestionId(),questionTypeId: mergeData.getQuestionTypeId(),questionCode: mergeData.getQuestionCode(),text:mergeData.text});
