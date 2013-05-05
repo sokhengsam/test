@@ -47,7 +47,8 @@ var CASIAPIRequests = new Class({
 		});
 	},
 	insertDB: function(response){
-		this.parseJson(sampleJson);
+		//this.parseJson(sampleJson);
+		this.parseJson(response);
 	},
 	downloadSurveyFail: function() {
 		console.log("download survey fail. reading from static sample json");
