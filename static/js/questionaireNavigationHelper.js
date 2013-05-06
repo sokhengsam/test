@@ -5,9 +5,11 @@ var qIndex = 0,
 	lastQid,
 	questionaires,
 	yes = true,
-	lang=1;
+	lang=1,
+	MOVE_NEXT_MODE = 1,
+	MOVE_PREVIOUS_MODE = 2;
 
-function getQuestion() {
+function getQuestion(mode) {
 	questionaires = $("body").data("questionaire");
 	totalQ = questionaires.questions.length;
 	isFromPrivious = questionaires.fromPrevious;
@@ -18,8 +20,20 @@ function getQuestion() {
 		$(".pagination-label").text(Number(qIndex)+1 +"/"+totalQ);
 		var question =  questionaires.questions[qIndex];
 		if(question.options.questionTypeId == 7){ // parent question with complete answer with GOTOQUESTION
-			qIndex++;
+			if(mode == MOVE_NEXT_MODE){
+				qIndex++;
+			}
+			else if(mode == MOVE_PREVIOUS_MODE){
+				qIndex--;
+				if(sectionDisplayed > 0 && qIndex < 0){
+					sectionDisplayed--;
+					$("#content").load("static/view/section.html");
+					return;
+				}
+			}
+			console.log("qIndex : " + qIndex);
 			question =  questionaires.questions[qIndex];
+			console.log(question);
 		}
 		answerQ = participantAnswerList[question.getQuestionId()];
 		lastQid = question.getQuestionId();
@@ -238,7 +252,7 @@ $(function(){
 		sectionDisplayed = startQuestionData.lastSectionIndex;
 		$("body").removeData("startQuestionData");
 	}
-	getQuestion();
+	getQuestion(MOVE_NEXT_MODE);
 	if(sectionDisplayed == 0 && qIndex == 0) {
 		$("#previousQuestion").hide();
 	}
@@ -248,6 +262,7 @@ $(function(){
 	$("#nextQuestion").click(function(){
 		var goToQuestionId = getSelectedSingleAnswer().data("goToQuestionId");
 		if(null != goToQuestionId){
+			console.log("section id: " + sectionId);
 			var currentQuestionInfo = sectionId + "," + lastQid + "," +  sectionDisplayed + "," + qIndex;
 			// maintain question index and section
 			findSectionKeyByQuestionKey(goToQuestionId,function(secId){
@@ -276,7 +291,7 @@ $(function(){
 					parseAnswerSpecialCase();
 					$("#previousQuestion").show();
 					clearQuestionBlock();
-					getQuestion();
+					getQuestion(MOVE_NEXT_MODE);
 					skipQuestionHistory[eval(secId+questions[qIndex].getQuestionId())] = currentQuestionInfo + "," + (lang == 2 ? sections[sectionDisplayed].getDescription2() : sections[sectionDisplayed].getDescription1()); //keep to back state 
 				});
 			});
@@ -291,6 +306,7 @@ $(function(){
 				}
 				qIndex = qIndex + 1;
 				parseParticipantAnswer();
+				console.log(qIndex + " : " + totalQ + " : " + (qIndex < totalQ));
 				if(qIndex < totalQ) {
 					if(selectedSectionId == 9) {
 						parseAnswer();
@@ -299,7 +315,7 @@ $(function(){
 					parseAnswerSpecialCase();
 					$("#previousQuestion").show();
 					clearQuestionBlock();
-					getQuestion();
+					getQuestion(MOVE_NEXT_MODE);
 				}
 				else {
 					//check the survey displayed. 
@@ -323,11 +339,12 @@ $(function(){
 			delete skipQuestionHistory[eval(sectionId+lastQid)];
 			questionDao.getBySection(questionData[0], function(questions) {
 				$("body").data("questionaire", {"questions": questions, fromPrevious: false, "sectionId": questionData[0],"displaySectionName": questionData[4]});
-				sectionDisplayed = questionData[2]
-				qIndex = questionData[3];
+				sectionDisplayed = Number(questionData[2]);
+				qIndex = Number(questionData[3]);
+				sectionId = Number(questionData[0]);
 				clearQuestionBlock();
 				questionaires.fromPrevious = false;
-				getQuestion();
+				getQuestion(MOVE_PREVIOUS_MODE);
 				if(qIndex == 0 && sectionDisplayed == 0) {
 					$(this).hide();
 				}
@@ -342,7 +359,7 @@ $(function(){
 				clearQuestionBlock();
 				questionaires.fromPrevious = false;
 				qIndex--;
-				getQuestion();
+				getQuestion(MOVE_PREVIOUS_MODE);
 				if(qIndex == 0 && sectionDisplayed == 0) {
 					$(this).hide();
 				}
@@ -356,6 +373,7 @@ $(function(){
 		$("#scrollWrapper").css("height", availableH + "px");
 		scroller = new iScroll("scrollWrapper");
 	}, 400);
+	
 });
 
 function parseAnswerSpecialCase() {

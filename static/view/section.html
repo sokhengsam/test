@@ -11,12 +11,14 @@
 </div>
 <script>
 	$(function(){
+		var lang = $("body").data("language");
 		var sections = $("body").data("sections");
 		sectionDisplayed++;
 		var section = sections[sectionDisplayed];
+		console.log(section);
 		$("#sectionCode").text("Section " + section.getSectionCode() + ": ");
 		$("#description").text(section.getDescription1());
-		if($("body").data("language") == 2) {
+		if(lang == 2) {
 			$("#sectionCode").text("ផ្នែក " + section.getSectionCode() + ": ");
 			$("#description").text(section.getDescription2());
 		}
@@ -24,7 +26,7 @@
 		$("#nextQuestion").click(function() {
 			questionDao.getBySection(section.getSectionId(), function(questions) {
 				if(questions.length > 0) {
-					$("body").data("questionaire", {"questions": questions, fromPrevious: false, "sectionId": section.getSectionId(),"displaySectionName": $("body").data("language") == 2 ? section.getDescription2() : section.getDescription1()});
+					$("body").data("questionaire", {"questions": questions, fromPrevious: false, "sectionId": section.getSectionId(),"displaySectionName": lang == 2 ? section.getDescription2() : section.getDescription1()});
 					$("#content").load("static/view/questionaire.html");
 				}
 				else {
@@ -40,7 +42,7 @@
 			var section = sections[sectionDisplayed];
 			questionDao.getBySection(section.getSectionId(), function(questions) {
 				if(questions.length > 0) {
-					$("body").data("questionaire", {"questions": questions, fromPrevious: true, "sectionId": section.getSectionId()});
+					$("body").data("questionaire", {"questions": questions, fromPrevious: true, "sectionId": section.getSectionId(),"displaySectionName": lang == 2 ? section.getDescription2() : section.getDescription1()});
 					$("#content").load("static/view/questionaire.html");
 				}
 				else {
