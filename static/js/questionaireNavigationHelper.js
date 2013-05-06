@@ -222,12 +222,14 @@ function parseAnswer() {
 	if(childQuestions.length > 0) {
 		var pAnswers = [];
 		childQuestions.each(function(i, child){
+			var participantA = new ParticipantAnswer();
 			var q = $(child).find(".group-question-row");
 			var type = q.attr("qtype");
 			parseValue($(child), type, participantA);
 		});
 	}
 	else {
+		var participantA = new ParticipantAnswer();
 		parseValue($(".answer"), $(".question").attr("qtype"), participantA);
 	}
 	//alert(answerVal);
