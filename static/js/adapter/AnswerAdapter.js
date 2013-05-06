@@ -54,7 +54,6 @@ var AnswerAdapter = new Class({
 				}
 				switch(Number(this.options.questionType)) {
 					case 4: //single question type
-						console.log("single selection");
 						if(this.participanAnswer != undefined) {
 							aOption.panswerId = this.participanAnswer.getParticipantAnswerId();
 						}

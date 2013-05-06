@@ -21,7 +21,6 @@ var SynLogDao = new Class({
 				dataset = result.rows;
 				//for (var i = 0; i < dataset.length; i++) {
 				synced = dataset.item(0)["count"];
-				console.log(synced);
 				//}
 				successCallback(synced);
 			});

@@ -9,12 +9,11 @@ var SingleAnswer = new Class({
 	},
 	mergeTemplate: function(){
 		// merge template
-		console.log(this.pAnswer);
-		if(this.pAnswer != undefined) {
-			this.answer.panswerId = this.pAnswer.getParticipantAnswerId();
-		}
 		var singleAnswerTemplate = $('#singleTemplate').tmpl(this.answer);
 		singleAnswerTemplate.find("input[type='radio']").data("goToQuestionId",this.answer.goToQuestionId);
+		if(this.pAnswer != undefined) {
+			singleAnswerTemplate.find("input[type='radio']").data("panswerid",this.pAnswer.getParticipantAnswerId());
+		}
 		//auto add input box if answer type is other
 		if(this.answer.answerTypeId == this.ANSWERTYPE){
 			singleAnswerTemplate.append($("<input type='text' />"))

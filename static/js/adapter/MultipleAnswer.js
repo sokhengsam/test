@@ -17,7 +17,6 @@ var MultipleAnswer = new Class({
 		if(this.pAnswer != undefined) {
 			for(var i = 0; i < this.pAnswer.length; i++) {
 				var p = this.pAnswer[i];
-				console.log(">>>>>>>>> answer id: " + p.getAnswerId());
 				$("#a"+p.getAnswerId()).attr("checked", "checked");
 				$("#a"+p.getAnswerId()).trigger("click");
 			}

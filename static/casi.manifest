@@ -15,9 +15,9 @@ js/dao/answerTypeDao.js
 js/dao/languageDao.js
 js/dao/mobileDao.js
 js/dao/outComeEvaluationDao.js
-#js/dao/participantAnswerDao.js
-#js/dao/participantLogDao.js
-#js/dao/participantSurveyDao.js
+js/dao/participantAnswerDao.js
+js/dao/participantLogDao.js
+js/dao/participantSurveyDao.js
 js/dao/provinceDao.js
 js/dao/questionDao.js
 js/dao/questionTypeDao.js

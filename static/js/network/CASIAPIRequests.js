@@ -24,7 +24,6 @@ var CASIAPIRequests = new Class({
 		enablepage();
 		var syncstatus = response.syncstatus.Value;
 		var synclog = response.SynLog;
-		console.log(synclog);
 		switch(syncstatus) {
 			case 0:
 				alert("Invalid MobileKey. Make sure your device didn't clear any important data.");

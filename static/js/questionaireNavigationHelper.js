@@ -111,16 +111,26 @@ function getGroupQuesion(qOption) {
 	groupQuestion.label = qOption.text;
 	groupQuestion.displaySectionName = qOption.displaySectionName;
 	groupQuestionAdapter.mergeGroupQuestionParent(groupQuestion); // merge parent question info 
-	
+	var pSurvey = $("#participant").data("participant");
 	questionDao.getChild(qOption.questionId, function(questions) {
 		$.each(questions,function(index,question){
 			question.text = question.getDescription1();
 			if(lang == 2) {
 				question.text = question.getDescription2();
 			}
-			answerDao.getByQuestion(question.getQuestionId(), function(answers){
-				groupQuestionAdapter.mergeChildQuestionTemplate(question);
-				groupQuestionAdapter.mergeChildQuestionAnswerTemplate(question.getQuestionTypeId(),answers,lang);
+			participantAnswerDao.getBySQuestion(question.getQuestionId(), pSurvey.getParticipantSurveyId(), function(items) {
+				if(items != undefined) {
+					if(qOption.questionTypeId == 5) {
+						participantAnswer = items;
+					}
+					else {
+						participantAnswer = items[0];
+					}
+				}
+				answerDao.getByQuestion(question.getQuestionId(), function(answers){
+					groupQuestionAdapter.mergeChildQuestionTemplate(question);
+					groupQuestionAdapter.mergeChildQuestionAnswerTemplate(question.getQuestionTypeId(),answers,lang, participantAnswer);
+				});
 			});
 		});
 	});
@@ -211,6 +221,7 @@ function parseParticipantAnswer() {
 				var participantA = new ParticipantAnswer();
 				switch(Number(type)) {
 					case 4: //single question type
+						var panswerid = $(".answer").find("input[type='radio']:checked").data("panswerid");
 						participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
 						participantA.setAnswerId($(child).find("input[type='radio']:checked").attr("id").substring(1));
 						participantA.setQuestionId(q.attr("id"));
@@ -218,7 +229,13 @@ function parseParticipantAnswer() {
 						participantA.setStartDateTime(startTimeQ);
 						participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 						participantA.setStatus("");
-						participantAnswerDao.persist(participantA);
+						if(panswerid == undefined) {
+							participantAnswerDao.persist(participantA);
+						}
+						else {
+							participantA.setParticipantAnswerId(panswerid);
+							participantAnswerDao.update(participantA);
+						}
 						break;
 					case 5: //multiple question type
 						//how to store the answer id in the participant answer for this???
@@ -272,6 +289,7 @@ function parseParticipantAnswer() {
 		else if(Number(type) == 4 || Number(type) == 5) {
 			switch(Number(type)) {
 				case 4: //single question type
+					var panswerid = $(".answer").find("input[type='radio']:checked").data("panswerid");
 					participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
 					participantA.setAnswerId($(".answer").find("input[type='radio']:checked").attr("id").substring(1));
 					participantA.setQuestionId($(".question").attr("id"));
@@ -279,7 +297,13 @@ function parseParticipantAnswer() {
 					participantA.setStartDateTime(startTimeQ);
 					participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 					participantA.setStatus("");
-					participantAnswerDao.persist(participantA);
+					if(panswerid == undefined) {
+						participantAnswerDao.persist(participantA);
+					}
+					else {
+						participantA.setParticipantAnswerId(panswerid);
+						participantAnswerDao.update(participantA);
+					}
 					break;
 				case 5: //multiple question type
 					//how to store the answer id in the participant answer for this???
@@ -387,7 +411,6 @@ $(function(){
 				}
 				qIndex = qIndex + 1;
 				parseParticipantAnswer();
-				//console.log(qIndex + " : " + totalQ + " : " + (qIndex < totalQ));
 				if(qIndex < totalQ) {
 					if(selectedSectionId == 9) {
 						parseAnswer();
