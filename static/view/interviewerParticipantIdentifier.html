@@ -137,17 +137,21 @@
 			returnMessage.status = false;
 			return returnMessage;
 		}
-		else if($("#interviewerId").val().length < 2){
+		else if($("#interviewerId").val().length != 2){
 			returnMessage.status = false;
 			returnMessage.message = "Incorrect interviewer id";
 			return returnMessage;
 		}
-		else if($("#participantId").val().length < 6){
+		else if($("#participantId").val().length != 6){
 			returnMessage.status = false;
 			returnMessage.message = "Incorrect study id";
 			return returnMessage;
 		}
-		
+		else if(isNaN($("#interviewerId").val()) || isNaN($("#participantId").val())){
+			returnMessage.status = false;
+			returnMessage.message = "Interview id and Study id accepted only digit";
+			return returnMessage;
+		}
 		return {status: true};
 	}
 </script>

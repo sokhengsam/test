@@ -31,9 +31,7 @@ function getQuestion(mode) {
 					return;
 				}
 			}
-			console.log("qIndex : " + qIndex);
 			question =  questionaires.questions[qIndex];
-			console.log(question);
 		}
 		answerQ = participantAnswerList[question.getQuestionId()];
 		lastQid = question.getQuestionId();
@@ -262,7 +260,6 @@ $(function(){
 	$("#nextQuestion").click(function(){
 		var goToQuestionId = getSelectedSingleAnswer().data("goToQuestionId");
 		if(null != goToQuestionId){
-			console.log("section id: " + sectionId);
 			var currentQuestionInfo = sectionId + "," + lastQid + "," +  sectionDisplayed + "," + qIndex;
 			// maintain question index and section
 			findSectionKeyByQuestionKey(goToQuestionId,function(secId){
@@ -306,7 +303,7 @@ $(function(){
 				}
 				qIndex = qIndex + 1;
 				parseParticipantAnswer();
-				console.log(qIndex + " : " + totalQ + " : " + (qIndex < totalQ));
+				//console.log(qIndex + " : " + totalQ + " : " + (qIndex < totalQ));
 				if(qIndex < totalQ) {
 					if(selectedSectionId == 9) {
 						parseAnswer();
