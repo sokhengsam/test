@@ -158,7 +158,7 @@ function parseInputValue(child, participantA, type) {
 				//how to store the answer id in the participant answer for this???
 				var checkList = [];
 				child.find("input[type='checkbox']:checked").each(function(i, ch){
-					checkList.push(ch.attr("id").substring(1));
+					checkList.push($(ch).attr("id").substring(1));
 				});
 				participantA.options.checkList = checkList;
 				break;

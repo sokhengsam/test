@@ -518,12 +518,12 @@ input[type='checkbox'],input[type='radio']{
 	background-image: url("images/sync.png");
 	background-repeat: no-repeat;
 	display: inline-block;
-	width: 16px;
-	height: 16px;
+	width: 32px;
+	height: 32px;
 	float: right;
 	padding-right: 5px;
 	vertical-align: middle;
-	margin-top: 12px;
+	margin-top: 4px;
 	cursor: pointer;
 }
 .scrollable {
