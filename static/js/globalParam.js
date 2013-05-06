@@ -17,7 +17,8 @@ var surveyDao = null,
 	mobile = null,
 	skipQuestionHistory = [],
 	answerVal = 0,
-	participantAnswerList=[];
+	participantAnswerList=[],
+	synLogDao = null;
 
 
 var sampleJson = 

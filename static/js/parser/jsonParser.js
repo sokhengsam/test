@@ -137,5 +137,19 @@ var JSONParser = new Class({
 		mobile.setMobileKey(key);
 		mobileDao.persist(mobile);
 		successCallback(mobile);
+	},
+	parseSynLog: function(synclog) {
+		//"SynLogID":"1","ParticipantSurveyID":"1","SynDate":"2013-05-06 23:04:00","Status":"1"
+		for(var i = 0; i < synclog.length; i++) {
+			var sync = synclog[i];
+			var s = new SyncLog();
+			s.setSynLogId(sync.SynLogID);
+			s.setParticipantSurveyId(sync.ParticipantSurveyID);
+			s.setSynDate(sync.SynDate);
+			s.setStatus(sync.Status);
+			synLogDao.persist(s);
+		}
 	}
+	
+	
 });

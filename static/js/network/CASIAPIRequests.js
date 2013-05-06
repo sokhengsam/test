@@ -8,9 +8,41 @@ var CASIAPIRequests = new Class({
 		this.self = this;
 	},
 	uploadSurvey: function(requestData) {
+		var self = this;
 		var mobileKey = mobile.getMobileKey();
 		requestData.mobilekey = mobileKey;
-		this.postRequest("http://cenat.gov.kh:8090/CASIMS/index.php/home/uploadjsondata", requestData, function() {console.log("success");}, function(){console.log("falt")});
+		this.postRequest("http://cenat.gov.kh:8090/CASIMS/index.php/home/uploadjsondata", requestData, 
+			function(response){
+				self.handleUploadResponse(response);
+			}, 
+			function(){
+				console.log("falt");
+			}
+		);
+	},
+	handleUploadResponse: function(response) {
+		enablepage();
+		var syncstatus = response.syncstatus.Value;
+		var synclog = response.SynLog;
+		console.log(synclog);
+		switch(syncstatus) {
+			case 0:
+				alert("Invalid MobileKey. Make sure your device didn't clear any important data.");
+				break;
+			case 1:
+				this.parseSynLog(synclog);
+				alert("Synchronize completed.");
+				break;
+			case 2:
+				alert("Invalid data");
+				break;
+			case 3:
+				alert("Data can't be saved. Please try again.");
+				break;
+			default:
+				console.log("Unkown syncstatus");
+		}
+		
 	},
 	pushAnswer: function(requestData,responseHandler,failureHandler){
 		this.postRequest(this.baseUrl,requestData,responseHandler,failureHandler);

@@ -129,7 +129,7 @@ function sychronizeData(pSurveys) {
 		$.each(items, function(i, l){
 			var pLog = {
 				"ParticipantLogID": l.getParticipantLogId(),
-				"ParticipantCode": l.getParticipantCode(),
+				"ParticipantSurveyID": l.getParticipantSurveyId(),
 				"StartDateTime": l.getStartDateTime(),
 				"EndDateTime": l.getEndDateTime(),
 			}
@@ -138,17 +138,10 @@ function sychronizeData(pSurveys) {
 		requestData.participantlog = JSON.stringify(participantlog);
 		addRequestObject(requestData);
 	});
-	/*
-	var requestData = {
-		mobilekey: '', 
-        participantsurvey: JSON.stringify(participantsurvey),
-        participantanswer: JSON.stringify(participantanswer),
-        participantlog: JSON.stringify(participantlog)
-	};*/
-	//request.uploadSurvey(requestData);
 }
 function addRequestObject(requestData) {
 	if(requestData.participantsurvey != undefined && requestData.participantanswer != undefined && requestData.participantlog != undefined) {
+		showLoadingDialog();
 		request.uploadSurvey(requestData);
 	}
 }

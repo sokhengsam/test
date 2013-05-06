@@ -15,14 +15,15 @@ js/dao/answerTypeDao.js
 js/dao/languageDao.js
 js/dao/mobileDao.js
 js/dao/outComeEvaluationDao.js
-js/dao/participantAnswerDao.js
-js/dao/participantLogDao.js
-js/dao/participantSurveyDao.js
+#js/dao/participantAnswerDao.js
+#js/dao/participantLogDao.js
+#js/dao/participantSurveyDao.js
 js/dao/provinceDao.js
 js/dao/questionDao.js
 js/dao/questionTypeDao.js
 js/dao/surveysDao.js
 js/dao/sectionDao.js
+js/dao/synLogDao.js
 js/globalParam.js
 js/iscroll.js
 
@@ -62,6 +63,7 @@ css/images/radio-off.png
 css/images/radio-on.png
 css/images/up-arrow.png
 css/images/smart_girl.png
+css/images/sync.png
 
 view/login.html
 view/home.html

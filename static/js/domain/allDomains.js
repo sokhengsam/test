@@ -1129,3 +1129,56 @@ var AnswerType = new Class({
 		return this.options.answerTypeCode;
 	}
 });
+
+var SyncLog = new Class({
+	Implements: [Options, Fields],
+	fields: {
+		primaryKey: {
+			name: "synLogId",
+			isPrimaryKey: true,
+			dataType: "INTEGER"
+		},
+		participantSurveyId: {
+			name: "participantSurveyId",
+			dataType: "INTEGER"
+		},
+		syncDate: {
+			name: "synDate",
+			dataType: "TEXT"
+		},
+		status: {
+			name: "status",
+			dataType: "INTEGER"
+		}
+	},
+	options: {
+		synLogId: '',
+		participantSurveyId: '',
+		synDate:'',
+		status: ''
+	},
+	setSynLogId: function(id) {
+		this.options.synLogId = id;
+	},
+	setParticipantSurveyId: function(id) {
+		this.options.participantSurveyId = id;
+	},
+	setSynDate:function(d) {
+		this.options.synDate = d;
+	},
+	setStatus: function(s) {
+		this.options.status = s;
+	},
+	getStatus: function() {
+		return this.options.status;
+	},
+	getSynLogId: function() {
+		return this.options.synLogId;
+	},
+	getParticipantSurveyId: function(id) {
+		return this.options.participantSurveyId;
+	},
+	getSynDate:function() {
+		return this.options.synDate;
+	}
+});

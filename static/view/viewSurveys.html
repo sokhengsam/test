@@ -12,7 +12,7 @@
 
 <!-- survey history template -->
 <script id="surveyHistoryListTemplate" type="x-jquery-tmpl">
-	<li>${description} <span class='survey-status'> ${notSynchronized}ppl | ${readySynchronized}sync</span></li>
+	<li>${description} <span class='survey-status'> ${notSynchronized} ppl | ${readySynchronized} sync</span></li>
 </script>
 
 <script>
@@ -20,12 +20,21 @@ $(function(){
 	surveyDao.getAll(function(surveys) {
 		$.each(surveys,function(index,survey){
 			var surveyId = survey.getSurveyId();
-			participantSurveyDao.countParticipantBySurveyKey(surveyId, function(status){
-				var li = $("#surveyHistoryListTemplate").tmpl({clickEvent: onclick,description: survey.getDescription1(), notSynchronized: status.notSync,readySynchronized: status.sync});
-				li.bind("click",function(){
-					loadHistoryDetail(surveyId,survey.getDescription1());
+			var syncState = {
+				readySynchronized: 0
+			}; 
+			synLogDao.countSyncBySurvey(surveyId, function(count){
+				syncState.readySynchronized = count;
+				participantSurveyDao.countParticipantBySurveyKey(surveyId, function(status){
+					syncState.clickEvent = onclick;
+					syncState.description = survey.getDescription1();
+					syncState.notSynchronized = status.notSync;
+					var li = $("#surveyHistoryListTemplate").tmpl(syncState);
+					li.bind("click",function(){
+						loadHistoryDetail(surveyId,survey.getDescription1());
+					});
+					$("#survey-list").append(li);
 				});
-				$("#survey-list").append(li);
 			});
 		});
 	});
