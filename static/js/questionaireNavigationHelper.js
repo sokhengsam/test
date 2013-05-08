@@ -53,7 +53,7 @@ function getQuestion(mode) {
 		else if(qOption.questionTypeId != 7) {
 			if(qOption.parentId != null){
 				questionDao.findQuestionByPrimaryKey(qOption.parentId,function(parentQuestion){
-					qOption.parentQuestion = parentQuestion.getQuestionCode() + ". " + (lang == 2? parentQuestion.getDecription2(): parentQuestion.getDescription1());
+					qOption.parentQuestion = parentQuestion.getQuestionCode() + ". " + (lang == 2? parentQuestion.getDescription2(): parentQuestion.getDescription1());
 					populateSimpleQuestionAnswer(question,qOption);
 				});
 			}

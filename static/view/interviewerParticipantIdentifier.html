@@ -5,8 +5,8 @@
 <div class="page-container">
 	<div class="interviewer-participant-identifier">
 		<div>Start at: <span id="startDateTime"></span></div>
-		<div><input id="interviewerId" type="text" placeholder="Enter Interviewer ID"></div>
-		<div><input id="participantId" type="text" placeholder="Enter Study ID"></div>
+		<div><input id="interviewerId" type="number" placeholder="Enter Interviewer ID"></div>
+		<div><input id="participantId" type="number" placeholder="Enter Study ID"></div>
 		<div><input id="placeOfInterview" type="text" placeholder="Enter Place of Interview"></div>
 		<div>
 			<select id="province">
@@ -142,7 +142,7 @@
 			returnMessage.message = "Incorrect interviewer id";
 			return returnMessage;
 		}
-		else if($("#participantId").val().length != 6){
+		else if($("#participantId").val().length != 7){
 			returnMessage.status = false;
 			returnMessage.message = "Incorrect study id";
 			return returnMessage;

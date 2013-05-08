@@ -1,15 +1,16 @@
 @font-face {
-	font-family: "Kh-Battambang";
+	font-family: "khmer-OS";
 	font-style: normal;
 	font-weight: normal;
-	src: url("fonts/Kh-Battambang.ttf") format("truetype"), url('/fonts/Kh-Battambang.woff') format('woff'), url('/fonts/Kh-Battambang.svg') format('svg');
+	/*src: url("fonts/KhmerOS.ttf") format("truetype"), url('/fonts/Kh-Battambang.woff') format('woff'), url('/fonts/Kh-Battambang.svg') format('svg');*/
+	src: url("fonts/KhmerOS.ttf") format("truetype");
 }
 
 body {
 	margin:0;
 	padding:0;
 	width: 100%;
-	font-family: "Kh-Battambang";
+	font-family: "khmer-OS";
 }
 
 .containerWrapper {
