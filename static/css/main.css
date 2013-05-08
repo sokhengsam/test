@@ -175,6 +175,10 @@ li:HOVER{
 	font-weight: bold;	
 }
 
+.pquestion{
+	margin-left: -12px;
+}
+
 .question-code{
 	color: #FFF;
 	font-size: 25px;
