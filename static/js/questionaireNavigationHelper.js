@@ -140,22 +140,30 @@ function getSelectedSingleAnswer(parentSelector){
 	return $(".answer-block input[type='radio']:checked");
 }
 
-function parseValue(child, type) {
-	if(Number(type) == 4 || Number(type) == 5) {
-		switch(Number(type)) {
-			case 4: //single question type
-				answerVal += Number(child.find("input[type='radio']:checked").attr("svalue"));
-				break;
-			case 5: //multiple question type
-				//how to store the answer id in the participant answer for this???
-				child.find("input[type='checkbox']:checked").each(function(i, ch){
-					answerVal += Number(ch.attr("svalue"));
-				});
-				break;
-			default:
-				console.log("unknow answer type");
+/**
+ * Score calculation algorith:
+ * We calculate only the E1b to  E7b (Alcoholic use), E1e - E7e(ATS use)
+ * Base on these 2 score, where will be 2 differeces message alert at the end of questionaire.
+ * 
+ * Base on the requirement only question type = 4 will be calculated
+ * 
+ * @param child
+ * @param type
+ */
+function parseValue(child, type, qid) {
+	//if(Number(type) == 4) {
+		//calculate the alcoholic value
+		if(alcoholicPartId.indexOf(Number(qid)) != -1) {
+			console.log("Calculate the alcoholic score");
+			alcoholicScore += Number(child.find("input[type='radio']:checked").attr("svalue"));
+			console.log("Alcoholic Score: " + alcoholicScore);
 		}
-	}
+		else if(atsPartId.indexOf(Number(qid)) != -1) {
+			console.log("Calculate the ATS score");
+			atsScore += Number(child.find("input[type='radio']:checked").attr("svalue"));
+			console.log("ATS score: " + atsScore);
+		}
+	//}
 }
 
 function parseInputValue(child, participantA, type) {
@@ -291,6 +299,7 @@ function parseParticipantAnswer() {
 				case 4: //single question type
 					var panswerid = $(".answer").find("input[type='radio']:checked").data("panswerid");
 					participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
+					//TODO: some answer got the substring error 
 					participantA.setAnswerId($(".answer").find("input[type='radio']:checked").attr("id").substring(1));
 					participantA.setQuestionId($(".question").attr("id"));
 					participantA.setDescription("");
@@ -325,6 +334,9 @@ function parseParticipantAnswer() {
 	}
 }
 
+/**
+ * Score calculation. only the specific id of question will be calculated
+ */
 function parseAnswer() {
 	var childQuestions = $(".child-question");
 	//parent child question
@@ -332,12 +344,13 @@ function parseAnswer() {
 		childQuestions.each(function(i, child){
 			var q = $(child).find(".group-question-row");
 			var type = q.attr("qtype");
-			parseValue($(child), type);
+			var qId = q.attr("id");
+			if(alcoholicPartId.indexOf(Number(qId)) != -1 || atsPartId.indexOf(Number(qId)) != -1) {
+				parseValue($(child), type, q.attr("id"));
+			}
 		});
 	}
-	else {
-		parseValue($(".answer"), $(".question").attr("qtype"));
-	}
+	
 	//alert(answerVal);
 }
 
@@ -391,7 +404,7 @@ $(function(){
 					if(secId == 9) {
 						parseAnswer();
 					}
-					parseParticipantAnswer();
+					//parseParticipantAnswer();
 					//we have speciall case for the surveyId =3
 					parseAnswerSpecialCase();
 					$("#previousQuestion").show();
@@ -410,7 +423,7 @@ $(function(){
 					return;
 				}
 				qIndex = qIndex + 1;
-				parseParticipantAnswer();
+				//parseParticipantAnswer();
 				if(qIndex < totalQ) {
 					if(selectedSectionId == 9) {
 						parseAnswer();
@@ -510,7 +523,7 @@ function parseAnswerSpecialCase() {
 					return;
 				}
 			}
-		}
+		}yes
 	}
 }
 function clearQuestionBlock(){
@@ -635,7 +648,17 @@ function showDailog(){
 			var participantSurveyLog = $("#participantLog").data("participantLog");
 			participantSurveyLog.setEndDateTime(dateTimeConvertor.getCurrentDateTime());
 			participantLogDao.update(participantSurveyLog);
-			//$("#content").load("static/view/emptyScreen.html");
+			var alertStr = "";
+			if(atsScore >=1 && atsScore < 4) {
+				alertStr = "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ ATS >= ១ សូមផ្តល់ការប្រឹក្សាស្តីពីការប្រើប្រាស់ ATS)\n";
+			}
+			else if(atsScore >=4) {
+				alertStr = "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ ATS >= 4អ្នកចូលរួមអាចនឹងត្រូវលក្ខខណ្ឌចូលរួមកម្មវិធី CCT\n";
+			}
+			if(alcoholicScore >=6) {
+				alertStr += "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ គ្រឿងស្រវឹង>= 6 សូមផ្តល់ការប្រឹក្សាស្តីពីការប្រើប្រាស់គ្រឿងស្រវឹង";
+			}
+			alert(alertStr);
 		}
 		else {
 			if(!yes) {
