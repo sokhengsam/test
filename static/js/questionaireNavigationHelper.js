@@ -772,3 +772,12 @@ function showDailog(){
 	$("#popup").append(actionBlock);
 	$("#popup").css("background-color", "#385676");
 }
+
+window.addEventListener("resize", function() {
+	if(typeof scroller !== 'undefined') {
+		scroller.stop();
+		var availableH = ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15);
+		$("#scrollWrapper").css("height", availableH + "px");
+		scroller.refresh();
+	}
+});
