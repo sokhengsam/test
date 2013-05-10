@@ -7,20 +7,20 @@ var CASIAPIRequests = new Class({
 		this.baseUrl = "http://cenat.gov.kh:8090/CASIMS/index.php/home/getjsondata";
 		this.self = this;
 	},
-	uploadSurvey: function(requestData) {
+	uploadSurvey: function(requestData, callBack) {
 		var self = this;
 		var mobileKey = mobile.getMobileKey();
 		requestData.mobilekey = mobileKey;
 		this.postRequest("http://cenat.gov.kh:8090/CASIMS/index.php/home/uploadjsondata", requestData, 
 			function(response){
-				self.handleUploadResponse(response);
+				self.handleUploadResponse(response, callBack);
 			}, 
 			function(){
 				console.log("falt");
 			}
 		);
 	},
-	handleUploadResponse: function(response) {
+	handleUploadResponse: function(response, callBack) {
 		enablepage();
 		var syncstatus = response.syncstatus.Value;
 		var synclog = response.SynLog;
@@ -30,6 +30,7 @@ var CASIAPIRequests = new Class({
 				break;
 			case 1:
 				this.parseSynLog(synclog);
+				callBack(synclog);
 				alert("Synchronize completed.");
 				break;
 			case 2:

@@ -145,6 +145,7 @@ var JSONParser = new Class({
 			var s = new SyncLog();
 			s.setSynLogId(sync.SynLogID);
 			s.setParticipantSurveyId(sync.ParticipantSurveyID);
+			s.setSurveyId(sync.SurveyID);
 			s.setSynDate(sync.SynDate);
 			s.setStatus(sync.Status);
 			synLogDao.persist(s);

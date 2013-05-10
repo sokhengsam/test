@@ -142,8 +142,18 @@ function sychronizeData(pSurveys) {
 function addRequestObject(requestData) {
 	if(requestData.participantsurvey != undefined && requestData.participantanswer != undefined && requestData.participantlog != undefined) {
 		showLoadingDialog();
-		request.uploadSurvey(requestData);
+		request.uploadSurvey(requestData, function(syncLogObj){
+			clearAllParticipantAnswer(syncLogObj);
+		});
 	}
+}
+
+function clearAllParticipantAnswer(syncLogObj) {
+	$.each(synLogObj, function(i, s){
+		participantLogDao.remove(s.SurveyID);
+		participantAnswerDao.remove(s.SurveyID);
+		participantSurvey.remove(s.SurveyID);
+	});
 }
 
 function continueSurvey(li){

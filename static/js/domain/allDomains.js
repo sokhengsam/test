@@ -1142,6 +1142,10 @@ var SyncLog = new Class({
 			name: "participantSurveyId",
 			dataType: "INTEGER"
 		},
+		surveyId: {
+			name: "surveyId",
+			dataType: "INTEGER"
+		},
 		syncDate: {
 			name: "synDate",
 			dataType: "TEXT"
@@ -1154,6 +1158,7 @@ var SyncLog = new Class({
 	options: {
 		synLogId: '',
 		participantSurveyId: '',
+		surveyId: '',
 		synDate:'',
 		status: ''
 	},
@@ -1166,6 +1171,9 @@ var SyncLog = new Class({
 	setSynDate:function(d) {
 		this.options.synDate = d;
 	},
+	setSurveyId: function(id) {
+		this.options.surveyId = id;
+	},
 	setStatus: function(s) {
 		this.options.status = s;
 	},
@@ -1177,6 +1185,9 @@ var SyncLog = new Class({
 	},
 	getParticipantSurveyId: function(id) {
 		return this.options.participantSurveyId;
+	},
+	getSurveyId: function() {
+		return this.options.surveyId;
 	},
 	getSynDate:function() {
 		return this.options.synDate;

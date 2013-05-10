@@ -83,5 +83,11 @@ var ParticipantSurveyDao = new Class({
 				successCallback(returnValue);
 			});
 		});
-	}
+	},
+	removeByIdAndComplete: function(surveyId) {
+		var sql = "DELETE * FROM " + this.options.tableName + " WHERE status= 1 && surveyId = " + surveyId;
+		this.options.db.transaction(function(tx) {
+			tx.executeSql(sql, [], function(){console.log("Delete record succed");}, function(tx, error){console.log("Delete fail " + error.message);});
+		});
+	} 
 });
