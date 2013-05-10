@@ -48,6 +48,7 @@ var QuestionDao = new Class({
 					item.setDescription2(dataset.item(i)["description2"]);
 					item.setQuestionTypeId(dataset.item(i)["questionTypeId"]);
 					item.setAllowNull(dataset.item(i)["allowNull"]);
+					item.setNumberRange(dataset.item(i)["numberRange"]);
 					items.push(item);
 				}
 				success(items);
@@ -70,6 +71,7 @@ var QuestionDao = new Class({
 					item.setQuestionTypeId(dataset.item(i)["questionTypeId"]);
 					item.setAllowNull(dataset.item(i)["allowNull"]);
 					item.setParentId(dataset.item(i)["parentId"]);
+					item.setNumberRange(dataset.item(i)["numberRange"]);
 					items.push(item);
 				}
 				successCallback(items);
@@ -105,6 +107,7 @@ var QuestionDao = new Class({
 					item.setQuestionTypeId(dataset.item(i)["questionTypeId"]);
 					item.setAllowNull(dataset.item(i)["allowNull"]);
 					item.setParentId(dataset.item(i)["parentId"]);
+					item.setNumberRange(dataset.item(i)["numberRange"]);
 				}
 				successCallback(item);
 			});

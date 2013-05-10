@@ -379,6 +379,10 @@ $(function(){
 		$("#content").load("static/view/home.html");
 	});
 	$("#nextQuestion").click(function(){
+		if(!answerValidated()){
+			return false;
+		}
+		
 		var goToQuestionId = getSelectedSingleAnswer().data("goToQuestionId");
 		if(null != goToQuestionId){
 			var currentQuestionInfo = sectionId + "," + lastQid + "," +  sectionDisplayed + "," + qIndex;
@@ -417,8 +421,7 @@ $(function(){
 		else{
 			//validate answer before going next
 			var selectedSectionId = $("body").data("questionaire").sectionId;
-			var valid = answerValidated();
-			if(valid) {
+			//if(valid) {
 				if(qIndex == totalQ) {
 					return;
 				}
@@ -446,7 +449,7 @@ $(function(){
 						showDailog();
 					}
 				}	
-			}
+			//}
 		}
 	});
 	
@@ -545,6 +548,49 @@ function suspend() {
 	$("#content").load("static/view/home.html");
 }
 
+function validateNumberRange(numberRange,inputNumber){
+	var returnObj = {state: false};
+	if(numberRange == null || typeof(numberRange) == 'undefined' || typeof(inputNumber) == 'undefined' || inputNumber.length <0){
+		returnObj.state = false;
+		returnObj.message = "Invalide number range";
+		return returnObj;
+	}
+	var range = numberRange.split("-");
+	if(ignoreNumberRangeValidation(range) || (Number(range[0])<= Number(inputNumber) && Number(inputNumber) <= Number(range[1]))){
+		returnObj.state = true;
+	}
+	returnObj.message = "The input value must be in range " + range[0] + " to " + range[1]; 
+	return returnObj;
+}
+
+function ignoreNumberRangeValidation(range){
+	return range[0] == "null" || range[1] == "null";
+}
+
+function validateEmpty(inputValue){
+	var returnObj = {};
+	if(inputValue != ""){
+		returnObj.state = true;
+	}
+	else{
+		returnObj.state = false;
+		returnObj.message = "You must answer this question.";
+	}
+	return returnObj;
+}
+
+function validateTextLength(inputValue,maxLength){
+	var returnObj = {};
+	if(inputValue.length <= maxLength){
+		returnObj.state = true;
+	}
+	else{
+		returnObj.state = false;
+		returnObj.message = "Your answer must be less than or equal " + maxLength + " characters";
+	}
+	return returnObj;
+}
+
 function answerValidated() {
 	var qType = $(".question-block > .question").attr("qtype");
 	//parent child question doesn't stored question type in the parent div
@@ -553,22 +599,50 @@ function answerValidated() {
 		var t = true;
 		var child = $(".child-question");
 		for(var i = 0; i < child.length ; i++) {
-			var allownull = $(child[i]).find(".group-question-row").attr("allownull");
-			var qType = $(child[i]).find(".group-question-row").attr("qtype");
+			var gQuestionRow = $(child[i]).find(".group-question-row"); 
+			var allownull = gQuestionRow.attr("allownull");
+			var qType = gQuestionRow.attr("qtype");
+			var numberRange = gQuestionRow.attr("numberRange");
 			var tq;
 			if(allownull == 0) {
 				if(Number(qType) == 1 || Number(qType) == 2 || Number(qType) == 3 || Number(qType) == 6) {
-					var tq =  $(child[i]).find(".answer > input").val() != "";
-					if(!tq) {
-						alert("You must answer the question " +$(child[i]).find(".group-question-row").attr('qcode') + ".");
-						return tq;
+					var emptyValidation = validateEmpty($(child[i]).find(".answer > input").val());
+					var numberRangeValidation = Number(qType) == 2? validateNumberRange(numberRange,$(child[i]).find(".answer > input").val()) : null;
+					var textLengthValidation = Number(qType) == 1? validateNumberRange($(child[i]).find(".answer > input").val(),80) : null;
+					if(!emptyValidation.state){
+						alert(emptyValidation.message + " " + $(child[i]).find(".group-question-row").attr('qcode') + ".");
+					}
+					else if(null != numberRangeValidation && !numberRangeValidation.state) {
+						alert(numberRangeValidation.message + " in " + $(child[i]).find(".group-question-row").attr('qcode') + ".");
+					}
+					else if(null != textLengthValidation && !textLengthValidation.state) {
+						alert(numberRangeValidation.message + " in " + $(child[i]).find(".group-question-row").attr('qcode') + ".");
+					}
+					if(!emptyValidation.state || (null != numberRangeValidation && !numberRangeValidation.state) || (null != textLengthValidation && !textLengthValidation.state)){
+						return false;
 					}
 				}
 				else if(Number(qType) == 4 || Number(qType) == 5) {
 					var t;
 					switch(Number(qType)) {
 						case 4: //single question type
-							tq = $(child[i]).find(".answer > input[type='radio']:checked").length > 0;
+							var radio = $(child[i]).find(".answer > input[type='radio']:checked");
+							var answerTypeId = radio.attr("answerTypeId")
+							if(answerTypeId == 3 || answerTypeId == 5){ // answer type id 3 and 5 is other require
+								var emptyValidation = validateEmpty(radio.siblings("input").val());
+								if(!emptyValidation.state){
+									alert(emptyValidation.message);
+									return false;
+								}
+							}
+							else if(answerTypeId == 2 || answerTypeId == 3){
+								var textLengthValidation = validateTextLength(radio.siblings("input").val(), 80);
+								if(!textLengthValidation.state){
+									alert(textLengthValidation.message);
+									return false;
+								}
+							}
+							tq = radio.length > 0;
 							break;
 						case 5: //multiple question type
 							//how to store the answer id in the participant answer for this???
@@ -590,17 +664,38 @@ function answerValidated() {
 		if($(".question-block > .question").attr("allownull") == 0) {
 			var textVal;
 			if(Number(qType) == 1 || Number(qType) == 2 || Number(qType) == 3 || Number(qType) == 6) {
-				var t =  $(".question-block > .answer-block").find("input").val() != "";
-				if(!t) {
-					alert("You must answer this question.");
+				var numberRange = $(".question-block > .question").attr("numberRange");
+				var emptyValidation = validateEmpty($(".question-block > .answer-block").find("input").val());
+				var numberRangeValidation = Number(qType) == 2? validateNumberRange(numberRange,$(".question-block > .answer-block").find("input").val()) : null;
+				if(!emptyValidation.state){
+					alert(emptyValidation.message);
 				}
-				return t;
+				else if(null != numberRangeValidation && !numberRangeValidation.state) {
+					alert(numberRangeValidation.message);
+				}
+				return emptyValidation.state && numberRangeValidation.state;
 			}
 			else if(Number(qType) == 4 || Number(qType) == 5) {
 				var t;
 				switch(Number(qType)) {
 					case 4: //single question type
-						t = $(".answer-block input[type='radio']:checked").length > 0;
+						var radio = $(".answer-block input[type='radio']:checked");
+						var answerTypeId = radio.attr("answerTypeId")
+						if(answerTypeId == 3 || answerTypeId == 5){ // answer type id 3 and 5 is other require
+							var emptyValidation = validateEmpty(radio.siblings("input").val());
+							if(!emptyValidation.state){
+								alert(emptyValidation.message);
+								return false;
+							}
+						}
+						else if(answerTypeId == 2 || answerTypeId == 3){
+							var textLengthValidation = validateTextLength(radio.siblings("input").val(), 80);
+							if(!textLengthValidation.state){
+								alert(textLengthValidation.message);
+								return false;
+							}
+						}
+						t = radio.length > 0;
 						break;
 					case 5: //multiple question type
 						//how to store the answer id in the participant answer for this???

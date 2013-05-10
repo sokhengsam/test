@@ -44,6 +44,9 @@ $(function(){
 	});
 });
 function loadHistoryDetail(surveyId,description1) {
+	sectionDao.getBySurvey(surveyId, function(sections) {
+			$("body").data("sections", sections);
+	});
 	participantSurveyDao.getBySurvey(surveyId, function(participants) {
 		$("body").data("participantSurveys", participants);
 		$("#selectedSurvey").data("selectedSurvey", {"surveyId": surveyId, "description": description1});

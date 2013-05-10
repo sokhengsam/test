@@ -7,7 +7,7 @@ var GroupQuestionAdapter = new Class({
 		this.mergeGroupQuestionTemplate({questionCode: mergeData.parentQuestionCode,text: mergeData.label,displaySectionName: mergeData.displaySectionName});
 	},
 	mergeChildQuestionTemplate: function(mergeData){
-		var question = $('#groupQuestionTemplate').tmpl({qcode:mergeData.getQuestionCode(), allowNull: mergeData.getAllowNull(), questionId: mergeData.getQuestionId(),questionTypeId: mergeData.getQuestionTypeId(),questionCode: mergeData.getQuestionCode(),text:mergeData.text});
+		var question = $('#groupQuestionTemplate').tmpl({qcode:mergeData.getQuestionCode(), allowNull: mergeData.getAllowNull(), questionId: mergeData.getQuestionId(),questionTypeId: mergeData.getQuestionTypeId(),questionCode: mergeData.getQuestionCode(),text:mergeData.text,numberRange: mergeData.getNumberRange()});
 		$(".question-block").append(question);
 	}
 	,

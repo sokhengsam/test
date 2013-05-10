@@ -19,7 +19,7 @@
 <script id="singleTemplate" type="x-jquery-tmpl">
 	<div class="answer">
 		<img src="static/css/images/radio-off.png">
-		<input svalue="${value}" type="radio" name="${questionId}" id="a${answerId}" panswer="${panswerid}"><label for="a${answerId}">${text}</label>
+		<input svalue="${value}" type="radio" name="${questionId}" id="a${answerId}" panswer="${panswerid}" answerTypeId="${answerTypeId}"><label for="a${answerId}">${text}</label>
 	</div>
 </script>
 
@@ -51,7 +51,7 @@
 	<div class="scrollable" id="scrollable">
   		<div class="question-block">
 			<div class="pquestion">${parentQuestion}</div>
-			<div class="question" id="${questionId}" qtype="${questionTypeId}" allowNull="${allowNull}" qcode="${questionCode}">${questionCode}. ${text}</div>
+			<div class="question" id="${questionId}" qtype="${questionTypeId}" allowNull="${allowNull}" qcode="${questionCode}" numberRange="${numberRange}">${questionCode}. ${text}</div>
 			<div class="answer-block"></div>
   		</div>
 	</div>
@@ -76,7 +76,7 @@
 <!-- group question row template -->
 <script id="groupQuestionTemplate" type="x-jquery-tmpl">
 	<div class="child-question">
-		<div class="group-question-row" id="${questionId}" qtype="${questionTypeId}" allowNull="${allowNull}" qcode="${qcode}">
+		<div class="group-question-row" id="${questionId}" qtype="${questionTypeId}" allowNull="${allowNull}" qcode="${qcode}" numberRange="${numberRange}">
 			${questionCode}. ${text}
 		</div>
 		<div class="answer-block group-question-answers"></div>
