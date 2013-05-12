@@ -101,6 +101,7 @@ function sychronizeData(pSurveys) {
              "ProvinceID": p.getProvinceId(),
              "OutcomeEvaluationID": p.getOutComeEvaluationId(),
              "LanguageID": p.getLanguageId(),
+             "StartDateTime": p.getStartDateTime(),
              "AddedDate": p.getStartDateTime(),
              "EndDateTime": p.getEndDateTime(),
              //"AddedDate": dateConvertor.getCurrentDate(),
@@ -156,9 +157,9 @@ function addRequestObject(requestData) {
 
 function clearAllParticipantAnswer(syncLogObj) {
 	$.each(syncLogObj, function(i, s){
-		participantLogDao.remove(s.SurveyID);
-		participantAnswerDao.remove(s.SurveyID);
-		participantSurvey.remove(s.SurveyID);
+		participantLogDao.removeBySurvey(s.SurveyID);
+		participantAnswerDao.removeBySurvey(s.SurveyID);
+		participantSurveyDao.removeByIdAndComplete(s.SurveyID);
 	});
 }
 

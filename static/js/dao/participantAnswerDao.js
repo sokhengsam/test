@@ -76,7 +76,7 @@ var ParticipantAnswerDao = new Class({
 		});
 	},
 	removeBySurvey: function(surveyId, successCallback) {
-		var sql = "DELETE * FROM " + this.options.tableName + " WHERE participantSurveyId IN (Select participantSurveyId from participantSurvey " +
+		var sql = "DELETE FROM " + this.options.tableName + " WHERE participantSurveyId IN (Select participantSurveyId from participantSurvey " +
 		  "where surveyId = " + surveyId + " and status = 1)";
 		this.options.db.transaction(function(tx) {
 			tx.executeSql(sql, [], function(){console.log("Delete record succed");}, function(tx, error){console.log("Delete fail " + error.message);});

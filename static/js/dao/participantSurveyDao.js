@@ -77,7 +77,7 @@ var ParticipantSurveyDao = new Class({
 					}
 					else{
 						returnValue.sync = dataset.item(i)["count"];
-					}					
+					}
 				}
 				returnValue.notSync = completeAndIncompleteStatusNumber;
 				successCallback(returnValue);
@@ -85,7 +85,7 @@ var ParticipantSurveyDao = new Class({
 		});
 	},
 	removeByIdAndComplete: function(surveyId) {
-		var sql = "DELETE * FROM " + this.options.tableName + " WHERE status= 1 && surveyId = " + surveyId;
+		var sql = "DELETE FROM " + this.options.tableName + " WHERE status= 1 and surveyId = " + surveyId;
 		this.options.db.transaction(function(tx) {
 			tx.executeSql(sql, [], function(){console.log("Delete record succed");}, function(tx, error){console.log("Delete fail " + error.message);});
 		});
