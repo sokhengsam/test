@@ -13,7 +13,7 @@ var SynLogDao = new Class({
 		this.createTable();
 	},
 	countSyncBySurvey: function(surveyId, successCallback) {
-		var sqlCount = "select count(*) as count from "+ this.options.tableName + " where participantSurveyId in (select participantSurveyId from participantSurvey where surveyId = "+ surveyId +")";
+		var sqlCount = "select count(*) as count from "+ this.options.tableName + " where surveyId = "+ surveyId;
 		var returnValue = new Object();
 		var synced = 0;
 		this.options.db.transaction(function(tx){
