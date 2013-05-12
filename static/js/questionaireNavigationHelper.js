@@ -608,7 +608,7 @@ function answerValidated() {
 				if(Number(qType) == 1 || Number(qType) == 2 || Number(qType) == 3 || Number(qType) == 6) {
 					var emptyValidation = validateEmpty($(child[i]).find(".answer > input").val());
 					var numberRangeValidation = Number(qType) == 2? validateNumberRange(numberRange,$(child[i]).find(".answer > input").val()) : null;
-					var textLengthValidation = Number(qType) == 1? validateNumberRange($(child[i]).find(".answer > input").val(),80) : null;
+					var textLengthValidation = Number(qType) == 1? validateTextLength($(child[i]).find(".answer > input").val(),80) : null;
 					if(!emptyValidation.state){
 						alert(emptyValidation.message + " " + $(child[i]).find(".group-question-row").attr('qcode') + ".");
 					}
@@ -616,7 +616,7 @@ function answerValidated() {
 						alert(numberRangeValidation.message + " in " + $(child[i]).find(".group-question-row").attr('qcode') + ".");
 					}
 					else if(null != textLengthValidation && !textLengthValidation.state) {
-						alert(numberRangeValidation.message + " in " + $(child[i]).find(".group-question-row").attr('qcode') + ".");
+						alert(textLengthValidation.message + " in " + $(child[i]).find(".group-question-row").attr('qcode') + ".");
 					}
 					if(!emptyValidation.state || (null != numberRangeValidation && !numberRangeValidation.state) || (null != textLengthValidation && !textLengthValidation.state)){
 						return false;
