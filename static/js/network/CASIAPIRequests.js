@@ -14,6 +14,7 @@ var CASIAPIRequests = new Class({
 		this.postRequest("http://cenat.gov.kh:8090/CASIMS/index.php/home/uploadjsondata", requestData, 
 			function(response){
 				self.handleUploadResponse(response, callBack);
+				
 			}, 
 			function(){
 				enablepage();

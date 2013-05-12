@@ -155,7 +155,7 @@ function addRequestObject(requestData) {
 }
 
 function clearAllParticipantAnswer(syncLogObj) {
-	$.each(synLogObj, function(i, s){
+	$.each(syncLogObj, function(i, s){
 		participantLogDao.remove(s.SurveyID);
 		participantAnswerDao.remove(s.SurveyID);
 		participantSurvey.remove(s.SurveyID);
