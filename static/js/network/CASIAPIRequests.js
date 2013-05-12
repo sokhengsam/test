@@ -16,6 +16,8 @@ var CASIAPIRequests = new Class({
 				self.handleUploadResponse(response, callBack);
 			}, 
 			function(){
+				enablepage();
+				alert("There are some problem while uploading the survey.");
 				console.log("falt");
 			}
 		);
