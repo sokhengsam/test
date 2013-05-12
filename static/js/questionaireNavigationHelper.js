@@ -734,15 +734,15 @@ function showDailog(){
 	actionBlock.append($('<button></button>').text("Yes").addClass("dialog-button").click(function(){
 		var selectedSurvey = $("#selectedSurvey").data("selectedSurvey");
 		enablepage();
-		if(selectedSurvey.surveyId != 3) {
-			var participantSurvey = $("#participant").data("participant");
-			var dateTimeConvertor = new DateTimeConvertor();
-			participantSurvey.setEndDateTime(dateTimeConvertor.getCurrentDate() + " " + dateTimeConvertor.getCurrentTime());
-			participantSurvey.setStatus(1);
-			participantSurveyDao.update(participantSurvey);
-			var participantSurveyLog = $("#participantLog").data("participantLog");
-			participantSurveyLog.setEndDateTime(dateTimeConvertor.getCurrentDateTime());
-			participantLogDao.update(participantSurveyLog);
+		var participantSurvey = $("#participant").data("participant");
+		var dateTimeConvertor = new DateTimeConvertor();
+		participantSurvey.setEndDateTime(dateTimeConvertor.getCurrentDateTime());
+		participantSurvey.setStatus(1);
+		participantSurveyDao.update(participantSurvey);
+		var participantSurveyLog = $("#participantLog").data("participantLog");
+		participantSurveyLog.setEndDateTime(dateTimeConvertor.getCurrentDateTime());
+		participantLogDao.update(participantSurveyLog);
+		if(selectedSurvey.surveyId != 10) {
 			var alertStr = "";
 			if(atsScore >=1 && atsScore < 4) {
 				alertStr = "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ ATS >= ១ សូមផ្តល់ការប្រឹក្សាស្តីពីការប្រើប្រាស់ ATS)\n";

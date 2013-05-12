@@ -21,6 +21,9 @@ var DateTimeConvertor = new Class({
 		var time = today.getHours();
 		var minutes = today.getMinutes();
 		var second = today.getSeconds();
+		if(minutes == 0) {
+			minutes = "00";
+		}
 		return time + ":" + minutes + ":" + second;
 	},
 	getCurrentUSDate: function() {

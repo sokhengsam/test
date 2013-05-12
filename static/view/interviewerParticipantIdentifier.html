@@ -64,7 +64,7 @@
 				var participantCode = $("#participantId").val();
 				var participantSurvey = new ParticipantSurvey();
 				participantSurvey.setSurveyId($("#selectedSurvey").data("selectedSurvey").surveyId);
-				participantSurvey.setSurveyDate(dateTimeConvertor.getCurrentDate());
+				participantSurvey.setSurveyDate(dateTimeConvertor.getCurrentDateTime());
 				participantSurvey.setInterviewCode($("#interviewerId").val());
 				participantSurvey.setParticipantCode(participantCode);
 				participantSurvey.setPlaceOfInterview($("#placeOfInterview").val());

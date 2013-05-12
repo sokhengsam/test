@@ -74,7 +74,13 @@ $(function() {
 	});
 	
 	$("#sync").click(function(){
-		sychronizeData(participantSurveys);
+		if(navigator.onLine) {
+			sychronizeData(participantSurveys);
+		}
+		else {
+			alert("No Internet connection.");
+		}
+			
 	});
 });
 
