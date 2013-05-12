@@ -408,7 +408,7 @@ $(function(){
 					if(secId == 9) {
 						parseAnswer();
 					}
-					//parseParticipantAnswer();
+					parseParticipantAnswer();
 					//we have speciall case for the surveyId =3
 					parseAnswerSpecialCase();
 					$("#previousQuestion").show();
@@ -426,7 +426,7 @@ $(function(){
 					return;
 				}
 				qIndex = qIndex + 1;
-				//parseParticipantAnswer();
+				parseParticipantAnswer();
 				if(qIndex < totalQ) {
 					if(selectedSectionId == 9) {
 						parseAnswer();
