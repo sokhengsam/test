@@ -729,7 +729,7 @@ function deleteData() {
 	delete $("#participantLog").data("participantLog");
 }
 function showDailog(){
-	buildPopUpPage(240,110);
+	buildPopUpPage(260,110);
 	var actionBlock = $("<div class='dialog-action'></div>");
 	actionBlock.append($('<button></button>').text("Yes").addClass("dialog-button").click(function(){
 		var selectedSurvey = $("#selectedSurvey").data("selectedSurvey");
