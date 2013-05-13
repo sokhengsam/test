@@ -11,8 +11,9 @@ var ParticipantLogDao = new Class({
 		//this is mock up. so, drop the table first to avoid the duplicate data
 		this.createTable();
 	},
-	getByParticipantCode: function(partcipantCode, successCallback) {
-		var selectAll = "SELECT * FROM "+this.options.tableName + " WHERE participantCode = " + partcipantCode;
+	getByParticipantSurveyId: function(partcipantSurveyId, successCallback) {
+		var selectAll = "SELECT * FROM "+this.options.tableName + " WHERE participantSurveyId = " + partcipantSurveyId;
+		console.log("Select p survey: " + selectAll);
 		var items = [];
 		this.options.db.transaction(function(tx){
 			tx.executeSql(selectAll, [], function(tx, result) {
@@ -20,6 +21,7 @@ var ParticipantLogDao = new Class({
 				for (var i = 0; i < dataset.length; i++) {
 					var item = new ParticipantLog();
 					item.setParticipantLogId(dataset.item(i)["participantLogId"]);
+					item.setParticipantSurveyId(dataset.item(i)["participantSurveyId"]);
 					item.setParticipantCode(dataset.item(i)["participantCode"]);
 					item.setStartDateTime(dataset.item(i)["startDateTime"]);
 					item.setEndDateTime(dataset.item(i)["endDateTime"]);

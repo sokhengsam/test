@@ -98,7 +98,8 @@
 					});
 				});
 			}
-			$("#content").load("static/view/section.html");
+			$("#content").load("static/view/introduction.html");
+			//$("#content").load("static/view/section.html");
 			//got to the last question of the participant
 		});
 		$("#backToSurveyList").click(function(){
@@ -115,9 +116,9 @@
 			var p = partic[i];
 			if(p.getParticipantCode() == participantCode &&  p.getOutComeEvaluationId() == evaluationOutcome) {
 				$("#participant").data("participant", p);
-				participantLogDao.getByParticipantCode(participantCode,function(participantLog) {
-					$("#participantLog").data("participantLog", participantLog);
-					var lastQuestionId = participantLog.getLastQuestion();
+				participantLogDao.getByParticipantSurveyId(p.getParticipantSurveyId(),function(participantLog) {
+					$("#participantLog").data("participantLog", participantLog[0]);
+					var lastQuestionId = participantLog[0].getLastQuestion();
 					//get the question 
 				});
 				return true;

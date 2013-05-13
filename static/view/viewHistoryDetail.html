@@ -119,7 +119,7 @@ function sychronizeData(pSurveys) {
 			var pAnswer = {
 				"ParticipantAnswerID": a.getParticipantAnswerId(),
 				"ParticipantSurveyID": a.getParticipantSurveyId(),
-				"AnswerID": a.getAnswerId(),
+				"AnswerID": a.getAnswerId() == ''? null : a.getAnswerId(),
 				"QuestionID": a.getQuestionId(),
 				"Description" : a.getDescription(),
 				"AddedDate": a.getStartDateTime(),

@@ -1,0 +1,20 @@
+<div class="section">
+	<div class="space"></div>
+	<span id="description"></span>
+</div>
+<div class="footer">
+	<div class="question-navigation">
+		<!-- <span class="move-question-previous" id="previousQuestion">&lt;&lt;</span> -->
+		<span class="move-question-next" id="nextQuestion">&gt;&gt;</span>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		var selectedSurvey = $("#selectedSurvey").data("selectedSurvey");
+		$(".section").css("height", $(window).height() - $(".footer").height());
+		$("#description").text(selectedSurvey.introduction);
+		$("#nextQuestion").click(function(){
+			$("#content").load("static/view/section.html");
+		});
+	});
+</script>

@@ -26,6 +26,8 @@ var JSONParser = new Class({
 			survey.setStatus(s.Status);
 			survey.setEditedDate(s.EditedDate);
 			survey.setLastDownload(this.getCurrentDate());
+			survey.setLogo(s.Logo);
+			survey.setInstructionText(s.IntroductionText);
 			surveyDao.persist(survey,persistCallback);
 		}
 	},

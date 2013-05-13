@@ -33,6 +33,7 @@ var SurveysDao = new Class({
 					item.setDescription2(dataset.item(i)["description2"]);
 					item.setStatus(dataset.item(i)["status"]);
 					item.setLastDownload(dataset.item(i)["lastDownload"]);
+					item.setInstructionText(dataset.item(i)["instructionText"]);
 					items.push(item);
 				}
 				successCallback(items);
@@ -52,6 +53,7 @@ var SurveysDao = new Class({
 					item.setDescription2(dataset.item(i)["description2"]);
 					item.setStatus(dataset.item(i)["status"]);
 					item.setLastDownload(dataset.item(i)["lastDownload"]);
+					item.setInstructionText(dataset.item(i)["instructionText"]);
 					items.push(item);
 				}
 			});

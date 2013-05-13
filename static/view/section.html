@@ -37,6 +37,10 @@
 		//load the last question of the last section
 		$("#previousQuestion").click(function(){
 			sectionDisplayed--;
+			if(sectionDisplayed < 0) {
+				$("#content").load("static/view/introduction.html");
+				return false;
+			}
 			var sections = $("body").data("sections");
 			var section = sections[sectionDisplayed];
 			questionDao.getBySection(section.getSectionId(), function(questions) {
