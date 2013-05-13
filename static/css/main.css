@@ -6,6 +6,10 @@
 	src: url("fonts/KhmerOS.ttf") format("truetype");
 }
 
+html, html *{
+	font-size: 22px;
+}
+
 body {
 	margin:0;
 	padding:0;
@@ -110,22 +114,24 @@ li:HOVER{
 }
 
 .move-question-previous{
-	width: 90px;
-	height: 30px;
+	width: 60px;
+	height: 60px;
 	display: inline-block;
 	background-image: url("images/back.png");
 	float: left;
 	margin-left: 50px;
 	color: #FFF;
+	background-repeat: no-repeat;
 }
 
 .move-question-next{
-	width: 90px;
-	height: 30px;
+	width: 60px;
+	height: 60px;
 	background-image: url("images/forward.png");
 	float: right;
 	margin-right: 50px;
 	color: #FFF;
+	background-repeat: no-repeat;
 }
 
 .question-navigation span:last-child,.question-navigation span:first-child{
@@ -220,6 +226,8 @@ li:HOVER{
 	display: inline-block;
 	cursor: pointer;
 	margin-left: 10px;
+	height: 60px;
+	vertical-align: middle;
 }
 
 .question-block{
@@ -315,7 +323,7 @@ input[type='checkbox'],input[type='radio']{
 
 .answer label{
 	position: absolute;
-	margin-top: 5px;
+	margin-top: 13px;
 	margin-left: -45px;
 }
 /*
@@ -534,4 +542,8 @@ input[type='checkbox'],input[type='radio']{
 .scrollable {
 	padding-bottom: 10px;
 	position:relative;
+}
+
+.answer{
+	padding: 5px 0px;
 }
