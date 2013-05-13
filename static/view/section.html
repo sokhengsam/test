@@ -11,7 +11,15 @@
 </div>
 <script>
 	$(function(){
+		var selectedSurvey = $("#selectedSurvey").data("selectedSurvey");
 		var lang = $("body").data("language");
+		console.log("section index: " + sectionDisplayed);
+		if(sectionDisplayed == Number(-1) && ((lang == 2 && selectedSurvey.introduction2 == "null") || (lang == 1 && selectedSurvey.introduction1 == "null"))) {
+			$("#previousQuestion").hide();
+		}
+		else {
+			$("#previousQuestion").show();
+		}
 		var sections = $("body").data("sections");
 		sectionDisplayed++;
 		var section = sections[sectionDisplayed];

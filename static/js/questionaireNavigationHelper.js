@@ -28,7 +28,7 @@ function getQuestion(mode) {
 			}
 			else if(mode == MOVE_PREVIOUS_MODE){
 				qIndex--;
-				if(sectionDisplayed > 0 && qIndex < 0){
+				if(sectionDisplayed == 0 && qIndex < 0){
 					sectionDisplayed--;
 					$("#content").load("static/view/section.html");
 					return;

@@ -93,6 +93,7 @@ var QuestionDao = new Class({
 	},
 	findQuestionByPrimaryKey: function(primaryKey,successCallback){
 		var sql = "SELECT * FROM " + this.options.tableName + " WHERE questionId = " + primaryKey;
+		//console.log("questiondao.findQuestionByPrimaryKey: " + sql);
 		var item;
 		this.options.db.transaction(function(tx){
 			tx.executeSql(sql, [], function(tx, result) {

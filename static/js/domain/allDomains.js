@@ -34,8 +34,12 @@ var Surveys =  new Class({
 			name:"logo",
 			dataType: ''
 		},
-		instructionText: {
-			name: 'instructionText',
+		introduction1: {
+			name: 'introduction1',
+			dataType: 'TEXT',
+		},
+		introduction2: {
+			name: 'introduction2',
 			dataType: 'TEXT',
 		},
 		endText: {
@@ -52,7 +56,8 @@ var Surveys =  new Class({
 		editedDate: '',
 		lastDownload: '',
 		logo: '',
-		instructionText: '',
+		introduction1: '',
+		introduction2: '',
 		endText: ''
 	},
 	jQuery: "Surveys",
@@ -84,8 +89,11 @@ var Surveys =  new Class({
 	setLogo: function(logo) {
 		this.options.logo = logo;
 	},
-	setInstructionText: function(ins) {
-		this.options.instructionText = ins;
+	setIntroduction1: function(ins) {
+		this.options.introduction1 = ins;
+	},
+	setIntroduction2: function(i) {
+		this.options.introduction2 = i;
 	},
 	setEndText: function(endText) {
 		this.options.endText = endText;
@@ -114,12 +122,15 @@ var Surveys =  new Class({
 	getLogo: function() {
 		return this.options.logo;
 	},
-	getInstructionText: function() {
-		return this.options.instructionText;
-	},
 	getEndText: function() {
 		return this.options.endText;
 	},
+	getIntroduction1: function() {
+		return this.options.introduction1;
+	},
+	getIntroduction2: function() {
+		return this.options.introduction2;
+	}
 });
 
 var Section = new Class({

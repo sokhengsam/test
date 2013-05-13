@@ -1,6 +1,10 @@
 <div class="section">
 	<div class="space"></div>
-	<span id="description"></span>
+	<div id="introductionScroller">
+		<div id="introductionScrollable">
+			<span id="description"></span>
+		</div>
+	</div>
 </div>
 <div class="footer">
 	<div class="question-navigation">
@@ -11,10 +15,26 @@
 <script type="text/javascript">
 	$(function(){
 		var selectedSurvey = $("#selectedSurvey").data("selectedSurvey");
-		$(".section").css("height", $(window).height() - $(".footer").height());
-		$("#description").text(selectedSurvey.introduction);
+		$(".section").css("min-height", $(window).height() - $(".footer").height());
+		$("#description").text(selectedSurvey.introduction1);
+		var lang = $("body").data("language");
+		if(lang == 2) {
+			$("#description").text(selectedSurvey.introduction2);
+		}
 		$("#nextQuestion").click(function(){
 			$("#content").load("static/view/section.html");
 		});
+		setScroller();
 	});
+	function setScroller() {
+		var availableH = ($(window).height() - $(".footer").outerHeight() - 15);
+		$("#introductionScroller").css("height", availableH + "px");
+		console.log(introductionScroller);
+		//if(introductionScroller == null) {
+			introductionScroller = new iScroll("introductionScroller", {useTransition:true});
+		/* }
+		else {
+			introductionScroller.refresh();
+		} */
+	}
 </script>

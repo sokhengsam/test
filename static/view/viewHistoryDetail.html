@@ -75,7 +75,9 @@ $(function() {
 	
 	$("#sync").click(function(){
 		if(navigator.onLine) {
-			sychronizeData(participantSurveys);
+			if(confirm("Your are about to upload all data to the server. Be note that the completed surveys will be removed form device once upload is completed. \n Are you sure you want to upload?")) {
+				sychronizeData(participantSurveys);
+			}
 		}
 		else {
 			alert("No Internet connection.");

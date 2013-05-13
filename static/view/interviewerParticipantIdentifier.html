@@ -98,8 +98,21 @@
 					});
 				});
 			}
-			$("#content").load("static/view/introduction.html");
-			//$("#content").load("static/view/section.html");
+			var lang = $("body").data("language");
+			if(lang == 2) {
+				if(surv.introduction2 != "null") {
+					$("#content").load("static/view/introduction.html");
+				}
+				else {
+					$("#content").load("static/view/section.html");
+				}
+			}
+			else if(surv.introduction1 != "null") {
+				$("#content").load("static/view/introduction.html");
+			}
+			else {
+				$("#content").load("static/view/section.html");
+			}
 			//got to the last question of the participant
 		});
 		$("#backToSurveyList").click(function(){

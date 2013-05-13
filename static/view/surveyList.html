@@ -17,17 +17,17 @@
 		});
 		surveyDao.getAll(function(surveys) {
 			for(var i = 0; i < surveys.length; i++) {
-				$("#survey-list").append("<li onclick='loadSection("+surveys[i].getSurveyId()+", \""+ surveys[i].getDescription1()+"\", \""+ surveys[i].getInstructionText()+"\");'>"+ surveys[i].getDescription1() + " | Last Downloaded: " + surveys[i].getLastDownload()+"</li>");
+				$("#survey-list").append("<li onclick='loadSection("+surveys[i].getSurveyId()+", \""+ surveys[i].getDescription1()+"\", \""+ surveys[i].getIntroduction1()+"\", \""+ surveys[i].getIntroduction2()+"\");'>"+ surveys[i].getDescription1() + " | Last Downloaded: " + surveys[i].getLastDownload()+"</li>");
 			}
 		});
 	});
-	function loadSection(surveyId, description1, introductionText) {
+	function loadSection(surveyId, description1, introduction1, introduction2) {
 		sectionDao.getBySurvey(surveyId, function(sections) {
 			//questionDao.getBySection(surveyId, function(questions) {
 				$("body").data("sections", sections);
 			//});
 		});
-		$("#selectedSurvey").data("selectedSurvey", {"surveyId": surveyId, "description": description1, "introduction": introductionText});
+		$("#selectedSurvey").data("selectedSurvey", {"surveyId": surveyId, "description": description1, "introduction1": introduction1, "introduction2" : introduction2});
 		$("#content").load("static/view/interviewerParticipantIdentifier.html");
 	}
 	function refreshSurvey() {
