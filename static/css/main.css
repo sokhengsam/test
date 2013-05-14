@@ -7,7 +7,7 @@
 }
 
 html, html *{
-	font-size: 22px;
+	/*font-size: 22px;*/
 }
 
 body {
@@ -227,6 +227,22 @@ li:HOVER{
 	cursor: pointer;
 	margin-left: 10px;
 	height: 60px;
+	vertical-align: middle;
+}
+
+.back-top{
+	background-image: url("images/back-top.png");
+	background-repeat: no-repeat;
+	background-position: left center;
+	padding: 5px 5px 5px 0px;
+	color: #FFF;
+	text-align: center;
+	width: 90px;
+	font-weight: bold;
+	display: inline-block;
+	cursor: pointer;
+	margin-left: 10px;
+	height: 30px;
 	vertical-align: middle;
 }
 
