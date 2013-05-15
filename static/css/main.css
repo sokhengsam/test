@@ -563,3 +563,16 @@ input[type='checkbox'],input[type='radio']{
 .answer{
 	padding: 5px 0px;
 }
+
+.small {
+	font-size: 16px;
+}
+.medium {
+	font-size: 20.8px;
+}
+.large {
+	font-size: 27.2px;
+}
+.active {
+	color: rgb(116, 110, 110);
+}

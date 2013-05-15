@@ -70,8 +70,26 @@ function getQuestion(mode) {
 			scroller = new iScroll("scrollWrapper");
 		}
 	}, 400);
+	setTimeout(function(){
+		$(".resize").bind("click", function(){
+			var size = $(this).css("font-size");
+			$(".question").css("font-size", size);
+			$(".answer").css("font-size", size);
+			$(".group-question-row").css("font-size", size);
+			$(".active").removeClass("active");
+			$(this).addClass("active");
+			resizeScrollArea();
+		});
+	}, 400);
 }
 
+function resizeScrollArea() {
+	var availableH = ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15);
+	$("#scrollWrapper").css("height", availableH + "px");
+	if(typeof scroller !== 'undefined' && scroller != null) {
+		scroller.refresh();
+	}
+}
 
 function populateSimpleQuestionAnswer(question,qOption){
 	var questionAdapter = new QuestionAdapter(qOption);
@@ -353,7 +371,6 @@ function parseAnswer() {
 	
 	//alert(answerVal);
 }
-
 
 $(function(){
 	$("input[type='checkbox']").checkbox("add",{imageOn: "static/css/images/check-on.png",imageOff: "static/css/images/check-off.png"})
