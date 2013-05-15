@@ -2,9 +2,9 @@ var SingleAnswer = new Class({
 	answer: "",
 	pAnswer: '',
 	TEXT_ANSWERTYPE: "2",
-	TEXT_ANSWERTYPE_REQURE: "3",
+	TEXT_ANSWERTYPE_REQUIRE: "3",
 	NUMBER_ANSWERTYPE: "4",
-	NUMBER_ANSWERTYPE_REQURE: "5",
+	NUMBER_ANSWERTYPE_REQUIRE: "5",
 	initialize: function(answer, pAnswer){
 		// answer of question for merge template
 		this.answer = answer;
@@ -21,7 +21,7 @@ var SingleAnswer = new Class({
 		if(this.answer.answerTypeId == this.TEXT_ANSWERTYPE || this.answer.answerTypeId == this.TEXT_ANSWERTYPE_REQUIRE){
 			singleAnswerTemplate.append($("<input type='text' />"))
 		}
-		else if(this.answer.answerTypeId == this.NUMBER_ANSWERTYPE || this.answer.answerTypeId == this.NUMBER_ANSWERTYPE_REQURE){
+		else if(this.answer.answerTypeId == this.NUMBER_ANSWERTYPE || this.answer.answerTypeId == this.NUMBER_ANSWERTYPE_REQUIRE){
 			singleAnswerTemplate.append($("<input type='number' />"))
 		}
 		singleAnswerTemplate.appendTo($(".answer-block :last"));
