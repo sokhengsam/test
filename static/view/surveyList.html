@@ -17,7 +17,7 @@
 		});
 		surveyDao.getAll(function(surveys) {
 			for(var i = 0; i < surveys.length; i++) {
-				$("#survey-list").append("<li onclick='loadSection("+surveys[i].getSurveyId()+", \""+ surveys[i].getDescription1()+"\", \""+ surveys[i].getIntroduction1()+"\", \""+ surveys[i].getIntroduction2()+"\");'>"+ surveys[i].getDescription1() + " | Last Downloaded: " + surveys[i].getLastDownload()+"</li>");
+				$("#survey-list").append("<li onclick='loadSection("+surveys[i].getSurveyId()+", \""+ surveys[i].getDescription1()+"\", \""+ surveys[i].getIntroduction1()+"\", \""+ surveys[i].getIntroduction2()+"\");'>"+ surveys[i].getDescription1() + " | " + surveys[i].getLastDownload()+"</li>");
 			}
 		});
 	});
