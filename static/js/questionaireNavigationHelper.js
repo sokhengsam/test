@@ -76,6 +76,7 @@ function getQuestion(mode) {
 			$(".question").css("font-size", size);
 			$(".answer").css("font-size", size);
 			$(".group-question-row").css("font-size", size);
+			$(".pquestion").css("font-size", size);
 			$(".active").removeClass("active");
 			$(this).addClass("active");
 			resizeScrollArea();
