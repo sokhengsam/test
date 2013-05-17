@@ -70,6 +70,9 @@ var JSONParser = new Class({
 			question.setDateRange(q.DateRangeFrom + "-" + q.DateRangeTo);
 			question.setImage(q.Image);
 			question.setOrder(q.OrderNo);
+			question.setStatus("");
+			question.setDependencyId(q.DependencyID);
+			question.setSkipToId(q.SkipToID);
 			questionDao.persist(question,persistCallback);
 		}
 	},

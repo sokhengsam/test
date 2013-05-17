@@ -49,6 +49,8 @@ var QuestionDao = new Class({
 					item.setQuestionTypeId(dataset.item(i)["questionTypeId"]);
 					item.setAllowNull(dataset.item(i)["allowNull"]);
 					item.setNumberRange(dataset.item(i)["numberRange"]);
+					item.setDependencyId(dataset.item(i)["dependencyId"]);
+					item.setSkipToId(dataset.item(i)["skipToId"]);
 					items.push(item);
 				}
 				success(items);
@@ -72,6 +74,8 @@ var QuestionDao = new Class({
 					item.setAllowNull(dataset.item(i)["allowNull"]);
 					item.setParentId(dataset.item(i)["parentId"]);
 					item.setNumberRange(dataset.item(i)["numberRange"]);
+					item.setDependencyId(dataset.item(i)["dependencyId"]);
+					item.setSkipToId(dataset.item(i)["skipToId"]);
 					items.push(item);
 				}
 				successCallback(items);
@@ -109,6 +113,8 @@ var QuestionDao = new Class({
 					item.setAllowNull(dataset.item(i)["allowNull"]);
 					item.setParentId(dataset.item(i)["parentId"]);
 					item.setNumberRange(dataset.item(i)["numberRange"]);
+					item.setDependencyId(dataset.item(i)["dependencyId"]);
+					item.setSkipToId(dataset.item(i)["skipToId"]);
 				}
 				successCallback(item);
 			});

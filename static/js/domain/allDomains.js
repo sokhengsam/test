@@ -274,6 +274,14 @@ var Question = new Class({
 		status: {
 			name: 'status',
 			dataType: 'INTEGER'
+		},
+		dependencyId: {
+			name: 'dependencyId',
+			dataType: 'INTEGER'
+		},
+		skipToId: {
+			name: 'skipToId',
+			dataType: 'INTEGER'
 		}
 	},
 	options: {
@@ -290,7 +298,9 @@ var Question = new Class({
 		dateRange:'',
 		image: '',
 		orderNo: '',
-		status: ''
+		status: '',
+		dependencyId: '',
+		skipToId: ''
 	},
 	jQuery: "Question",
 	initialize: function(options){
@@ -343,6 +353,12 @@ var Question = new Class({
 	setStatus: function(status) {
 		this.options.status = status;
 	},
+	setDependencyId: function(dependencyId){
+		this.options.dependencyId = dependencyId;
+	},
+	setSkipToId: function(skipToId){
+		this.options.skipToId = skipToId;
+	},
 	getAllowNull: function() {
 		return this.options.allowNull;
 	},
@@ -381,7 +397,14 @@ var Question = new Class({
 	},
 	getStatus: function() {
 		return this.options.status;
+	},
+	getDependencyId: function(){
+		return this.options.dependencyId;
+	},
+	getSkipToId: function(){
+		return this.options.skipToId;
 	}
+
 });
 /**
  * Question type class

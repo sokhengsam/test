@@ -82,7 +82,7 @@ var SQLiteHelper =  new Class({
 		});
 	},
 	
-	update: function(domain) {
+	update: function(domain,processCompleteCallback) {
 		var self = this;
 		var d = [];
 		var p = this.findPrimaryKeyName();
@@ -94,8 +94,21 @@ var SQLiteHelper =  new Class({
 		}
 		d.push(this.getPrimaryKey(domain));
 		this.options.db.transaction(function(tx) {
-			tx.executeSql(self.getUpdateStatement(), d, function(){console.log("Update succed");}, function(tx, error){console.log("Update fail " + error.message);});
+			tx.executeSql(self.getUpdateStatement(), d, 
+					function(){
+						if(typeof(processCompleteCallback) != "undefined"){
+							processCompleteCallback();							
+						}
+						console.log("Update succed");
+					},
+					function(tx, error){
+						if(typeof(processCompleteCallback) != "undefined"){
+							processCompleteCallback();							
+						}
+						console.log("Update fail " + error.message);
+				});
 		});
+		
 	},
 	remove: function(id) {
 		var self = this;

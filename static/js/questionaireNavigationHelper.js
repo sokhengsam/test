@@ -9,7 +9,8 @@ var qIndex = 0,
 	MOVE_NEXT_MODE = 1,
 	MOVE_PREVIOUS_MODE = 2,
 	startTimeQ,
-	dateConvertor = new DateTimeConvertor();
+	dateConvertor = new DateTimeConvertor(),
+	numberUpsertAnswers = [];
 
 function getQuestion(mode) {
 	questionaires = $("body").data("questionaire");
@@ -46,7 +47,6 @@ function getQuestion(mode) {
 		if(lang == 2) {
 			qOption.text = question.getDescription2();
 		}
-
 		if(qOption.questionTypeId == 6) {
 			getGroupQuesion(qOption);
 		}
@@ -128,30 +128,109 @@ function getGroupQuesion(qOption) {
 	groupQuestion.parentQuestionCode = qOption.questionCode;
 	groupQuestion.label = qOption.text;
 	groupQuestion.displaySectionName = qOption.displaySectionName;
+	groupQuestion.skipToId = qOption.skipToId;
 	groupQuestionAdapter.mergeGroupQuestionParent(groupQuestion); // merge parent question info 
 	var pSurvey = $("#participant").data("participant");
 	questionDao.getChild(qOption.questionId, function(questions) {
 		$.each(questions,function(index,question){
-			question.text = question.getDescription1();
-			if(lang == 2) {
-				question.text = question.getDescription2();
+			if(question.getDependencyId() != null){
+				 isSkipChildQuestion(pSurvey.getParticipantSurveyId(), question.getDependencyId(),function(isSkip){
+					 if(!isSkip){
+						 renderGroupQuestion(pSurvey,question,qOption,groupQuestionAdapter);						 
+					 }
+				 },index);
 			}
-			participantAnswerDao.getBySQuestion(question.getQuestionId(), pSurvey.getParticipantSurveyId(), function(items) {
-				if(items != undefined) {
-					if(qOption.questionTypeId == 5) {
-						participantAnswer = items;
-					}
-					else {
-						participantAnswer = items[0];
-					}
-				}
-				answerDao.getByQuestion(question.getQuestionId(), function(answers){
-					groupQuestionAdapter.mergeChildQuestionTemplate(question);
-					groupQuestionAdapter.mergeChildQuestionAnswerTemplate(question.getQuestionTypeId(),answers,lang, participantAnswer);
-				});
-			});
+			else{
+				renderGroupQuestion(pSurvey,question,qOption,groupQuestionAdapter);
+			}
 		});
 	});
+}
+
+function renderGroupQuestion(pSurvey,question,qOption,groupQuestionAdapter){
+	question.text = question.getDescription1();
+	if(lang == 2) {
+		question.text = question.getDescription2();
+	}
+	participantAnswerDao.getBySQuestion(question.getQuestionId(), pSurvey.getParticipantSurveyId(), function(items) {
+		if(items != undefined) {
+			if(qOption.questionTypeId == 5) {
+				participantAnswer = items;
+			}
+			else {
+				participantAnswer = items[0];
+			}
+		}
+		answerDao.getByQuestion(question.getQuestionId(), function(answers){
+			groupQuestionAdapter.mergeChildQuestionTemplate(question);
+			groupQuestionAdapter.mergeChildQuestionAnswerTemplate(question.getQuestionTypeId(),answers,lang, participantAnswer);
+		});
+	});
+}
+
+/**
+ * Check skip condition of dependency question in group
+ * 
+ * @param participantSurveyId
+ * @param dependencyId
+ * @param onSuccess
+ */
+function isSkipChildQuestion(participantSurveyId,dependencyId,onSuccess){
+	getAnswerValue(participantSurveyId, dependencyId, function(answerValue){
+		if(Number(answerValue) == 0){
+			onSuccess(true);
+		}
+		else {
+			onSuccess(false);
+		}		
+	});
+}
+
+/**
+ * Get answer score by participant survey id and question id
+ * 
+ * @param participantSurveyId
+ * @param dependencyId
+ * @param onSuccess
+ */
+function getAnswerValue(participantSurveyId,dependencyId,onSuccess){
+	participantAnswerDao.findParticipantAnswerByParticipantSurveyQuestionId(participantSurveyId,dependencyId,function(participant){
+		if(participant == undefined){
+			onSuccess(0); // no score
+			return false;
+		}
+		answerDao.findByPrimaryKey(participant.getAnswerId(),function(answer){
+			onSuccess(answer.getValue());
+		});
+		
+	});
+}
+
+/**
+ * 
+ * @param onComplete
+ */
+function autoCheckUpsertParticipantAnswer(onComplete){
+	numberUpsertAnswers.shift();
+	console.log("numberUpsertAnswers : " + numberUpsertAnswers.length);
+	if(numberUpsertAnswers.length == 0){
+		onComplete();
+	}
+}
+
+/**
+ * 
+ */
+function calculateUpsertParticipantAnswer(){
+	$("#content input [type='text'],#content input [type='number']").each(function(index){
+		if($(this).val() != ""){
+			numberUpsertAnswers.push(index);
+		}
+	});
+	$("#content input[type='radio']:checked,#content input[type='checkbox']:checked").each(function(index){
+		numberUpsertAnswers.push(index);
+	});
+	console.log("total number of saved answer : " + numberUpsertAnswers.length);
 }
 
 function getSelectedSingleAnswer(parentSelector){
@@ -206,7 +285,8 @@ function parseInputValue(child, participantA, type) {
 		}
 	}
 }
-function parseParticipantAnswer() {
+function parseParticipantAnswer(onCompleteUpsert) {
+	calculateUpsertParticipantAnswer();
 	var pSurvey = $("#participant").data("participant");
 	var childQuestions = $(".child-question");
 	//parent child question
@@ -229,7 +309,9 @@ function parseParticipantAnswer() {
 					participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 					participantA.setStatus("");
 					participantA.setParticipantAnswerId(panswer);
-					participantAnswerDao.update(participantA);
+					participantAnswerDao.update(participantA,function(){
+						autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+					},i);
 				}
 				else {
 					participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
@@ -239,7 +321,9 @@ function parseParticipantAnswer() {
 					participantA.setStartDateTime(startTimeQ);
 					participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 					participantA.setStatus("");
-					participantAnswerDao.persist(participantA);
+					participantAnswerDao.persist(participantA,function(){
+						autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+					},i);
 				}
 				
 			}
@@ -247,7 +331,7 @@ function parseParticipantAnswer() {
 				var participantA = new ParticipantAnswer();
 				switch(Number(type)) {
 					case 4: //single question type
-						var panswerid = $(".answer").find("input[type='radio']:checked").data("panswerid");
+						var panswerid = $(child).find(".answer input[type='radio']:checked").data("panswerid");
 						participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
 						participantA.setAnswerId($(child).find("input[type='radio']:checked").attr("id").substring(1));
 						participantA.setQuestionId(q.attr("id"));
@@ -256,11 +340,15 @@ function parseParticipantAnswer() {
 						participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 						participantA.setStatus("");
 						if(panswerid == undefined) {
-							participantAnswerDao.persist(participantA);
+							participantAnswerDao.persist(participantA,function(){
+								autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+							},i);
 						}
 						else {
 							participantA.setParticipantAnswerId(panswerid);
-							participantAnswerDao.update(participantA);
+							participantAnswerDao.update(participantA,function(){
+								autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+							},i);
 						}
 						break;
 					case 5: //multiple question type
@@ -273,7 +361,9 @@ function parseParticipantAnswer() {
 							participantA.setStartDateTime(startTimeQ);
 							participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 							participantA.setStatus("");
-							participantAnswerDao.persist(participantA);
+							participantAnswerDao.persist(participantA,function(){
+								autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+							},i);
 						});
 						break;
 					default:
@@ -298,7 +388,9 @@ function parseParticipantAnswer() {
 				participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 				participantA.setStatus("");
 				participantA.setParticipantAnswerId(panswer);
-				participantAnswerDao.update(participantA);
+				participantAnswerDao.update(participantA,function(){
+					autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+				});
 			}
 			else {
 				participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
@@ -308,7 +400,9 @@ function parseParticipantAnswer() {
 				participantA.setStartDateTime(startTimeQ);
 				participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 				participantA.setStatus("");
-				participantAnswerDao.persist(participantA);
+				participantAnswerDao.persist(participantA,function(){
+					autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+				});
 			}
 			
 		}
@@ -325,11 +419,15 @@ function parseParticipantAnswer() {
 					participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 					participantA.setStatus("");
 					if(panswerid == undefined) {
-						participantAnswerDao.persist(participantA);
+						participantAnswerDao.persist(participantA,function(){
+							autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+						});
 					}
 					else {
 						participantA.setParticipantAnswerId(panswerid);
-						participantAnswerDao.update(participantA);
+						participantAnswerDao.update(participantA,function(){
+							autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+						});
 					}
 					break;
 				case 5: //multiple question type
@@ -342,7 +440,9 @@ function parseParticipantAnswer() {
 						participantA.setStartDateTime(startTimeQ);
 						participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 						participantA.setStatus("");
-						participantAnswerDao.persist(participantA);
+						participantAnswerDao.persist(participantA,function(){
+							autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+						});
 					});
 					break;
 				default:
@@ -399,41 +499,15 @@ $(function(){
 		if(!answerValidated()){
 			return false;
 		}
-		
+		var totalScore = calculateTotalAnswerValues();
 		var goToQuestionId = getSelectedSingleAnswer().data("goToQuestionId");
-		if(null != goToQuestionId){
-			var currentQuestionInfo = sectionId + "," + lastQid + "," +  sectionDisplayed + "," + qIndex;
-			// maintain question index and section
-			findSectionKeyByQuestionKey(goToQuestionId,function(secId){
-				//iterator section to get section index
-				var sections = $("body").data("sections");
-				for(i=0;i<sections.length;i++){
-					if(sections[i].getSectionId() == secId){
-						sectionDisplayed = i;
-						break;
-					}
-				}
-				questionDao.getBySection(secId, function(questions) {
-					//iterator question to get section index 
-					for(i=0;i<questions.length;i++){
-						if(questions[i].getQuestionId() == goToQuestionId){
-							qIndex = i;
-							break;
-						}
-					}
-					$("body").data("questionaire", {"questions": questions, fromPrevious: false, "sectionId": secId,"displaySectionName": (lang == 2 ? sections[sectionDisplayed].getDescription2() : sections[sectionDisplayed].getDescription1())});
-					if(secId == 9) {
-						parseAnswer();
-					}
-					parseParticipantAnswer();
-					//we have speciall case for the surveyId =3
-					parseAnswerSpecialCase();
-					$("#previousQuestion").show();
-					clearQuestionBlock();
-					getQuestion(MOVE_NEXT_MODE);
-					skipQuestionHistory[eval(secId+questions[qIndex].getQuestionId())] = currentQuestionInfo + "," + (lang == 2 ? sections[sectionDisplayed].getDescription2() : sections[sectionDisplayed].getDescription1()); //keep to back state 
-				});
-			});
+		var skipToQuestionAttr = $(".question-block > .question").attr("skipquestionidwidthscore");
+		var skipToQuestionId = skipToQuestionAttr != undefined && skipToQuestionAttr != "" && skipToQuestionAttr != null ? skipToQuestionAttr : "";
+		if(totalScore == 0 && skipToQuestionId != ""){
+			gotoQuestion(skipToQuestionId);
+		}
+		else if(null != goToQuestionId){
+			gotoQuestion(goToQuestionId);
 		}
 		else{
 			//validate answer before going next
@@ -443,16 +517,19 @@ $(function(){
 					return;
 				}
 				qIndex = qIndex + 1;
-				parseParticipantAnswer();
 				if(qIndex < totalQ) {
 					if(selectedSectionId == 9) {
 						parseAnswer();
 					}
+					parseParticipantAnswer(function(){
+						clearQuestionBlock();
+						getQuestion(MOVE_NEXT_MODE);
+					});	
 					//we have speciall case for the surveyId =3
 					parseAnswerSpecialCase();
 					$("#previousQuestion").show();
-					clearQuestionBlock();
-					getQuestion(MOVE_NEXT_MODE);
+					//clearQuestionBlock();
+					//getQuestion(MOVE_NEXT_MODE);
 				}
 				else {
 					//check the survey displayed. 
@@ -472,20 +549,7 @@ $(function(){
 	
 	$("#previousQuestion").click(function(){
 		if(skipQuestionHistory[eval(sectionId+lastQid)] != null){
-			var questionData = skipQuestionHistory[eval(sectionId+lastQid)].split(",");
-			delete skipQuestionHistory[eval(sectionId+lastQid)];
-			questionDao.getBySection(questionData[0], function(questions) {
-				$("body").data("questionaire", {"questions": questions, fromPrevious: false, "sectionId": questionData[0],"displaySectionName": questionData[4]});
-				sectionDisplayed = Number(questionData[2]);
-				qIndex = Number(questionData[3]);
-				sectionId = Number(questionData[0]);
-				clearQuestionBlock();
-				questionaires.fromPrevious = false;
-				getQuestion(MOVE_PREVIOUS_MODE);
-				if(qIndex == 0 && sectionDisplayed == 0) {
-					$(this).hide();
-				}
-			});
+			restoreSkipQuestion($(this));
 		}
 		else{
 			if(sectionDisplayed > 0 && qIndex == 0) {
@@ -513,6 +577,104 @@ $(function(){
 	
 });
 
+
+function calculateTotalAnswerValues(){
+	/*if(skipQuestionIdByScore == null){
+		return false;
+	}*/
+	var totalScore = 0;
+	/*$("#content input [type='text'],#content input [type='number']").each(function(index){
+		if($(this).val() != ""){
+			numberUpsertAnswers.push(index);
+		}
+	});*/
+	$("#content input[type='radio']:checked,#content input[type='checkbox']:checked").each(function(index,input){
+		var score = $(input).attr("svalue");
+		totalScore = Number(totalScore) + Number(score);
+	});
+	
+	// specify for parent child question
+/*	questionDao.getChild(skipQuestionIdByScore, function(questions) {
+		console.log(questions);
+		$.each(questions,function(index,question){
+			getAnswerValue(participantSurveyId, question.getQuestionId(), function(score){
+				totalScore = totalScore + score;
+				console.log("total score : " + totalScore);
+			},totalScore);
+		});
+	},totalScore);*/
+	console.log("total score : " + totalScore);
+	
+	return totalScore;
+}
+
+/**
+ *  Restore skip question 
+ * @param previousNavigator
+ */
+function restoreSkipQuestion(previousNavigator){
+	var questionData = skipQuestionHistory[eval(sectionId+lastQid)].split(",");
+	delete skipQuestionHistory[eval(sectionId+lastQid)];
+	questionDao.getBySection(questionData[0], function(questions) {
+		$("body").data("questionaire", {"questions": questions, fromPrevious: false, "sectionId": questionData[0],"displaySectionName": questionData[4]});
+		sectionDisplayed = Number(questionData[2]);
+		qIndex = Number(questionData[3]);
+		sectionId = Number(questionData[0]);
+		clearQuestionBlock();
+		questionaires.fromPrevious = false;
+		getQuestion(MOVE_PREVIOUS_MODE);
+		if(qIndex == 0 && sectionDisplayed == 0) {
+			previousNavigator.hide();
+		}
+	});
+}
+
+/**
+ * Go to any question with specific question id
+ * 
+ * @param goToQuestionId
+ */
+function gotoQuestion(goToQuestionId){
+	var currentQuestionInfo = sectionId + "," + lastQid + "," +  sectionDisplayed + "," + qIndex;
+	// maintain question index and section
+	findSectionKeyByQuestionKey(goToQuestionId,function(secId){
+		//iterator section to get section index
+		var sections = $("body").data("sections");
+		for(i=0;i<sections.length;i++){
+			if(sections[i].getSectionId() == secId){
+				sectionDisplayed = i;
+				break;
+			}
+		}
+		questionDao.getBySection(secId, function(questions) {
+			//iterator question to get section index 
+			for(i=0;i<questions.length;i++){
+				if(questions[i].getQuestionId() == goToQuestionId){
+					qIndex = i;
+					break;
+				}
+			}
+			$("body").data("questionaire", {"questions": questions, fromPrevious: false, "sectionId": secId,"displaySectionName": (lang == 2 ? sections[sectionDisplayed].getDescription2() : sections[sectionDisplayed].getDescription1())});
+			if(secId == 9) {
+				parseAnswer();
+			}
+			parseParticipantAnswer(function(){
+				clearQuestionBlock();
+				getQuestion(MOVE_NEXT_MODE);
+			});	
+			//we have speciall case for the surveyId =3
+			parseAnswerSpecialCase();
+			$("#previousQuestion").show();
+			//clearQuestionBlock();
+			//getQuestion(MOVE_NEXT_MODE);
+			skipQuestionHistory[eval(secId+questions[qIndex].getQuestionId())] = currentQuestionInfo + "," + (lang == 2 ? sections[sectionDisplayed].getDescription2() : sections[sectionDisplayed].getDescription1()); //keep to back state
+		});
+	});
+}
+
+/**
+ * 
+ */
 function parseAnswerSpecialCase() {
 	var selectedSurvey = $("#selectedSurvey").data("selectedSurvey");
 	if(selectedSurvey.surveyId == 3) {

@@ -55,4 +55,28 @@ var AnswerDao = new Class({
 		});
 		//return items;
 	},
+	findByPrimaryKey: function(answerId,onSuccess){
+		var select = "SELECT * FROM " + this.options.tableName + " WHERE answerId = " + answerId;
+		//console.log(select);
+		var item;
+		this.options.db.transaction(function(tx){
+			tx.executeSql(select, [], function(tx, result) {
+				dataset = result.rows;
+				//console.log(dataset.length);
+				for (var i = 0; i < dataset.length; i++) {
+					item = new Answer();
+					item.setQuestionId(dataset.item(i)["questionId"]);
+					item.setAnswerId(dataset.item(i)["answerId"]);
+					item.setDescription1(dataset.item(i)["description1"]);
+					item.setDescription2(dataset.item(i)["description2"]);
+					item.setAnswerTypeId(dataset.item(i)["answerTypeId"]);
+					item.setValue(dataset.item(i)["value"]);
+					item.setGoToQuestionId(dataset.item(i)["goToQuestionId"]);
+					break;
+				}
+				//console.log(item);
+				onSuccess(item);
+			});
+		});
+	}
 });

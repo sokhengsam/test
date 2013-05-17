@@ -38,6 +38,7 @@ var ParticipantLogDao = new Class({
 	findParticipantLogByParticipantSurvey: function(participantSurveyId,successCallback){
 		var sql = "SELECT * FROM "+this.options.tableName + " WHERE participantSurveyId = " + participantSurveyId;
 		var item;
+		//console.log("findParticipantLogByParticipantSurvey : " + sql);
 		this.options.db.transaction(function(tx){
 			tx.executeSql(sql, [], function(tx, result) {
 				dataset = result.rows;

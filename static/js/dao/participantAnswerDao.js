@@ -81,5 +81,23 @@ var ParticipantAnswerDao = new Class({
 		this.options.db.transaction(function(tx) {
 			tx.executeSql(sql, [], function(){console.log("Delete record succed");}, function(tx, error){console.log("Delete fail " + error.message);});
 		});
+	},
+	findParticipantAnswerByParticipantSurveyQuestionId: function(participantSurveyId,questionId,successCallback){
+		var sql = "SELECT answerId from " + this.options.tableName + " WHERE questionId=" + questionId + " AND participantSurveyId=" + participantSurveyId;
+		var item;
+		//console.log(sql);
+		this.options.db.transaction(function(tx){
+			tx.executeSql(sql, [], function(tx, result) {
+				dataset = result.rows;
+				//console.log(dataset.length);
+				for (var i = 0; i < dataset.length; i++) {
+					item = new ParticipantAnswer();
+					item.setAnswerId(dataset.item(i)["answerId"]);
+					break;
+				}
+				//console.log("answer id : " + item.getAnswerId());
+				successCallback(item);
+			});
+		});
 	}
 });
