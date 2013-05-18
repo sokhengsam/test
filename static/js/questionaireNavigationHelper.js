@@ -223,7 +223,7 @@ function autoCheckUpsertParticipantAnswer(onComplete){
  * 
  */
 function calculateUpsertParticipantAnswer(){
-	$("#content input [type='text'],#content input [type='number']").each(function(index){
+	$("#content input[type='text'],#content input[type='number']").each(function(index){
 		if($(this).val() != ""){
 			numberUpsertAnswers.push(index);
 		}
