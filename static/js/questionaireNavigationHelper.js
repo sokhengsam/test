@@ -13,6 +13,7 @@ var qIndex = 0,
 	numberUpsertAnswers = [];
 
 function getQuestion(mode) {
+	$(".read-more-sign").hide();
 	questionaires = $("body").data("questionaire");
 	totalQ = questionaires.questions.length;
 	isFromPrivious = questionaires.fromPrevious;
@@ -29,7 +30,7 @@ function getQuestion(mode) {
 			}
 			else if(mode == MOVE_PREVIOUS_MODE){
 				qIndex--;
-				if(sectionDisplayed == 0 && qIndex < 0){
+				if(qIndex < 0){
 					sectionDisplayed--;
 					$("#content").load("static/view/section.html");
 					return;
@@ -62,6 +63,9 @@ function getQuestion(mode) {
 	}
 	setTimeout(function(){
 		var availableH = ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15);
+		if($(".question-block").height() > availableH){
+			$(".read-more-sign").show();
+		}
 		$("#scrollWrapper").css("height", availableH + "px");
 		if(typeof scroller !== 'undefined' && scroller != null) {
 			scroller.destroy();

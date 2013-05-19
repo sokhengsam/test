@@ -583,3 +583,11 @@ input[type='checkbox'],input[type='radio']{
 .active {
 	color: rgb(116, 110, 110);
 }
+
+.read-more-sign{
+	width: 30px;
+	height: 30px;
+	display: inline-block;
+	background-image: url("images/more-button.png");
+	background-repeat: no-repeat;
+}
