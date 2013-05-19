@@ -325,10 +325,10 @@ li:HOVER{
 
 /*style for checkbox and radio button*/
 input[type='checkbox'],input[type='radio']{
-	min-height: 40px;
-	min-width: 40px;
+	min-height: 50px;
+	min-width: 50px;
 	position: relative;
-	left: -45px;
+	left: -55px;
 	opacity: 0;
 	-webkit-tap-highlight-color:rgba(0,0,0,0);
 }
