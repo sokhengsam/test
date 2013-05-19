@@ -51,14 +51,12 @@ function getQuestion(mode) {
 			getGroupQuesion(qOption);
 		}
 		else if(qOption.questionTypeId != 7) {
-			if(qOption.parentId != null){
-				questionDao.findQuestionByPrimaryKey(qOption.parentId,function(parentQuestion){
-					qOption.parentQuestion = parentQuestion.getQuestionCode() + ". " + (lang == 2? parentQuestion.getDescription2(): parentQuestion.getDescription1());
-					populateSimpleQuestionAnswer(question,qOption);
-				});
+			//console.log(question.getDependencyId());
+			if(question.getDependencyId() != null){
+				skipSimpleQuestionDependency(mode,questionaires.questions, question, qOption);
 			}
 			else{
-				populateSimpleQuestionAnswer(question,qOption);
+				renderSimpleQuestionAnswerAndSpecialParentChildQuestion(question, qOption);
 			}
 		}
 	}
@@ -92,6 +90,63 @@ function resizeScrollArea() {
 	}
 }
 
+/**
+ * Verify and skip question depended on previous question score
+ * 
+ * @param questions
+ * @param question
+ * @param qOption
+ */
+function skipSimpleQuestionDependency(mode,questions,question,qOption){
+	var pSurvey = $("#participant").data("participant");
+	isSkipDependencyQuestion(pSurvey.getParticipantSurveyId(), question.getDependencyId(), function(isSkip){
+		if(isSkip){
+			if(MOVE_NEXT_MODE == mode){
+				qIndex++;
+				if(qIndex == questions.length){
+					$("#content").load("static/view/section.html");
+				}
+				getQuestion(MOVE_NEXT_MODE);							
+			}
+			else if(MOVE_PREVIOUS_MODE == mode){
+				qIndex--;
+				if(qIndex < 0){
+					sectionDisplayed--;
+					$("#content").load("static/view/section.html");
+				}
+				getQuestion(MOVE_PREVIOUS_MODE);
+			}
+		}
+		else{
+			renderSimpleQuestionAnswerAndSpecialParentChildQuestion(question, qOption);
+		}
+	});
+}
+
+/**
+ * Render questions' and answers' template of simple question type and  special parent child question
+ *  
+ * @param question
+ * @param qOption
+ */
+function renderSimpleQuestionAnswerAndSpecialParentChildQuestion(question,qOption){
+	if(qOption.parentId != null){
+		questionDao.findQuestionByPrimaryKey(qOption.parentId,function(parentQuestion){
+			qOption.parentQuestion = parentQuestion.getQuestionCode() + ". " + (lang == 2? parentQuestion.getDescription2(): parentQuestion.getDescription1());
+			populateSimpleQuestionAnswer(question,qOption);
+		});
+	}
+	else{
+		populateSimpleQuestionAnswer(question,qOption);
+	}
+}
+
+/**
+ * Populate simple questions and answers
+ * 
+ * @param question
+ * @param qOption
+ */
 function populateSimpleQuestionAnswer(question,qOption){
 	var questionAdapter = new QuestionAdapter(qOption);
 	questionAdapter.mergeTemplate();
@@ -135,7 +190,7 @@ function getGroupQuesion(qOption) {
 	questionDao.getChild(qOption.questionId, function(questions) {
 		$.each(questions,function(index,question){
 			if(question.getDependencyId() != null){
-				 isSkipChildQuestion(pSurvey.getParticipantSurveyId(), question.getDependencyId(),function(isSkip){
+				 isSkipDependencyQuestion(pSurvey.getParticipantSurveyId(), question.getDependencyId(),function(isSkip){
 					 if(!isSkip){
 						 renderGroupQuestion(pSurvey,question,qOption,groupQuestionAdapter);						 
 					 }
@@ -176,7 +231,7 @@ function renderGroupQuestion(pSurvey,question,qOption,groupQuestionAdapter){
  * @param dependencyId
  * @param onSuccess
  */
-function isSkipChildQuestion(participantSurveyId,dependencyId,onSuccess){
+function isSkipDependencyQuestion(participantSurveyId,dependencyId,onSuccess){
 	getAnswerValue(participantSurveyId, dependencyId, function(answerValue){
 		if(Number(answerValue) == 0){
 			onSuccess(true);
