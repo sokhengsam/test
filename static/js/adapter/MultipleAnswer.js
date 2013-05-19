@@ -16,10 +16,10 @@ var MultipleAnswer = new Class({
 		
 		//auto add input box if answer type is other
 		if(this.answer.answerTypeId == this.TEXT_ANSWERTYPE || this.answer.answerTypeId == this.TEXT_ANSWERTYPE_REQUIRE){
-			singleAnswerTemplate.append($("<input type='text' />"))
+			multipleAnswerTemplate.append($("<input type='text' />"))
 		}
 		else if(this.answer.answerTypeId == this.NUMBER_ANSWERTYPE || this.answer.answerTypeId == this.NUMBER_ANSWERTYPE_REQUIRE){
-			singleAnswerTemplate.append($("<input type='number' />"))
+			multipleAnswerTemplate.append($("<input type='number' />"))
 		}
 		multipleAnswerTemplate.appendTo($(".answer-block :last"));
 		if(this.pAnswer != undefined) {

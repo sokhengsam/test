@@ -14,15 +14,17 @@ var SingleAnswer = new Class({
 		// merge template
 		var singleAnswerTemplate = $('#singleTemplate').tmpl(this.answer);
 		singleAnswerTemplate.find("input[type='radio']").data("goToQuestionId",this.answer.goToQuestionId);
+		var description = "";
 		if(this.pAnswer != undefined) {
+			description = this.pAnswer.getDescription();
 			singleAnswerTemplate.find("input[type='radio']").data("panswerid",this.pAnswer.getParticipantAnswerId());
 		}
 		//auto add input box if answer type is other
 		if(this.answer.answerTypeId == this.TEXT_ANSWERTYPE || this.answer.answerTypeId == this.TEXT_ANSWERTYPE_REQUIRE){
-			singleAnswerTemplate.append($("<input type='text' />"))
+			singleAnswerTemplate.append($("<input type='text' />").val(description));
 		}
 		else if(this.answer.answerTypeId == this.NUMBER_ANSWERTYPE || this.answer.answerTypeId == this.NUMBER_ANSWERTYPE_REQUIRE){
-			singleAnswerTemplate.append($("<input type='number' />"))
+			singleAnswerTemplate.append($("<input type='number' />").val(description));
 		}
 		singleAnswerTemplate.appendTo($(".answer-block :last"));
 		if(this.pAnswer != undefined) {

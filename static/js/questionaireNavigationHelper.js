@@ -65,9 +65,9 @@ function getQuestion(mode) {
 		$("#scrollWrapper").css("height", availableH + "px");
 		if(typeof scroller !== 'undefined' && scroller != null) {
 			scroller.destroy();
-			scroller = new iScroll("scrollWrapper");
+			scroller = new iScroll("scrollWrapper", {checkDOMChanges: false});
 		}
-	}, 400);
+	}, 600);
 	setTimeout(function(){
 		$(".resize").bind("click", function(){
 			var size = $(this).css("font-size");
@@ -341,6 +341,7 @@ function parseInputValue(child, participantA, type) {
 		}
 	}
 }
+//TODO: there are duplicate code in this function. it's should be split
 function parseParticipantAnswer(onCompleteUpsert) {
 	calculateUpsertParticipantAnswer();
 	var pSurvey = $("#participant").data("participant");
@@ -388,10 +389,15 @@ function parseParticipantAnswer(onCompleteUpsert) {
 				switch(Number(type)) {
 					case 4: //single question type
 						var panswerid = $(child).find(".answer input[type='radio']:checked").data("panswerid");
+						var answerType = $(child).find("answer input[type='radio']:checked").attr("answertypeid");
 						participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
 						participantA.setAnswerId($(child).find("input[type='radio']:checked").attr("id").substring(1));
 						participantA.setQuestionId(q.attr("id"));
-						participantA.setDescription("");
+						var description = "";
+						if([2, 3, 4, 5].indexOf(Number(answerType)) != -1) {
+							description = $(child).find(".answer input[type='radio']:checked").siblings("input").val();
+						}
+						participantA.setDescription(description);
 						participantA.setStartDateTime(startTimeQ);
 						participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 						participantA.setStatus("");
@@ -409,7 +415,7 @@ function parseParticipantAnswer(onCompleteUpsert) {
 						break;
 					case 5: //multiple question type
 						//how to store the answer id in the participant answer for this???
-						$(child).find("input[type='checkbox']:checked").each(function(i, ch){
+						$(child).find(".answer input[type='checkbox']:checked").each(function(i, ch){
 							participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
 							participantA.setAnswerId($(ch).attr("id").substring(1));
 							participantA.setQuestionId(q.attr("id"));
@@ -435,27 +441,20 @@ function parseParticipantAnswer(onCompleteUpsert) {
 			//check if it's an update or new insert
 			var input = $(".answer").find("input");
 			panswer = input.attr("panswer");
+			participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
+			participantA.setAnswerId("");
+			participantA.setQuestionId($(".question").attr("id"));
+			participantA.setDescription($(".answer").find("input").val());
+			participantA.setStartDateTime(startTimeQ);
+			participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
+			participantA.setStatus("");
 			if(panswer != '') {
-				participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
-				participantA.setAnswerId("");
-				participantA.setQuestionId($(".question").attr("id"));
-				participantA.setDescription($(".answer").find("input").val());
-				participantA.setStartDateTime(startTimeQ);
-				participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
-				participantA.setStatus("");
 				participantA.setParticipantAnswerId(panswer);
 				participantAnswerDao.update(participantA,function(){
 					autoCheckUpsertParticipantAnswer(onCompleteUpsert);
 				});
 			}
 			else {
-				participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
-				participantA.setAnswerId("");
-				participantA.setQuestionId($(".question").attr("id"));
-				participantA.setDescription($(".answer").find("input").val());
-				participantA.setStartDateTime(startTimeQ);
-				participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
-				participantA.setStatus("");
 				participantAnswerDao.persist(participantA,function(){
 					autoCheckUpsertParticipantAnswer(onCompleteUpsert);
 				});
@@ -466,11 +465,16 @@ function parseParticipantAnswer(onCompleteUpsert) {
 			switch(Number(type)) {
 				case 4: //single question type
 					var panswerid = $(".answer").find("input[type='radio']:checked").data("panswerid");
+					var answerType = $(".answer").find("input[type='radio']:checked").attr("answertypeid");
 					participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
 					//TODO: some answer got the substring error 
 					participantA.setAnswerId($(".answer").find("input[type='radio']:checked").attr("id").substring(1));
 					participantA.setQuestionId($(".question").attr("id"));
-					participantA.setDescription("");
+					var description = "";
+					if([2, 3, 4, 5].indexOf(Number(answerType)) != -1) {
+						description = $(".answer").find("input[type='radio']:checked").siblings("input").val();
+					}
+					participantA.setDescription(description);
 					participantA.setStartDateTime(startTimeQ);
 					participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 					participantA.setStatus("");
@@ -488,7 +492,10 @@ function parseParticipantAnswer(onCompleteUpsert) {
 					break;
 				case 5: //multiple question type
 					//how to store the answer id in the participant answer for this???
-					$(".answer-block").find("input[type='checkbox']:checked").each(function(i, ch){
+					console.log("calling");
+					$(".answer-block").find(".answer input[type='checkbox']:checked").each(function(i, ch){
+						console.log("xxx");
+						participantA = new ParticipantAnswer()
 						participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
 						participantA.setAnswerId($(ch).attr("id").substring(1));
 						participantA.setQuestionId($(".question").attr("id"));
@@ -544,6 +551,7 @@ $(function(){
 		sectionDisplayed = startQuestionData.lastSectionIndex;
 		$("body").removeData("startQuestionData");
 	}
+	console.log("getting question load");
 	getQuestion(MOVE_NEXT_MODE);
 	if(sectionDisplayed == 0 && qIndex == 0) {
 		$("#previousQuestion").hide();
@@ -588,6 +596,10 @@ $(function(){
 					//getQuestion(MOVE_NEXT_MODE);
 				}
 				else {
+					//save the last question of the section and clear the question block
+					parseParticipantAnswer(function(){
+						clearQuestionBlock();
+					});
 					//check the survey displayed. 
 					//if all the survey already displayed meant they are at the end so, show dialog. Otherwise, load next section
 					//sectionDisplayed started from 0
@@ -616,6 +628,7 @@ $(function(){
 				clearQuestionBlock();
 				questionaires.fromPrevious = false;
 				qIndex--;
+				console.log("previouse question bind");
 				getQuestion(MOVE_PREVIOUS_MODE);
 				if(qIndex == 0 && sectionDisplayed == 0) {
 					$(this).hide();
@@ -628,8 +641,8 @@ $(function(){
 	setTimeout(function() {
 		var availableH = ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15);
 		$("#scrollWrapper").css("height", availableH + "px");
-		scroller = new iScroll("scrollWrapper");
-	}, 400);
+		scroller = new iScroll("scrollWrapper", {checkDOMChanges: false});
+	}, 600);
 	
 });
 
@@ -678,6 +691,7 @@ function restoreSkipQuestion(previousNavigator){
 		sectionId = Number(questionData[0]);
 		clearQuestionBlock();
 		questionaires.fromPrevious = false;
+		console.log("restoring skip question");
 		getQuestion(MOVE_PREVIOUS_MODE);
 		if(qIndex == 0 && sectionDisplayed == 0) {
 			previousNavigator.hide();
@@ -728,6 +742,17 @@ function gotoQuestion(goToQuestionId){
 	});
 }
 
+function showScoreMessage(message) {
+	buildPopUpPage(394,190);
+	var actionBlock = $("<div class='dialog-action'></div>");
+	actionBlock.append($('<button></button>').text("Ok").addClass("dialog-button").click(function(){
+		enablepage();
+		deleteData();
+		$("#content").load("static/view/home.html");
+	}));
+	$("#popup").append($("<div class='score-dialog-message'></div>").text(message));
+	$("#popup").append(actionBlock);
+}
 /**
  * 
  */
@@ -983,12 +1008,18 @@ function showDailog(){
 				alertStr = "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ ATS >= ១ សូមផ្តល់ការប្រឹក្សាស្តីពីការប្រើប្រាស់ ATS)\n";
 			}
 			else if(atsScore >=4) {
-				alertStr = "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ ATS >= 4អ្នកចូលរួមអាចនឹងត្រូវលក្ខខណ្ឌចូលរួមកម្មវិធី CCT\n";
+				alertStr = "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ ATS >= 4 អ្នកចូលរួមអាចនឹងត្រូវលក្ខខណ្ឌចូលរួមកម្មវិធី CCT\n";
 			}
 			if(alcoholicScore >=6) {
-				alertStr += "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ គ្រឿងស្រវឹង>= 6 សូមផ្តល់ការប្រឹក្សាស្តីពីការប្រើប្រាស់គ្រឿងស្រវឹង";
+				alertStr += "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ គ្រឿងស្រវឹង >= 6 សូមផ្តល់ការប្រឹក្សាស្តីពីការប្រើប្រាស់គ្រឿងស្រវឹង";
 			}
-			alert(alertStr);
+			if(alertStr != "") {
+				showScoreMessage(alertStr);
+			}
+			else {
+				deleteData();
+				$("#content").load("static/view/home.html");
+			}
 		}
 		else {
 			if(!yes) {
@@ -997,9 +1028,9 @@ function showDailog(){
 			else {
 				alert("You are pass in this section");
 			}
+			deleteData();
+			$("#content").load("static/view/home.html");
 		}
-		deleteData();
-		$("#content").load("static/view/home.html");
 	}));
 	actionBlock.append($('<button></button>').text("No").addClass("dialog-button").click(enablepage));
 	$("#popup").append($("<div class='dialog-title'></div>").text("Confirm"));
