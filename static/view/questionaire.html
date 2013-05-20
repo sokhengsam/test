@@ -20,7 +20,7 @@
 <script id="singleTemplate" type="x-jquery-tmpl">
 	<div class="answer">
 		<img src="static/css/images/radio-off.png">
-		<input svalue="${value}" type="radio" name="${questionId}" id="a${answerId}" panswer="${panswerid}" answerTypeId="${answerTypeId}"><label for="a${answerId}">${text}</label>
+		<input svalue="${value}" type="radio" name="${questionId}" id="a${answerId}" panswer="${panswerid}" answerTypeId="${answerTypeId}"><span class="answer-descriptoin"><label for="a${answerId}">${text}</label></span>
 	</div>
 </script>
 
@@ -38,7 +38,7 @@
 <script id="multipleTemplate" type="x-jquery-tmpl">
   <div class="answer">
 	<img src="static/css/images/check-off.png">
-	<input svalue="${value}" type="checkbox" id="a${answerId}" panswer="${panswerid}"/><label for="a${answerId}">${text}</label>
+	<input svalue="${value}" type="checkbox" id="a${answerId}" panswer="${panswerid}"/><span class="answer-descriptoin"><label for="a${answerId}">${text}</label></span>
   </div>
 </script>
 
