@@ -178,7 +178,8 @@ li:HOVER{
 }
 */
 .question, .pquestion{
-	font-weight: bold;	
+	font-weight: bold;
+	line-height: 35px;
 }
 
 .pquestion{
@@ -251,7 +252,7 @@ li:HOVER{
 	clear:both;
 	padding: 10px 10px 0 10px;
 	margin: 20px 10px 0px 10px;
-	line-height: 24px;
+	line-height: 30px;
 }
 
 .survey-block{
