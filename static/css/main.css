@@ -180,6 +180,7 @@ li:HOVER{
 .question, .pquestion{
 	font-weight: bold;
 	line-height: 35px;
+	font-size:21px;
 }
 
 .pquestion{
@@ -420,6 +421,7 @@ input[type='checkbox'],input[type='radio']{
 	padding: 10px;
 	color: #888888;
 	margin: 0 10px;
+	font-size: 21px;
 }
 
 .child-question{
@@ -570,16 +572,17 @@ input[type='checkbox'],input[type='radio']{
 }
 .answer{
 	padding: 5px 0px;
+	font-size:21px;
 }
 
 .small {
-	font-size: 16px;
+	font-size: 21px;
 }
 .medium {
-	font-size: 20.8px;
+	font-size: 27px;
 }
 .large {
-	font-size: 27.2px;
+	font-size: 33px;
 }
 .active {
 	color: rgb(116, 110, 110);
