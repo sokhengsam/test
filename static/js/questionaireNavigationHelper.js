@@ -110,7 +110,7 @@ function skipSimpleQuestionDependency(mode,questions,question,qOption){
 				if(qIndex == questions.length){
 					$("#content").load("static/view/section.html");
 				}
-				getQuestion(MOVE_NEXT_MODE);							
+				getQuestion(MOVE_NEXT_MODE);
 			}
 			else if(MOVE_PREVIOUS_MODE == mode){
 				qIndex--;
@@ -282,8 +282,12 @@ function autoCheckUpsertParticipantAnswer(onComplete){
  * 
  */
 function calculateUpsertParticipantAnswer(){
+	//check if the answer type is in [2, 3, 4, 5] or not
+	
 	$("#content input[type='text'],#content input[type='number']").each(function(index){
-		if($(this).val() != ""){
+		//check if its parent is check box or radio if its parant is radio or checkbox skip the count
+		var radio = $(this).prev().prev();
+		if($(this).val() != "" && radio == undefined && !(radio.is(":radio") || radio.is("checkbox"))){
 			numberUpsertAnswers.push(index);
 		}
 	});
@@ -581,15 +585,16 @@ $(function(){
 			//validate answer before going next
 			var selectedSectionId = $("body").data("questionaire").sectionId;
 			//if(valid) {
-				if(qIndex == totalQ) {
+				/*if(qIndex == totalQ) {
 					return;
-				}
+				}*/
 				qIndex = qIndex + 1;
 				if(qIndex < totalQ) {
 					if(selectedSectionId == 9) {
 						parseAnswer();
 					}
 					parseParticipantAnswer(function(){
+						console.log("already parsed participant answer");
 						clearQuestionBlock();
 						getQuestion(MOVE_NEXT_MODE);
 					});	
