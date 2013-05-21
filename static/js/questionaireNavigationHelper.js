@@ -71,7 +71,7 @@ function getQuestion(mode) {
 			scroller.destroy();
 			scroller = new iScroll("scrollWrapper", {checkDOMChanges: false});
 		}
-	}, 600);
+	}, 400);
 	setTimeout(function(){
 		$(".resize").bind("click", function(){
 			var size = $(this).css("font-size");
@@ -276,6 +276,7 @@ function autoCheckUpsertParticipantAnswer(onComplete){
 	numberUpsertAnswers.shift();
 	console.log("numberUpsertAnswers : " + numberUpsertAnswers.length);
 	if(numberUpsertAnswers.length == 0){
+		setTimeout(function(){enablepage();}, 400);
 		onComplete();
 	}
 }
@@ -612,8 +613,8 @@ $(function(){
 					if(selectedSectionId == 9) {
 						parseAnswer();
 					}
+					showLoadingDialog();
 					parseParticipantAnswer(function(){
-						console.log("already parsed participant answer");
 						clearQuestionBlock();
 						getQuestion(MOVE_NEXT_MODE);
 					});	
@@ -670,7 +671,7 @@ $(function(){
 		var availableH = ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15);
 		$("#scrollWrapper").css("height", availableH + "px");
 		scroller = new iScroll("scrollWrapper", {checkDOMChanges: false});
-	}, 600);
+	}, 400);
 	
 });
 
