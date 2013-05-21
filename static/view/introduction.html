@@ -19,7 +19,7 @@
 		$("#description").text(selectedSurvey.introduction1);
 		var lang = $("body").data("language");
 		if(lang == 2) {
-			$("#description").text(selectedSurvey.introduction2);
+			$("#description").html(selectedSurvey.introduction2);
 		}
 		$("#nextQuestion").click(function(){
 			$("#content").load("static/view/section.html");

@@ -23,11 +23,11 @@
 		var sections = $("body").data("sections");
 		sectionDisplayed++;
 		var section = sections[sectionDisplayed];
-		$("#sectionCode").text("Section " + section.getSectionCode() + ": ");
-		$("#description").text(section.getDescription1());
+		$("#sectionCode").html("Section " + section.getSectionCode() + ": ");
+		$("#description").html(section.getDescription1());
 		if(lang == 2) {
-			$("#sectionCode").text("ផ្នែក " + section.getSectionCode() + ": ");
-			$("#description").text(section.getDescription2());
+			$("#sectionCode").html("ផ្នែក " + section.getSectionCode() + ": ");
+			$("#description").html(section.getDescription2());
 		}
 		$(".section").css("height", $(window).height() - $(".footer").height());
 		$("#nextQuestion").click(function() {
