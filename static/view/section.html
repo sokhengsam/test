@@ -1,7 +1,11 @@
 <div class="section">
 	<div class="space"></div>
-	<span id="sectionCode"></span><br/>
-	<span id="description"></span>
+	<div id="sectionScroller">
+		<div id="sectionScrollable">
+			<span id="sectionCode"></span><br/>
+			<span id="description"></span>
+		</div>
+	</div>
 </div>
 <div class="footer">
 	<div class="question-navigation">
@@ -10,6 +14,16 @@
 	</div>
 </div>
 <script>
+	function setScroller() {
+		var availableH = ($(window).height() - $(".footer").height());
+		$("#sectionScroller").css("height", availableH + "px");
+		//if(sectionScroller == null) {
+			sectionScroller = new iScroll("sectionScroller", {useTransition:true});
+		 //}
+		//else {
+		//	sectionScroller.refresh();
+		//} 
+	}
 	$(function(){
 		var selectedSurvey = $("#selectedSurvey").data("selectedSurvey");
 		var lang = $("body").data("language");
@@ -29,7 +43,8 @@
 			$("#sectionCode").html("ផ្នែក " + section.getSectionCode() + ": ");
 			$("#description").html(section.getDescription2());
 		}
-		$(".section").css("height", $(window).height() - $(".footer").height());
+		setScroller();
+		//$(".section").css("height", $(window).height() - $(".footer").height());
 		$("#nextQuestion").click(function() {
 			questionDao.getBySection(section.getSectionId(), function(questions) {
 				if(questions.length > 0) {

@@ -22,7 +22,8 @@ var surveyDao = null,
 	synLogDao = null,
 	alcoholicPartId = [220, 239, 250, 261, 272, 283, 294, 388],
 	atsPartId = [223, 242, 253, 264, 275, 286, 297, 391],
-	introductionScroller = null;
+	introductionScroller = null,
+	sectionScroller = null;
 
 
 var sampleJson = 
