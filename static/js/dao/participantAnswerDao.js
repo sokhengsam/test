@@ -99,5 +99,15 @@ var ParticipantAnswerDao = new Class({
 				successCallback(item);
 			});
 		});
+	},
+	removeByIds: function(panswerid, successCallback) {
+		var ids = [];
+		for(var i = 0; i < panswerid.length; i++) {
+			ids.push(panswerid[i].getParticipantAnswerId());
+		}
+		var sql = "DELETE FROM " + this.options.tableName + " WHERE participantAnswerId IN (" + ids.join() + ")";
+		this.options.db.transaction(function(tx) {
+			tx.executeSql(sql, [], function(){console.log("Delete record succed");successCallback();}, function(tx, error){console.log("Delete fail " + error.message);});
+		});
 	}
 });

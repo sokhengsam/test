@@ -152,6 +152,7 @@ function renderSimpleQuestionAnswerAndSpecialParentChildQuestion(question,qOptio
  * @param qOption
  */
 function populateSimpleQuestionAnswer(question,qOption){
+	console.log(">>>>>>>>>>> called <<<<<<<<<<");
 	var questionAdapter = new QuestionAdapter(qOption);
 	questionAdapter.mergeTemplate();
 	var pSurvey = $("#participant").data("participant");
@@ -160,6 +161,7 @@ function populateSimpleQuestionAnswer(question,qOption){
 		if(items != undefined) {
 			if(qOption.questionTypeId == 5) {
 				participantAnswer = items;
+				$("#"+question.getQuestionId()).data("panswerid", items);
 			}
 			else {
 				participantAnswer = items[0];
@@ -197,7 +199,7 @@ function getGroupQuesion(qOption) {
 			if(question.getDependencyId() != null){
 				 isSkipDependencyQuestion(pSurvey.getParticipantSurveyId(), question.getDependencyId(),function(isSkip){
 					 if(!isSkip){
-						 renderGroupQuestion(pSurvey,question,qOption,groupQuestionAdapter);						 
+						 renderGroupQuestion(pSurvey,question,qOption,groupQuestionAdapter);
 					 }
 				 },index);
 			}
@@ -398,7 +400,7 @@ function parseParticipantAnswer(onCompleteUpsert) {
 				switch(Number(type)) {
 					case 4: //single question type
 						var panswerid = $(child).find(".answer input[type='radio']:checked").data("panswerid");
-						var answerType = $(child).find("answer input[type='radio']:checked").attr("answertypeid");
+						var answerType = $(child).find(".answer input[type='radio']:checked").attr("answertypeid");
 						participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
 						participantA.setAnswerId($(child).find("input[type='radio']:checked").attr("id").substring(1));
 						participantA.setQuestionId(q.attr("id"));
@@ -501,21 +503,41 @@ function parseParticipantAnswer(onCompleteUpsert) {
 					break;
 				case 5: //multiple question type
 					//how to store the answer id in the participant answer for this???
-					console.log("calling");
-					$(".answer-block").find(".answer input[type='checkbox']:checked").each(function(i, ch){
-						console.log("xxx");
-						participantA = new ParticipantAnswer()
-						participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
-						participantA.setAnswerId($(ch).attr("id").substring(1));
-						participantA.setQuestionId($(".question").attr("id"));
-						participantA.setDescription("");
-						participantA.setStartDateTime(startTimeQ);
-						participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
-						participantA.setStatus("");
-						participantAnswerDao.persist(participantA,function(){
-							autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+					var panswerid = $(".question").data("panswerid");//get the array of panswer id
+					console.log(panswerid);
+					//remove the existing answer and add new one. this is the best solution for the multiple answer??
+					if(panswerid.length > 0) {
+						participantAnswerDao.removeByIds(panswerid, function(){
+							$(".answer-block").find(".answer input[type='checkbox']:checked").each(function(i, ch){
+								participantA = new ParticipantAnswer()
+								participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
+								participantA.setAnswerId($(ch).attr("id").substring(1));
+								participantA.setQuestionId($(".question").attr("id"));
+								participantA.setDescription("");
+								participantA.setStartDateTime(startTimeQ);
+								participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
+								participantA.setStatus("");
+								participantAnswerDao.persist(participantA,function(){
+									autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+								});
+							});
 						});
-					});
+					}
+					else {
+						$(".answer-block").find(".answer input[type='checkbox']:checked").each(function(i, ch){
+							participantA = new ParticipantAnswer()
+							participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
+							participantA.setAnswerId($(ch).attr("id").substring(1));
+							participantA.setQuestionId($(".question").attr("id"));
+							participantA.setDescription("");
+							participantA.setStartDateTime(startTimeQ);
+							participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
+							participantA.setStatus("");
+							participantAnswerDao.persist(participantA,function(){
+								autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+							});
+						});
+					}
 					break;
 				default:
 					console.log("unknow answer type");
