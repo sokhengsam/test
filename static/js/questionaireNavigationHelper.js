@@ -170,7 +170,6 @@ function populateSimpleQuestionAnswer(question,qOption){
 		var answers = answerDao.getByQuestion(question.getQuestionId(), function(answers){
 			var answerAdapter = new AnswerAdapter({questionType: question.getQuestionTypeId()}, answers, $("body").data("language"), participantAnswer);
 			answerAdapter.mergeTemplate();
-			console.log("finish merage template");
 		});
 	});
 }
@@ -290,7 +289,7 @@ function calculateUpsertParticipantAnswer(){
 	$("#content input[type='text'],#content input[type='number']").each(function(index){
 		//check if its parent is check box or radio if its parant is radio or checkbox skip the count
 		var radio = $(this).prev().prev();
-		if($(this).val() != "" && radio == undefined && !(radio.is(":radio") || radio.is("checkbox"))){
+		if($(this).val() != "" && radio != undefined && !(radio.is(":radio") || radio.is("checkbox"))){
 			numberUpsertAnswers.push(index);
 		}
 	});
