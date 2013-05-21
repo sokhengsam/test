@@ -168,6 +168,7 @@ function populateSimpleQuestionAnswer(question,qOption){
 		var answers = answerDao.getByQuestion(question.getQuestionId(), function(answers){
 			var answerAdapter = new AnswerAdapter({questionType: question.getQuestionTypeId()}, answers, $("body").data("language"), participantAnswer);
 			answerAdapter.mergeTemplate();
+			console.log("finish merage template");
 		});
 	});
 }
@@ -544,9 +545,6 @@ function parseAnswer() {
 }
 
 $(function(){
-	$("input[type='checkbox']").checkbox("add",{imageOn: "static/css/images/check-on.png",imageOff: "static/css/images/check-off.png"})
-	
-	$("input[type='radio']").radio("add",{imageOn: "static/css/images/radio-on.png",imageOff: "static/css/images/radio-off.png"});
 	
 	//init language
 	

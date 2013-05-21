@@ -25,9 +25,13 @@ var MultipleAnswer = new Class({
 		if(this.pAnswer != undefined) {
 			for(var i = 0; i < this.pAnswer.length; i++) {
 				var p = this.pAnswer[i];
-				$("#a"+p.getAnswerId()).attr("checked", "checked");
-				$("#a"+p.getAnswerId()).trigger("click");
+				if(p.getAnswerId() == this.answer.answerId){
+					//$("#a"+p.getAnswerId()).attr("checked", "checked");
+					$("#a"+p.getAnswerId()).trigger("click");
+					//console.log($("#a"+p.getAnswerId()));			
+				}
 			}
+			
 		}
 	}
 });
