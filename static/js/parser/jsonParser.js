@@ -41,6 +41,10 @@ var JSONParser = new Class({
 			section.setSectionCode(sect.SectionCode);
 			section.setDescription1(sect.Description1);
 			section.setDescription2(sect.Description2);
+			//server side should provide the introduction 1 and 2
+			section.setIntroduction1("");
+			section.setIntroduction2("");
+			
 			sectionDao.persist(section,persistCallback);
 		}
 	},

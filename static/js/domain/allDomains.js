@@ -158,6 +158,14 @@ var Section = new Class({
 			name:'description2',
 			dataType: 'TEXT'
 		},
+		introduction1: {
+			name: 'introduction1',
+			dataType: 'TEXT'
+		},
+		introduction2: {
+			name: 'introduction2',
+			dataType: 'TEXT'
+		},
 		status: {
 			name: 'status',
 			dataType: 'INTEGER'
@@ -169,12 +177,14 @@ var Section = new Class({
 		sectionCode: '',
 		description1: '',
 		description2: '',
+		introduction1: '',
+		introduction2: '',
 		status: '' // status here can be active or inactive
 	},
 	jQuery: 'Section',
 	initialize: function(options){
 		//this.setFields(this.fields); // inherited from Options like jQuery.extend();
-		//this.setOptions(this.options);
+		this.setOptions(this.options);
 	},
 	getPrimaryKey: function() {
 		return this.fields.primaryKey;
@@ -194,6 +204,12 @@ var Section = new Class({
 	setDescription2: function(sectionname) {
 		this.options.description2 = sectionname;
 	},
+	setIntroduction1: function(introduction1) {
+		this.options.introduction1 = introduction1;
+	},
+	setIntroduction2: function(introduction2) {
+		this.options.introduction2 = introduction2;
+	},
 	setStatus: function(status) {
 		this.options.status = status;
 	},
@@ -208,6 +224,12 @@ var Section = new Class({
 	},
 	getDescription2: function() {
 		return this.options.description2;
+	},
+	getIntroduction1: function() {
+		return this.options.introduction1;
+	},
+	getIntroduction2: function() {
+		return this.options.introduction2;
 	},
 	getStatus: function() {
 		return this.options.status;

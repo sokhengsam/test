@@ -23,6 +23,8 @@ var SectionDao = new Class({
 					section.setSectionCode(dataset.item(i)["sectionCode"]);
 					section.setDescription1(dataset.item(i)["description1"]);
 					section.setDescription2(dataset.item(i)["description2"]);
+					section.setIntroduction1(dataset.item(i)["introduction1"]);
+					section.setIntroduction2(dataset.item(i)["introduction2"]);
 				}
 				onSuccess(section);
 			});
@@ -41,7 +43,8 @@ var SectionDao = new Class({
 					item.setSectionCode(dataset.item(i)["sectionCode"]);
 					item.setDescription1(dataset.item(i)["description1"]);
 					item.setDescription2(dataset.item(i)["description2"]);
-					//item.questions.push(self.getQuestion(item.getSectionId()));
+					item.setIntroduction1(dataset.item(i)["introduction1"]);
+					item.setIntroduction2(dataset.item(i)["introduction2"]);
 					items.push(item);
 				}
 				success(items);

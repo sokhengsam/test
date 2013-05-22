@@ -38,10 +38,10 @@
 		sectionDisplayed++;
 		var section = sections[sectionDisplayed];
 		$("#sectionCode").html("Section " + section.getSectionCode() + ": ");
-		$("#description").html(section.getDescription1());
+		$("#description").html(section.getDescription1() + "<br/>" + section.getIntroduction1());
 		if(lang == 2) {
 			$("#sectionCode").html("ផ្នែក " + section.getSectionCode() + ": ");
-			$("#description").html(section.getDescription2());
+			$("#description").html(section.getDescription2() + "<br/>" + section.getIntroduction2());
 		}
 		setScroller();
 		//$(".section").css("height", $(window).height() - $(".footer").height());
