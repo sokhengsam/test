@@ -228,7 +228,11 @@ function renderGroupQuestion(pSurvey,question,qOption,groupQuestionAdapter){
 		}
 		answerDao.getByQuestion(question.getQuestionId(), function(answers){
 			groupQuestionAdapter.mergeChildQuestionTemplate(question);
-			groupQuestionAdapter.mergeChildQuestionAnswerTemplate(question.getQuestionTypeId(),answers,lang, participantAnswer);
+			groupQuestionAdapter.mergeChildQuestionAnswerTemplate(question.getQuestionTypeId(),answers,lang, participantAnswer, function(){
+				setTimeout(function(){
+					enablepage();
+				}, 400);
+			});
 		});
 	});
 }
@@ -661,11 +665,7 @@ $(function(){
 		else{
 			if(sectionDisplayed > 0 && qIndex == 0) {
 				sectionDisplayed--;
-				$("#content").load("static/view/section.html", function(){
-					setTimeout(function(){
-						enablepage();
-					}, 400);
-				});
+				$("#content").load("static/view/section.html");
 			}
 			else {
 				clearQuestionBlock();

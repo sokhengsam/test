@@ -71,7 +71,9 @@ var AnswerAdapter = new Class({
 				}
 			}
 		}
-		callback();//temparary solution should be consider if the template merged success or not
+		if(typeof callback !== 'undefined') {
+			callback();//temparary solution should be consider if the template merged success or not
+		}
 	},
 	mergeAnswerTemplate: function(aOption){
 		var singleAnswer = new SingleAnswer(aOption, this.participanAnswer);

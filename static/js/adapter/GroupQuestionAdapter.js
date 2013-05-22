@@ -11,8 +11,8 @@ var GroupQuestionAdapter = new Class({
 		$(".question-block").append(question);
 	}
 	,
-	mergeChildQuestionAnswerTemplate: function(questionType,answers,lang, participantAnswer){
+	mergeChildQuestionAnswerTemplate: function(questionType,answers,lang, participantAnswer, callback){
 		var answerAdapter = new AnswerAdapter({questionType: questionType}, answers, lang, participantAnswer);
-		answerAdapter.mergeTemplate();
+		answerAdapter.mergeTemplate(callback);
 	}
 });

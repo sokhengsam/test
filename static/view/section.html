@@ -44,6 +44,7 @@
 			$("#description").html(section.getDescription2() + "<br/>" + section.getIntroduction2());
 		}
 		setScroller();
+		enablepage();
 		//$(".section").css("height", $(window).height() - $(".footer").height());
 		$("#nextQuestion").click(function() {
 			questionDao.getBySection(section.getSectionId(), function(questions) {
