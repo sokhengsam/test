@@ -332,13 +332,13 @@ function parseValue(child, type, qid) {
 		var pLog = $("#participantLog").data("participantLog");
 		if(alcoholicPartId.indexOf(Number(qid)) != -1) {
 			console.log("Calculate the alcoholic score");
-			alcoholicScore += Number(child.find("input[type='radio']:checked").attr("svalue"));
+			alcoholicScore = Number(alcoholicScore) + Number(child.find("input[type='radio']:checked").attr("svalue"));
 			pLog.setAlcoholScore(alcoholicScore);
 			console.log("Alcoholic Score: " + alcoholicScore);
 		}
 		else if(atsPartId.indexOf(Number(qid)) != -1) {
 			console.log("Calculate the ATS score");
-			atsScore += Number(child.find("input[type='radio']:checked").attr("svalue"));
+			atsScore = Number(atsScore) + Number(child.find("input[type='radio']:checked").attr("svalue"));
 			pLog.setATSScore(atsScore);
 			console.log("ATS score: " + atsScore);
 		}
