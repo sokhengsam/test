@@ -152,7 +152,6 @@ function renderSimpleQuestionAnswerAndSpecialParentChildQuestion(question,qOptio
  * @param qOption
  */
 function populateSimpleQuestionAnswer(question,qOption){
-	console.log(">>>>>>>>>>> called <<<<<<<<<<");
 	var questionAdapter = new QuestionAdapter(qOption);
 	questionAdapter.mergeTemplate();
 	var pSurvey = $("#participant").data("participant");
@@ -616,6 +615,8 @@ $(function(){
 					showLoadingDialog();
 					parseParticipantAnswer(function(){
 						clearQuestionBlock();
+						//save the last question 
+						saveLastQuestion();
 						getQuestion(MOVE_NEXT_MODE);
 					});	
 					//we have speciall case for the surveyId =3
@@ -825,7 +826,11 @@ function clearQuestionBlock(){
 	$("#scrollWrapper").remove();
 }
 
-function suspend() {
+/**
+ * Save the last question and section index of the participant 
+ * to avoid the losing data when user click on back button of the browswer
+ */
+function saveLastQuestion() {
 	var pLog = $("#participantLog").data("participantLog");
 	pLog.setLastQuestion(lastQid);
 	pLog.setLastScore(0);
@@ -833,6 +838,13 @@ function suspend() {
 	pLog.setLastQuestionIndex(qIndex);
 	pLog.setLastSectionId(sectionId);
 	participantLogDao.update(pLog);
+}
+/**
+ * Suspend button clicked function call.
+ * 
+ */
+function suspend() {
+	saveLastQuestion();
 	deleteData();
 	$("#content").load("static/view/home.html");
 }
