@@ -194,7 +194,7 @@ li:HOVER{
 	font-weight: bold;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	width: 76%;
+	width: 65%;
 	display: inline-block;
 	overflow: hidden;
 }

@@ -71,7 +71,7 @@ function getQuestion(mode) {
 			scroller.destroy();
 			scroller = new iScroll("scrollWrapper", {checkDOMChanges: false});
 		}
-	}, 400);
+	}, 600);
 	setTimeout(function(){
 		$(".resize").bind("click", function(){
 			var size = $(this).css("font-size");
@@ -168,7 +168,11 @@ function populateSimpleQuestionAnswer(question,qOption){
 		}
 		var answers = answerDao.getByQuestion(question.getQuestionId(), function(answers){
 			var answerAdapter = new AnswerAdapter({questionType: question.getQuestionTypeId()}, answers, $("body").data("language"), participantAnswer);
-			answerAdapter.mergeTemplate();
+			answerAdapter.mergeTemplate(function(){
+				setTimeout(function(){
+					enablepage();
+				}, 400);
+			});
 		});
 	});
 }
@@ -316,16 +320,20 @@ function getSelectedSingleAnswer(parentSelector){
 function parseValue(child, type, qid) {
 	//if(Number(type) == 4) {
 		//calculate the alcoholic value
+		var pLog = $("#participantLog").data("participantLog");
 		if(alcoholicPartId.indexOf(Number(qid)) != -1) {
 			console.log("Calculate the alcoholic score");
 			alcoholicScore += Number(child.find("input[type='radio']:checked").attr("svalue"));
+			pLog.setAlcoholScore(alcoholicScore);
 			console.log("Alcoholic Score: " + alcoholicScore);
 		}
 		else if(atsPartId.indexOf(Number(qid)) != -1) {
 			console.log("Calculate the ATS score");
 			atsScore += Number(child.find("input[type='radio']:checked").attr("svalue"));
+			pLog.setATSScore(atsScore);
 			console.log("ATS score: " + atsScore);
 		}
+		participantLogDao.update(pLog);
 	//}
 }
 
@@ -627,13 +635,13 @@ $(function(){
 				}
 				else {
 					//save the last question of the section and clear the question block
-					parseParticipantAnswer(function(){
-						clearQuestionBlock();
-					});
 					//check the survey displayed. 
 					//if all the survey already displayed meant they are at the end so, show dialog. Otherwise, load next section
 					//sectionDisplayed started from 0
 					if(sectionDisplayed < $("body").data("sections").length -1) {
+						parseParticipantAnswer(function(){
+							clearQuestionBlock();
+						});
 						$("#content").load("static/view/section.html");
 					}
 					else {
@@ -646,19 +654,23 @@ $(function(){
 	});
 	
 	$("#previousQuestion").click(function(){
+		showLoadingDialog();
 		if(skipQuestionHistory[eval(sectionId+lastQid)] != null){
 			restoreSkipQuestion($(this));
 		}
 		else{
 			if(sectionDisplayed > 0 && qIndex == 0) {
 				sectionDisplayed--;
-				$("#content").load("static/view/section.html");
+				$("#content").load("static/view/section.html", function(){
+					setTimeout(function(){
+						enablepage();
+					}, 400);
+				});
 			}
 			else {
 				clearQuestionBlock();
 				questionaires.fromPrevious = false;
 				qIndex--;
-				console.log("previouse question bind");
 				getQuestion(MOVE_PREVIOUS_MODE);
 				if(qIndex == 0 && sectionDisplayed == 0) {
 					$(this).hide();
@@ -672,7 +684,7 @@ $(function(){
 		var availableH = ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15);
 		$("#scrollWrapper").css("height", availableH + "px");
 		scroller = new iScroll("scrollWrapper", {checkDOMChanges: false});
-	}, 400);
+	}, 600);
 	
 });
 
@@ -832,11 +844,15 @@ function clearQuestionBlock(){
  */
 function saveLastQuestion() {
 	var pLog = $("#participantLog").data("participantLog");
+	var language = $("body").data("language");
 	pLog.setLastQuestion(lastQid);
 	pLog.setLastScore(0);
+	pLog.setATSScore(atsScore);
+	pLog.setAlcoholScore(alcoholicScore);
 	pLog.setLastSectionIndex(sectionDisplayed);
 	pLog.setLastQuestionIndex(qIndex);
 	pLog.setLastSectionId(sectionId);
+	pLog.setLanguage(language);
 	participantLogDao.update(pLog);
 }
 /**
@@ -1045,6 +1061,10 @@ function showDailog(){
 		participantLogDao.update(participantSurveyLog);
 		if(selectedSurvey.surveyId != 10) {
 			var alertStr = "";
+			if(atsScore == '' && alcoholicScore == '' || (atsScore == 0 && alcoholicScore == 0)) {
+				atsScore = participantSurveyLog.getATSScore();
+				alcoholicScore = participantSurveyLog.getAlcoholScore();
+			}
 			if(atsScore >=1 && atsScore < 4) {
 				alertStr = "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ ATS >= ១ សូមផ្តល់ការប្រឹក្សាស្តីពីការប្រើប្រាស់ ATS)\n";
 			}

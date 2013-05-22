@@ -26,9 +26,12 @@ var ParticipantLogDao = new Class({
 					item.setStartDateTime(dataset.item(i)["startDateTime"]);
 					item.setEndDateTime(dataset.item(i)["endDateTime"]);
 					item.setLastQuestion(dataset.item(i)["lastQuestion"]);
+					item.setATSScore(dataset.item(i)["atsScore"]);
+					item.setAlcoholScore(dataset.item(i)["alcoholScore"]);
 					item.setLastSectionId(dataset.item(i)["lastSectionId"]);
 					item.setLastSectionIndex(dataset.item(i)["lastSectionIndex"]);
 					item.setLastQuestionIndex(dataset.item(i)["lastQuestionIndex"]);
+					item.setLanguage(dataset.item(i)["language"]);
 					items.push(item);
 				}
 				successCallback(items);
@@ -51,9 +54,12 @@ var ParticipantLogDao = new Class({
 					item.setEndDateTime(dataset.item(i)["endDateTime"]);
 					item.setLastQuestion(dataset.item(i)["lastQuestion"]);
 					item.setLastScore(dataset.item(i)["lastScore"]);
+					item.setATSScore(dataset.item(i)["atsScore"]);
+					item.setAlcoholScore(dataset.item(i)["alcoholScore"]);
 					item.setLastSectionIndex(dataset.item(i)["lastSectionIndex"]);
 					item.setLastQuestionIndex(dataset.item(i)["lastQuestionIndex"]);
 					item.setLastSectionId(dataset.item(i)["lastSectionId"]);
+					item.setLanguage(dataset.item(i)["language"]);
 				}
 				successCallback(item);
 			});
@@ -74,9 +80,12 @@ var ParticipantLogDao = new Class({
 					item.setEndDateTime(dataset.item(i)["endDateTime"]);
 					item.setLastQuestion(dataset.item(i)["lastQuestion"]);
 					item.setLastScore(dataset.item(i)["lastScore"]);
+					item.setATSScore(dataset.item(i)["atsScore"]);
+					item.setAlcoholScore(dataset.item(i)["alcoholScore"]);
 					item.setLastSectionIndex(dataset.item(i)["lastSectionIndex"]);
 					item.setLastQuestionIndex(dataset.item(i)["lastQuestionIndex"]);
 					item.setLastSectionId(dataset.item(i)["lastSectionId"]);
+					item.setLanguage(dataset.item(i)["language"]);
 					items.push(item);
 				}
 				successCallback(items);

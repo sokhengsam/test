@@ -1,9 +1,9 @@
 var MultipleAnswer = new Class({
 	answer: "",
 	TEXT_ANSWERTYPE: "2",
-	TEXT_ANSWERTYPE_REQURE: "3",
+	TEXT_ANSWERTYPE_REQUIRE: "3",
 	NUMBER_ANSWERTYPE: "4",
-	NUMBER_ANSWERTYPE_REQURE: "5",
+	NUMBER_ANSWERTYPE_REQUIRE: "5",
 	pAnswer:'',
 	initialize: function(answer, pAnswer){
 		// answer of question for merge template
@@ -15,6 +15,7 @@ var MultipleAnswer = new Class({
 		var multipleAnswerTemplate = $('#multipleTemplate').tmpl(this.answer);
 		
 		//auto add input box if answer type is other
+		console.log("answer type: "+ this.answer.answerTypeId);
 		if(this.answer.answerTypeId == this.TEXT_ANSWERTYPE || this.answer.answerTypeId == this.TEXT_ANSWERTYPE_REQUIRE){
 			multipleAnswerTemplate.append($("<input type='text' />"))
 		}

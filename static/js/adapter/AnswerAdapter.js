@@ -13,7 +13,7 @@ var AnswerAdapter = new Class({
 		this.lang = lang;
 		this.participanAnswer = pAnswer;
 	},
-	mergeTemplate: function(){
+	mergeTemplate: function(callback){
 		if(Number(this.options.questionType) == 1 || Number(this.options.questionType) == 2 
 				|| Number(this.options.questionType) == 3 || Number(this.options.questionType) == 6) {
 			var aOption = {};
@@ -71,6 +71,7 @@ var AnswerAdapter = new Class({
 				}
 			}
 		}
+		callback();//temparary solution should be consider if the template merged success or not
 	},
 	mergeAnswerTemplate: function(aOption){
 		var singleAnswer = new SingleAnswer(aOption, this.participanAnswer);

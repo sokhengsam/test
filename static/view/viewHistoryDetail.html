@@ -61,7 +61,8 @@ $(function() {
 								lastSectionIndex: participantLog.getLastSectionIndex(),
 								lastQuestionIndex: participantLog.getLastQuestionIndex(),
 								participantLog: participantLog,
-								participant: participantSurvey
+								participant: participantSurvey,
+								lang: participantLog.getLanguage()
 							  }
 			li.data("continueSurvey",embededData);
 		});
@@ -172,6 +173,7 @@ function continueSurvey(li){
 		questionDao.getBySection(liData.lastSectionId,function(questions){
 			$("#participantLog").data("participantLog", liData.participantLog);
 			$("body").data("startQuestionData",liData);
+			$("body").data("language", liData.lang);
 			$("body").data("questionaire", {
 				"questions": questions, 
 				fromPrevious: false,

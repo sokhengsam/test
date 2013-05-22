@@ -49,6 +49,7 @@ var SQLiteHelper =  new Class({
 			}
 			self.getDB().transaction(function(tx) {
 				tx.executeSql(self.getInsertStatement(), d, function(transaction, resultSet){
+					console.log("persist " + self.options.tableName);
 					if(typeof(processCompleteCallback) !== "undefined"){
 						//insertId is for autoincrease primary key
 						processCompleteCallback(resultSet.insertId);

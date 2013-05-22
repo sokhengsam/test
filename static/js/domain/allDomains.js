@@ -1033,6 +1033,14 @@ var ParticipantLog = new Class({
 			name: 'lastScore',
 			dataType: 'INTEGER'
 		},
+		lastATSScore: {
+			name: 'atsScore',
+			dataType: 'INTEGER'
+		},
+		lastAlcoholicScore: {
+			name: 'alcoholicScore',
+			dataType: 'INTEGER'
+		},
 		lastSectionIndex:{
 			name: 'lastSectionIndex',
 			dataType: 'INTEGER'
@@ -1044,6 +1052,10 @@ var ParticipantLog = new Class({
 		lastSectionId: {
 			name: 'lastSectionId',
 			dataType: 'INTEGER'
+		},
+		language: {
+			name: "language",
+			dataType: "INTEGER"
 		}
 	},
 	options: {
@@ -1054,9 +1066,12 @@ var ParticipantLog = new Class({
 		lastQuestion: '',
 		participantSurveyId: '',
 		lastScore: '',
+		atsScore: '',
+		alcoholicScore: '',
 		lastSectionIndex: "",
 		lastQuestionIndex: "",
-		lastSectionId: ""
+		lastSectionId: "",
+		language: ''
 	},
 	setParticipantLogId: function(id){
 		this.options.participantLogId = id;
@@ -1079,6 +1094,12 @@ var ParticipantLog = new Class({
 	setLastScore: function(score) {
 		this.options.lastScore = score;
 	},
+	setATSScore: function(score) {
+		this.options.atsScore = score;
+	},
+	setAlcoholScore: function(score) {
+		this.options.alcoholicScore = score;
+	},
 	setLastSectionIndex: function(sectionIndex){
 		this.options.lastSectionIndex = sectionIndex;
 	},
@@ -1088,8 +1109,20 @@ var ParticipantLog = new Class({
 	setLastSectionId: function(sectionId){
 		this.options.lastSectionId = sectionId;
 	},
+	setLanguage: function(langId) {
+		this.options.language = langId;
+	},
+	getLanguage: function() {
+		return this.options.language;
+	},
 	getLastScore: function() {
 		return this.options.lastScore;
+	},
+	getATSScore: function() {
+		return this.options.atsScore;
+	},
+	getAlcoholScore: function() {
+		return this.options.alcoholicScore;
 	},
 	getParticipantSurveyId: function() {
 		return this.options.participantSurveyId;
