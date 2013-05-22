@@ -418,7 +418,12 @@ function parseParticipantAnswer(onCompleteUpsert) {
 						var panswerid = $(child).find(".answer input[type='radio']:checked").data("panswerid");
 						var answerType = $(child).find(".answer input[type='radio']:checked").attr("answertypeid");
 						participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
-						participantA.setAnswerId($(child).find("input[type='radio']:checked").attr("id").substring(1));
+						if($(child).find("input[type='radio']:checked").length > 0) {
+							participantA.setAnswerId($(child).find("input[type='radio']:checked").attr("id").substring(1));
+						}
+						else {
+							participantA.setAnswerId("");
+						}
 						participantA.setQuestionId(q.attr("id"));
 						var description = "";
 						if([2, 3, 4, 5].indexOf(Number(answerType)) != -1) {
@@ -444,7 +449,12 @@ function parseParticipantAnswer(onCompleteUpsert) {
 						//how to store the answer id in the participant answer for this???
 						$(child).find(".answer input[type='checkbox']:checked").each(function(i, ch){
 							participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
-							participantA.setAnswerId($(ch).attr("id").substring(1));
+							if($(ch).length > 0) {
+								participantA.setAnswerId($(ch).attr("id").substring(1));
+							}
+							else {
+								participantA.setAnswerId("");
+							}
 							participantA.setQuestionId(q.attr("id"));
 							participantA.setDescription("");
 							participantA.setStartDateTime(startTimeQ);
@@ -495,7 +505,12 @@ function parseParticipantAnswer(onCompleteUpsert) {
 					var answerType = $(".answer").find("input[type='radio']:checked").attr("answertypeid");
 					participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
 					//TODO: some answer got the substring error 
-					participantA.setAnswerId($(".answer").find("input[type='radio']:checked").attr("id").substring(1));
+					if($(".answer").find("input[type='radio']:checked").length > 0) {
+						participantA.setAnswerId($(".answer").find("input[type='radio']:checked").attr("id").substring(1));
+					}
+					else {
+						participantA.setAnswerId("");
+					}
 					participantA.setQuestionId($(".question").attr("id"));
 					var description = "";
 					if([2, 3, 4, 5].indexOf(Number(answerType)) != -1) {
@@ -527,7 +542,12 @@ function parseParticipantAnswer(onCompleteUpsert) {
 							$(".answer-block").find(".answer input[type='checkbox']:checked").each(function(i, ch){
 								participantA = new ParticipantAnswer()
 								participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
-								participantA.setAnswerId($(ch).attr("id").substring(1));
+								if($(ch).length > 0) {
+									participantA.setAnswerId($(ch).attr("id").substring(1));
+								}
+								else {
+									participantA.setAnswerId("");
+								}
 								participantA.setQuestionId($(".question").attr("id"));
 								participantA.setDescription("");
 								participantA.setStartDateTime(startTimeQ);
