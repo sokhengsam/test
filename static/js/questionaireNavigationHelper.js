@@ -65,6 +65,11 @@ function getQuestion(mode) {
 		var availableH = ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15);
 		if($(".question-block").height() > availableH){
 			$(".read-more-sign").show();
+			$(".answer input").focus(function(){
+				if(scroller != undefined && scroller != null) {
+					scroller.refresh();
+				}
+			});
 		}
 		$("#scrollWrapper").css("height", availableH + "px");
 		if(typeof scroller !== 'undefined' && scroller != null) {
@@ -297,7 +302,7 @@ function calculateUpsertParticipantAnswer(){
 	$("#content input[type='text'],#content input[type='number']").each(function(index){
 		//check if its parent is check box or radio if its parant is radio or checkbox skip the count
 		var radio = $(this).prev().prev();
-		if($(this).val() != "" && radio != undefined && !(radio.is(":radio") || radio.is("checkbox"))){
+		if($(this).val() != "" && radio != undefined && !(radio.is(":radio") || radio.is(":checkbox"))){
 			numberUpsertAnswers.push(index);
 		}
 	});
@@ -854,6 +859,10 @@ function saveLastQuestion() {
 	var language = $("body").data("language");
 	pLog.setLastQuestion(lastQid);
 	pLog.setLastScore(0);
+	if(atsScore == '' && alcoholicScore == '' || (atsScore == 0 && alcoholicScore == 0)) {
+		atsScore = pLog.getATSScore();
+		alcoholicScore = pLog.getAlcoholScore();
+	}
 	pLog.setATSScore(atsScore);
 	pLog.setAlcoholScore(alcoholicScore);
 	pLog.setLastSectionIndex(sectionDisplayed);

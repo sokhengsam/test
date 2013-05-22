@@ -42,7 +42,7 @@ var JSONParser = new Class({
 			section.setDescription1(sect.Description1);
 			section.setDescription2(sect.Description2);
 			//server side should provide the introduction 1 and 2
-			var int1, int2 = "";
+			var int1="", int2 = "";
 			if(sect.Introduction1 != null) {
 				int1 = sect.Introduction1;
 			}
