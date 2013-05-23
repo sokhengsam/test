@@ -613,6 +613,9 @@ $(function(){
 			gotoQuestion(goToQuestionId);
 		}
 		else{
+			if(skipQuestionHistory.length > 0){
+				skipQuestionHistory.push(-1);
+			}
 			//validate answer before going next
 			var selectedSectionId = $("body").data("questionaire").sectionId;
 			//if(valid) {
@@ -659,8 +662,11 @@ $(function(){
 	
 	$("#previousQuestion").click(function(){
 		showLoadingDialog();
-		if(skipQuestionHistory[eval(sectionId+lastQid)] != null){
-			restoreSkipQuestion($(this));
+		var questionData = skipQuestionHistory.pop();
+		//console.log(skipQuestionHistory.length + " : " + questionData)
+		var isRestoreSkipQuestion = skipQuestionHistory.length >= 0 && questionData != -1 && questionData != undefined; 
+		if(isRestoreSkipQuestion){
+			restoreSkipQuestion($(this),questionData);
 		}
 		else{
 			if(sectionDisplayed > 0 && qIndex == 0) {
@@ -723,9 +729,8 @@ function calculateTotalAnswerValues(){
  *  Restore skip question 
  * @param previousNavigator
  */
-function restoreSkipQuestion(previousNavigator){
-	var questionData = skipQuestionHistory[eval(sectionId+lastQid)].split(",");
-	delete skipQuestionHistory[eval(sectionId+lastQid)];
+function restoreSkipQuestion(previousNavigator,questionData){
+	questionData = questionData.split(",");
 	questionDao.getBySection(questionData[0], function(questions) {
 		$("body").data("questionaire", {"questions": questions, fromPrevious: false, "sectionId": questionData[0],"displaySectionName": questionData[4]});
 		sectionDisplayed = Number(questionData[2]);
@@ -733,7 +738,7 @@ function restoreSkipQuestion(previousNavigator){
 		sectionId = Number(questionData[0]);
 		clearQuestionBlock();
 		questionaires.fromPrevious = false;
-		console.log("restoring skip question");
+		console.log("restoring skip question : " + qIndex);
 		getQuestion(MOVE_PREVIOUS_MODE);
 		if(qIndex == 0 && sectionDisplayed == 0) {
 			previousNavigator.hide();
@@ -779,7 +784,9 @@ function gotoQuestion(goToQuestionId){
 			$("#previousQuestion").show();
 			//clearQuestionBlock();
 			//getQuestion(MOVE_NEXT_MODE);
-			skipQuestionHistory[eval(secId+questions[qIndex].getQuestionId())] = currentQuestionInfo + "," + (lang == 2 ? sections[sectionDisplayed].getDescription2() : sections[sectionDisplayed].getDescription1()); //keep to back state
+			//console.log("questionId : " + questions[qIndex].getQuestionId());
+			//skipQuestionHistory[eval(questions[qIndex].getQuestionId())] = currentQuestionInfo + "," + (lang == 2 ? sections[sectionDisplayed].getDescription2() : sections[sectionDisplayed].getDescription1()); //keep to back state
+			skipQuestionHistory.push(currentQuestionInfo + "," + (lang == 2 ? sections[sectionDisplayed].getDescription2() : sections[sectionDisplayed].getDescription1()));
 		});
 	});
 }
