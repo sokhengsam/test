@@ -55,6 +55,7 @@ css/images/cloud.png
 css/images/down-arrow.png
 css/images/first.png
 css/images/forward-arrow.png
+css/images/forward.png
 css/images/header-bar.png
 css/images/last.png
 css/images/poweredby.png
@@ -65,6 +66,8 @@ css/images/radio-on.png
 css/images/up-arrow.png
 css/images/smart_girl.png
 css/images/sync.png
+css/images/exit.png
+
 
 view/login.html
 view/home.html
