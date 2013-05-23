@@ -456,7 +456,11 @@ function parseParticipantAnswer(onCompleteUpsert) {
 								participantA.setAnswerId("");
 							}
 							participantA.setQuestionId(q.attr("id"));
-							participantA.setDescription("");
+							var description = "";
+							if([2, 3, 4, 5].indexOf(Number($(ch).attr("answertypeid"))) != -1) {
+								description = $(ch).siblings("input").val();
+							}
+							participantA.setDescription(description);
 							participantA.setStartDateTime(startTimeQ);
 							participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 							participantA.setStatus("");
@@ -540,6 +544,7 @@ function parseParticipantAnswer(onCompleteUpsert) {
 					if(panswerid.length > 0) {
 						participantAnswerDao.removeByIds(panswerid, function(){
 							$(".answer-block").find(".answer input[type='checkbox']:checked").each(function(i, ch){
+								var answerType = $(ch).attr("answertypeid");
 								participantA = new ParticipantAnswer()
 								participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
 								if($(ch).length > 0) {
@@ -549,7 +554,11 @@ function parseParticipantAnswer(onCompleteUpsert) {
 									participantA.setAnswerId("");
 								}
 								participantA.setQuestionId($(".question").attr("id"));
-								participantA.setDescription("");
+								var description = "";
+								if([2, 3, 4, 5].indexOf(Number(answerType)) != -1) {
+									description = $(ch).siblings("input").val();
+								}
+								participantA.setDescription(description);
 								participantA.setStartDateTime(startTimeQ);
 								participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 								participantA.setStatus("");
@@ -565,7 +574,11 @@ function parseParticipantAnswer(onCompleteUpsert) {
 							participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
 							participantA.setAnswerId($(ch).attr("id").substring(1));
 							participantA.setQuestionId($(".question").attr("id"));
-							participantA.setDescription("");
+							var description = "";
+							if([2, 3, 4, 5].indexOf(Number(answerType)) != -1) {
+								description = $(ch).find(".answer input[type='radio']:checked").siblings("input").val();
+							}
+							participantA.setDescription(description);
 							participantA.setStartDateTime(startTimeQ);
 							participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 							participantA.setStatus("");

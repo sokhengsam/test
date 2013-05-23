@@ -15,7 +15,7 @@ var MultipleAnswer = new Class({
 		var multipleAnswerTemplate = $('#multipleTemplate').tmpl(this.answer);
 		
 		//auto add input box if answer type is other
-		console.log("answer type: "+ this.answer.answerTypeId);
+		
 		if(this.answer.answerTypeId == this.TEXT_ANSWERTYPE || this.answer.answerTypeId == this.TEXT_ANSWERTYPE_REQUIRE){
 			multipleAnswerTemplate.append($("<input type='text' />"))
 		}
@@ -27,6 +27,10 @@ var MultipleAnswer = new Class({
 			for(var i = 0; i < this.pAnswer.length; i++) {
 				var p = this.pAnswer[i];
 				if(p.getAnswerId() == this.answer.answerId){
+					var description = "";
+					if(p.getDescription() != undefined && p.getDescription() != "") {
+						$("#a"+p.getAnswerId()).siblings("input").val(p.getDescription());
+					}
 					//$("#a"+p.getAnswerId()).attr("checked", "checked");
 					$("#a"+p.getAnswerId()).trigger("click");
 					//console.log($("#a"+p.getAnswerId()));			
