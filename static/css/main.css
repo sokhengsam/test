@@ -181,6 +181,7 @@ li:HOVER{
 	font-weight: bold;
 	/*line-height: 35px;*/
 	font-size: 27px;
+	padding-bottom: 30px;
 }
 
 .pquestion{
@@ -419,7 +420,7 @@ input[type='checkbox'],input[type='radio']{
 
 .group-question-row{
 	vertical-align: middle;
-	padding: 10px;
+	padding: 10px 10px 30px 10px;
 	color: #888888;
 	margin: 0 10px;
 	font-size: 27px;
