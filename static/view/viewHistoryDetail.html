@@ -68,7 +68,9 @@ $(function() {
 		});
 		
 		li.bind("click",function(){
-			continueSurvey($(this));
+			if(participantSurvey.getStatus() == 0) {
+				continueSurvey($(this));
+			}
 		});
 		
 		$("#participant_list_" + startedDateTime[0]).append(li);
