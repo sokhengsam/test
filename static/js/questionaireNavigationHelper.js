@@ -416,59 +416,71 @@ function parseParticipantAnswer(onCompleteUpsert) {
 				var participantA = new ParticipantAnswer();
 				switch(Number(type)) {
 					case 4: //single question type
-						var panswerid = $(child).find(".answer input[type='radio']:checked").data("panswerid");
-						var answerType = $(child).find(".answer input[type='radio']:checked").attr("answertypeid");
-						participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
-						if($(child).find("input[type='radio']:checked").length > 0) {
-							participantA.setAnswerId($(child).find("input[type='radio']:checked").attr("id").substring(1));
-						}
-						else {
-							participantA.setAnswerId("");
-						}
-						participantA.setQuestionId(q.attr("id"));
-						var description = "";
-						if([2, 3, 4, 5].indexOf(Number(answerType)) != -1) {
-							description = $(child).find(".answer input[type='radio']:checked").siblings("input").val();
-						}
-						participantA.setDescription(description);
-						participantA.setStartDateTime(startTimeQ);
-						participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
-						participantA.setStatus("");
-						if(panswerid == undefined) {
-							participantAnswerDao.persist(participantA,function(){
-								autoCheckUpsertParticipantAnswer(onCompleteUpsert);
-							},i);
-						}
-						else {
-							participantA.setParticipantAnswerId(panswerid);
-							participantAnswerDao.update(participantA,function(){
-								autoCheckUpsertParticipantAnswer(onCompleteUpsert);
-							},i);
-						}
-						break;
-					case 5: //multiple question type
-						//how to store the answer id in the participant answer for this???
-						$(child).find(".answer input[type='checkbox']:checked").each(function(i, ch){
+						if($(child).find(".answer input[type='radio']:checked").length > 0) {
+							var panswerid = $(child).find(".answer input[type='radio']:checked").data("panswerid");
+							var answerType = $(child).find(".answer input[type='radio']:checked").attr("answertypeid");
 							participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
-							if($(ch).length > 0) {
-								participantA.setAnswerId($(ch).attr("id").substring(1));
+							if($(child).find("input[type='radio']:checked").length > 0) {
+								participantA.setAnswerId($(child).find("input[type='radio']:checked").attr("id").substring(1));
 							}
 							else {
 								participantA.setAnswerId("");
 							}
 							participantA.setQuestionId(q.attr("id"));
 							var description = "";
-							if([2, 3, 4, 5].indexOf(Number($(ch).attr("answertypeid"))) != -1) {
-								description = $(ch).siblings("input").val();
+							if([2, 3, 4, 5].indexOf(Number(answerType)) != -1) {
+								description = $(child).find(".answer input[type='radio']:checked").siblings("input").val();
 							}
 							participantA.setDescription(description);
 							participantA.setStartDateTime(startTimeQ);
 							participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 							participantA.setStatus("");
-							participantAnswerDao.persist(participantA,function(){
-								autoCheckUpsertParticipantAnswer(onCompleteUpsert);
-							},i);
-						});
+							if(panswerid == undefined) {
+								participantAnswerDao.persist(participantA,function(){
+									autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+								},i);
+							}
+							else {
+								participantA.setParticipantAnswerId(panswerid);
+								participantAnswerDao.update(participantA,function(){
+									autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+								},i);
+							}
+						}
+						else {
+							enablepage();
+							onCompleteUpsert();
+						}
+						break;
+					case 5: //multiple question type
+						//how to store the answer id in the participant answer for this???
+						if($(child).find(".answer input[type='checkbox']:checked").length > 0) {
+							$(child).find(".answer input[type='checkbox']:checked").each(function(i, ch){
+								participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
+								if($(ch).length > 0) {
+									participantA.setAnswerId($(ch).attr("id").substring(1));
+								}
+								else {
+									participantA.setAnswerId("");
+								}
+								participantA.setQuestionId(q.attr("id"));
+								var description = "";
+								if([2, 3, 4, 5].indexOf(Number($(ch).attr("answertypeid"))) != -1) {
+									description = $(ch).siblings("input").val();
+								}
+								participantA.setDescription(description);
+								participantA.setStartDateTime(startTimeQ);
+								participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
+								participantA.setStatus("");
+								participantAnswerDao.persist(participantA,function(){
+									autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+								},i);
+							});
+						}
+						else {
+							enablepage();
+							onCompleteUpsert();
+						}
 						break;
 					default:
 						console.log("unknow answer type");
@@ -506,58 +518,90 @@ function parseParticipantAnswer(onCompleteUpsert) {
 		else if(Number(type) == 4 || Number(type) == 5) {
 			switch(Number(type)) {
 				case 4: //single question type
-					var panswerid = $(".answer").find("input[type='radio']:checked").data("panswerid");
-					var answerType = $(".answer").find("input[type='radio']:checked").attr("answertypeid");
-					participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
-					//TODO: some answer got the substring error 
 					if($(".answer").find("input[type='radio']:checked").length > 0) {
-						participantA.setAnswerId($(".answer").find("input[type='radio']:checked").attr("id").substring(1));
+						var panswerid = $(".answer").find("input[type='radio']:checked").data("panswerid");
+						var answerType = $(".answer").find("input[type='radio']:checked").attr("answertypeid");
+						participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
+						//TODO: some answer got the substring error 
+						if($(".answer").find("input[type='radio']:checked").length > 0) {
+							participantA.setAnswerId($(".answer").find("input[type='radio']:checked").attr("id").substring(1));
+						}
+						else {
+							participantA.setAnswerId("");
+						}
+						participantA.setQuestionId($(".question").attr("id"));
+						var description = "";
+						if([2, 3, 4, 5].indexOf(Number(answerType)) != -1) {
+							description = $(".answer").find("input[type='radio']:checked").siblings("input").val();
+						}
+						participantA.setDescription(description);
+						participantA.setStartDateTime(startTimeQ);
+						participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
+						participantA.setStatus("");
+						if(panswerid == undefined) {
+							participantAnswerDao.persist(participantA,function(){
+								autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+							});
+						}
+						else {
+							participantA.setParticipantAnswerId(panswerid);
+							participantAnswerDao.update(participantA,function(){
+								autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+							});
+						}
 					}
 					else {
-						participantA.setAnswerId("");
-					}
-					participantA.setQuestionId($(".question").attr("id"));
-					var description = "";
-					if([2, 3, 4, 5].indexOf(Number(answerType)) != -1) {
-						description = $(".answer").find("input[type='radio']:checked").siblings("input").val();
-					}
-					participantA.setDescription(description);
-					participantA.setStartDateTime(startTimeQ);
-					participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
-					participantA.setStatus("");
-					if(panswerid == undefined) {
-						participantAnswerDao.persist(participantA,function(){
-							autoCheckUpsertParticipantAnswer(onCompleteUpsert);
-						});
-					}
-					else {
-						participantA.setParticipantAnswerId(panswerid);
-						participantAnswerDao.update(participantA,function(){
-							autoCheckUpsertParticipantAnswer(onCompleteUpsert);
-						});
+						enablepage();
+						onCompleteUpsert();
 					}
 					break;
 				case 5: //multiple question type
 					//how to store the answer id in the participant answer for this???
 					var panswerid = $(".question").data("panswerid");//get the array of panswer id
-					console.log(panswerid);
 					//remove the existing answer and add new one. this is the best solution for the multiple answer??
 					if(panswerid.length > 0) {
 						participantAnswerDao.removeByIds(panswerid, function(){
+							if($(".answer-block").find(".answer input[type='checkbox']:checked").length > 0) {
+								$(".answer-block").find(".answer input[type='checkbox']:checked").each(function(i, ch){
+									var answerType = $(ch).attr("answertypeid");
+									participantA = new ParticipantAnswer()
+									participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
+									if($(ch).length > 0) {
+										participantA.setAnswerId($(ch).attr("id").substring(1));
+									}
+									else {
+										participantA.setAnswerId("");
+									}
+									participantA.setQuestionId($(".question").attr("id"));
+									var description = "";
+									if([2, 3, 4, 5].indexOf(Number(answerType)) != -1) {
+										description = $(ch).siblings("input").val();
+									}
+									participantA.setDescription(description);
+									participantA.setStartDateTime(startTimeQ);
+									participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
+									participantA.setStatus("");
+									participantAnswerDao.persist(participantA,function(){
+										autoCheckUpsertParticipantAnswer(onCompleteUpsert);
+									});
+								});
+							}
+							else {
+								enablepage();
+								onCompleteUpsert();
+							}
+						});
+					}
+					else {
+						if($(".answer-block").find(".answer input[type='checkbox']:checked").length > 0) {
 							$(".answer-block").find(".answer input[type='checkbox']:checked").each(function(i, ch){
-								var answerType = $(ch).attr("answertypeid");
 								participantA = new ParticipantAnswer()
 								participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
-								if($(ch).length > 0) {
-									participantA.setAnswerId($(ch).attr("id").substring(1));
-								}
-								else {
-									participantA.setAnswerId("");
-								}
+								participantA.setAnswerId($(ch).attr("id").substring(1));
 								participantA.setQuestionId($(".question").attr("id"));
 								var description = "";
 								if([2, 3, 4, 5].indexOf(Number(answerType)) != -1) {
-									description = $(ch).siblings("input").val();
+									description = $(ch).find(".answer input[type='radio']:checked").siblings("input").val();
 								}
 								participantA.setDescription(description);
 								participantA.setStartDateTime(startTimeQ);
@@ -567,26 +611,11 @@ function parseParticipantAnswer(onCompleteUpsert) {
 									autoCheckUpsertParticipantAnswer(onCompleteUpsert);
 								});
 							});
-						});
-					}
-					else {
-						$(".answer-block").find(".answer input[type='checkbox']:checked").each(function(i, ch){
-							participantA = new ParticipantAnswer()
-							participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
-							participantA.setAnswerId($(ch).attr("id").substring(1));
-							participantA.setQuestionId($(".question").attr("id"));
-							var description = "";
-							if([2, 3, 4, 5].indexOf(Number(answerType)) != -1) {
-								description = $(ch).find(".answer input[type='radio']:checked").siblings("input").val();
-							}
-							participantA.setDescription(description);
-							participantA.setStartDateTime(startTimeQ);
-							participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
-							participantA.setStatus("");
-							participantAnswerDao.persist(participantA,function(){
-								autoCheckUpsertParticipantAnswer(onCompleteUpsert);
-							});
-						});
+						}
+						else {
+							enablepage();
+							onCompleteUpsert();
+						}
 					}
 					break;
 				default:
