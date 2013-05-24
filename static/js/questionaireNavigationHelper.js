@@ -19,6 +19,7 @@ function getQuestion(mode) {
 	isFromPrivious = questionaires.fromPrevious;
 	if(isFromPrivious) {
 		qIndex = totalQ -1;
+		questionaires.fromPrevious = false;
 	}
 	if(Number(qIndex)+1 <= totalQ) {
 		startTimeQ = dateConvertor.getCurrentDateTime();
@@ -52,7 +53,7 @@ function getQuestion(mode) {
 			getGroupQuesion(qOption);
 		}
 		else if(qOption.questionTypeId != 7) {
-			//console.log(question.getDependencyId());
+			//console.log("DependencyId : " + question.getDependencyId());
 			if(question.getDependencyId() != null){
 				skipSimpleQuestionDependency(mode,questionaires.questions, question, qOption);
 			}
@@ -628,8 +629,9 @@ $(function(){
 		sectionDisplayed = startQuestionData.lastSectionIndex;
 		$("body").removeData("startQuestionData");
 	}
-	console.log("getting question load");
-	getQuestion(MOVE_NEXT_MODE);
+	console.log("getting question load : " + $("body").data("questionaire").fromPrevious);
+	getQuestion($("body").data("questionaire").fromPrevious? MOVE_PREVIOUS_MODE : MOVE_NEXT_MODE);
+	
 	if(sectionDisplayed == 0 && qIndex == 0) {
 		$("#previousQuestion").hide();
 	}
@@ -702,7 +704,7 @@ $(function(){
 		showLoadingDialog();
 		var questionData = skipQuestionHistory.pop();
 		//console.log(skipQuestionHistory.length + " : " + questionData)
-		var isRestoreSkipQuestion = skipQuestionHistory.length >= 0 && questionData != -1 && questionData != undefined; 
+		var isRestoreSkipQuestion = skipQuestionHistory.length >= 0 && questionData != -1 && questionData != undefined;
 		if(isRestoreSkipQuestion){
 			restoreSkipQuestion($(this),questionData);
 		}
