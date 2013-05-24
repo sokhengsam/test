@@ -63,7 +63,7 @@ function getQuestion(mode) {
 		}
 	}
 	setTimeout(function(){
-		var availableH = ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15);
+		var availableH = ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 25);
 		if($(".question-block").height() > availableH){
 			$(".read-more-sign").show();
 			$(".answer input").focus(function(){
@@ -93,7 +93,7 @@ function getQuestion(mode) {
 }
 
 function resizeScrollArea() {
-	var availableH = ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15);
+	var availableH = ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 25);
 	$("#scrollWrapper").css("height", availableH + "px");
 	if(typeof scroller !== 'undefined' && scroller != null) {
 		scroller.refresh();
@@ -727,7 +727,7 @@ $(function(){
 	});
 	
 	setTimeout(function() {
-		var availableH = ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15);
+		var availableH = ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 25);
 		$("#scrollWrapper").css("height", availableH + "px");
 		scroller = new iScroll("scrollWrapper", {checkDOMChanges: false});
 	}, 600);
@@ -1154,7 +1154,7 @@ function showDailog(){
 window.addEventListener("resize", function() {
 	if(typeof scroller !== 'undefined') {
 		scroller.stop();
-		var availableH = ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 15);
+		var availableH = ($(window).height() - $(".footer").outerHeight() - $(".question-header").height() - 25);
 		$("#scrollWrapper").css("height", availableH + "px");
 		scroller.refresh();
 	}
