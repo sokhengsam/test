@@ -117,6 +117,9 @@ function skipSimpleQuestionDependency(mode,questions,question,qOption){
 					$("#content").load("static/view/section.html");
 				}
 				getQuestion(MOVE_NEXT_MODE);
+				 participantAnswerDao.removeByParticipantSurveyIdAndQuestionId(pSurvey.getParticipantSurveyId(),question.getQuestionId(),function(){
+					 console.log('complete remove answer of question id : ' + question.getQuestionId());
+				 });
 			}
 			else if(MOVE_PREVIOUS_MODE == mode){
 				qIndex--;
@@ -208,6 +211,11 @@ function getGroupQuesion(qOption) {
 				 isSkipDependencyQuestion(pSurvey.getParticipantSurveyId(), question.getDependencyId(),function(isSkip){
 					 if(!isSkip){
 						 renderGroupQuestion(pSurvey,question,qOption,groupQuestionAdapter);
+					 }
+					 else{
+						 participantAnswerDao.removeByParticipantSurveyIdAndQuestionId(pSurvey.getParticipantSurveyId(),question.getQuestionId(),function(){
+							 console.log('complete remove answer of question id : ' + question.getQuestionId());
+						 });
 					 }
 				 },index);
 			}
@@ -723,6 +731,7 @@ $(function(){
 					else {
 						//total score and show dialog
 						showDailog();
+						qIndex--; // keep index of current question, prevent deny dialog
 					}
 				}	
 			//}
@@ -1173,7 +1182,12 @@ function showDailog(){
 			$("#content").load("static/view/home.html");
 		}
 	}));
-	actionBlock.append($('<button></button>').text("No").addClass("dialog-button").click(enablepage));
+	actionBlock.append($('<button></button>').text("No").addClass("dialog-button").click(function(){
+		enablepage();
+		parseParticipantAnswer(function(){
+			saveLastQuestion();
+		})
+	}));
 	$("#popup").append($("<div class='dialog-title'></div>").text("Confirm"));
 	$("#popup").append($("<div class='dialog-message'></div>").text("Are you satify with your answer?"));
 	$("#popup").append(actionBlock);
