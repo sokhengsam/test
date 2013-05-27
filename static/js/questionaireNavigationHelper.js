@@ -355,6 +355,32 @@ function parseValue(child, type, qid) {
 	//}
 }
 
+/**
+ * function to minus the calculated score when click previous button
+ */
+function minusPreviousScore(child, type, qid) {
+	var pLog = $("#participantLog").data("participantLog");
+	if(alcoholicPartId.indexOf(Number(qid)) != -1 && child.find("input[type='radio']:checked").attr("svalue") != undefined) {
+		console.log("Minus the alcoholic score " + alcoholicScore);
+		if(alcoholicScore == 0) {
+			alcoholicScore = pLog.getAlcoholScore();
+		}
+		alcoholicScore = Number(alcoholicScore) - Number(child.find("input[type='radio']:checked").attr("svalue"));
+		pLog.setAlcoholScore(alcoholicScore);
+		console.log("Alcoholic Score: " + alcoholicScore);
+	}
+	else if(atsPartId.indexOf(Number(qid)) != -1 && child.find("input[type='radio']:checked").attr("svalue") != undefined) {
+		console.log("Minus the ATS score");
+		if(atsScore == 0) {
+			atsScore = pLog.getATSScore();
+		}
+		atsScore = Number(atsScore) - Number(child.find("input[type='radio']:checked").attr("svalue"));
+		pLog.setATSScore(atsScore);
+		console.log("ATS score: " + atsScore);
+	}
+	participantLogDao.update(pLog);
+}
+
 function parseInputValue(child, participantA, type) {
 	if(Number(type) == 1 || Number(type) == 2 || Number(type) == 3 || Number(type) == 6) {
 		participantA.setDescription(child.find("input").val());
@@ -636,8 +662,10 @@ function parseParticipantAnswer(onCompleteUpsert) {
 /**
  * Score calculation. only the specific id of question will be calculated
  */
-function parseAnswer() {
+function parseAnswer(mode, calculateComplete) {
+	console.log(">>>>>>>>>>>>>>>> parse answer mode: "+ mode);
 	var childQuestions = $(".child-question");
+	console.log(childQuestions.length);
 	//parent child question
 	if(childQuestions.length > 0) {
 		childQuestions.each(function(i, child){
@@ -645,9 +673,23 @@ function parseAnswer() {
 			var type = q.attr("qtype");
 			var qId = q.attr("id");
 			if(alcoholicPartId.indexOf(Number(qId)) != -1 || atsPartId.indexOf(Number(qId)) != -1) {
-				parseValue($(child), type, q.attr("id"));
+				console.log(">>>>>>>>>>>>>>> get sss");
+				if(mode == MOVE_NEXT_MODE) {
+					parseValue($(child), type, q.attr("id"));
+				}
+				else if(mode == MOVE_PREVIOUS_MODE) {
+					console.log("got");
+					minusPreviousScore($(child), type, q.attr("id"));
+				}
+			}
+			console.log(">>>>> index: " + i);
+			if(i == (childQuestions.length - 1) && typeof calculateComplete === 'function') {
+				calculateComplete();
 			}
 		});
+	}
+	else if(typeof calculateComplete === 'function'){
+		calculateComplete();
 	}
 	
 	//alert(answerVal);
@@ -702,7 +744,7 @@ $(function(){
 				qIndex = qIndex + 1;
 				if(qIndex < totalQ) {
 					if(selectedSectionId == 9) {
-						parseAnswer();
+						parseAnswer(MOVE_NEXT_MODE);
 					}
 					showLoadingDialog();
 					parseParticipantAnswer(function(){
@@ -759,6 +801,9 @@ $(function(){
 				if(qIndex == 0 && sectionDisplayed == 0) {
 					$(this).hide();
 				}
+				setTimeout(function(){
+					parseAnswer(MOVE_PREVIOUS_MODE);
+				}, 400);
 			}
 		}
 		
@@ -851,7 +896,7 @@ function gotoQuestion(goToQuestionId){
 			}
 			$("body").data("questionaire", {"questions": questions, fromPrevious: false, "sectionId": secId,"displaySectionName": (lang == 2 ? sections[sectionDisplayed].getDescription2() : sections[sectionDisplayed].getDescription1())});
 			if(secId == 9) {
-				parseAnswer();
+				parseAnswer(MOVE_NEXT_MODE);
 			}
 			parseParticipantAnswer(function(){
 				clearQuestionBlock();
