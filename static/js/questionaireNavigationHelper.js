@@ -767,8 +767,8 @@ $(function(){
 					if(sectionDisplayed < $("body").data("sections").length -1) {
 						parseParticipantAnswer(function(){
 							clearQuestionBlock();
+							$("#content").load("static/view/section.html");
 						});
-						$("#content").load("static/view/section.html");
 					}
 					else {
 						//total score and show dialog
