@@ -34,7 +34,8 @@ var ParticipantAnswerDao = new Class({
 	},
 	
 	getBySurvey: function(psId, successCallback) {
-		var selectAll = "SELECT * FROM "+this.options.tableName + " Where participantSurveyId = " + psId;
+		var selectAll = "SELECT * FROM "+this.options.tableName + " Where participantSurveyId in (" + psId +")";
+		console.log(selectAll);
 		var items = [];
 		this.options.db.transaction(function(tx){
 			tx.executeSql(selectAll, [], function(tx, result) {
