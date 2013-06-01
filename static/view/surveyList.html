@@ -31,15 +31,20 @@
 		$("#content").load("static/view/interviewerParticipantIdentifier.html");
 	}
 	function refreshSurvey() {
-		$("#survey-list").empty();
-		showLoadingDialog();
-		request.downloadSurvey();
-			setTimeout(function(){
-				surveyDao.getAll(function(surveys){
-					for(var i = 0; i < surveys.length; i++) {
-						$("#survey-list").append("<li onclick='loadSection("+surveys[i].getSurveyId()+", \""+ surveys[i].getDescription1()+"\");'>"+ surveys[i].getDescription1() + " | Last Downloaded: " + surveys[i].getLastDownload()+"</li>");
-					}
-				});
-			}, 8000);
+		if(navigator.onLine) {
+			$("#survey-list").empty();
+			showLoadingDialog();
+			request.downloadSurvey();
+				setTimeout(function(){
+					surveyDao.getAll(function(surveys){
+						for(var i = 0; i < surveys.length; i++) {
+							$("#survey-list").append("<li onclick='loadSection("+surveys[i].getSurveyId()+", \""+ surveys[i].getDescription1()+"\");'>"+ surveys[i].getDescription1() + " | " + surveys[i].getLastDownload()+"</li>");
+						}
+					});
+				}, 8000);
+		}
+		else {
+			alert("Your device is currently offline.");
+		}
 	}
 </script>

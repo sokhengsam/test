@@ -50,13 +50,15 @@ var CASIAPIRequests = new Class({
 	pushAnswer: function(requestData,responseHandler,failureHandler){
 		this.postRequest(this.baseUrl,requestData,responseHandler,failureHandler);
 	},
-	downloadSurvey: function() {
+	downloadSurvey: function(lastmodified) {
 		var mobileKey = mobile.getMobileKey();
 		
 		requestData={
-			"last-modified-since": this.getTimeStamp(),
 			"mobilekey": mobileKey 
 		};
+		if(lastmodified != undefined) {
+			requestData.last-modified-since = lastmodified;
+		}
 		var self = this;
 		this.getRequest("http://cenat.gov.kh:8090/CASIMS/index.php/home/getjsondata", requestData, function(response){self.insertDB(response);}, function(){self.downloadSurveyFail();});
 	},
@@ -71,8 +73,11 @@ var CASIAPIRequests = new Class({
 		this.parseJson(response);
 	},
 	downloadSurveyFail: function() {
-		console.log("download survey fail. reading from static sample json");
-		this.parseJson(sampleJson);
+		console.log("download survey fail.");
+		if(debug) {
+			console.log("Reading from static sample json");
+			this.parseJson(sampleJson);
+		}
 	},
 	parseJson: function(sampleJson) {
 		

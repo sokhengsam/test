@@ -61,5 +61,26 @@ var SurveysDao = new Class({
 			});
 		});
 		return items;
+	},
+	selectLastItem: function(successCallback) {
+		var self = this;
+		var selectLast = "select * from surveys order by lastDownload desc limit 1";
+		this.getDB().transaction(function(tx){
+			tx.executeSql(selectLast, [], function(tx, result) {
+				dataset = result.rows;
+				var item = new Surveys();
+				for (var i = 0; i < dataset.length; i++) {
+					item.setSurveyId(dataset.item(i)["surveyId"]);
+					item.setSurveyCode(dataset.item(i)["surveyCode"]);
+					item.setDescription1(dataset.item(i)["description1"]);
+					item.setDescription2(dataset.item(i)["description2"]);
+					item.setStatus(dataset.item(i)["status"]);
+					item.setLastDownload(dataset.item(i)["lastDownload"]);
+					item.setIntroduction1(dataset.item(i)["introduction1"]);
+					item.setIntroduction2(dataset.item(i)["introduction2"]);
+				}
+				successCallback(item);
+			});
+		});
 	}
 });
