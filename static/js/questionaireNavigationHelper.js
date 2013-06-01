@@ -43,10 +43,12 @@ function getQuestion(mode) {
 		lastQid = question.getQuestionId();
 		sectionId = question.getSectionId();
 		var qOption = question.options;
+		qOption.introduction = question.getIntroduction1();
 		qOption.text = question.getDescription1();
 		qOption.displaySectionName = questionaires.displaySectionName;
 		
 		if(lang == 2) {
+			qOption.introduction = question.getIntroduction2();
 			qOption.text = question.getDescription2();
 		}
 		if(qOption.questionTypeId == 6) {
@@ -341,12 +343,18 @@ function parseValue(child, type, qid) {
 		var pLog = $("#participantLog").data("participantLog");
 		if(alcoholicPartId.indexOf(Number(qid)) != -1) {
 			console.log("Calculate the alcoholic score");
+			if(pLog.setAlcoholScore() != undefined && (alcoholicScore == 0 || alcoholicScore == undefined)) {
+				alcoholicScore = pLog.setAlcoholScore();
+			}
 			alcoholicScore = Number(alcoholicScore) + Number(child.find("input[type='radio']:checked").attr("svalue"));
 			pLog.setAlcoholScore(alcoholicScore);
 			console.log("Alcoholic Score: " + alcoholicScore);
 		}
 		else if(atsPartId.indexOf(Number(qid)) != -1) {
 			console.log("Calculate the ATS score");
+			if(pLog.getATSScore() != undefined && (atsScore == 0 || atsScore == undefined)) {
+				atsScore = pLog.getATSScore();
+			}
 			atsScore = Number(atsScore) + Number(child.find("input[type='radio']:checked").attr("svalue"));
 			pLog.setATSScore(atsScore);
 			console.log("ATS score: " + atsScore);
@@ -958,7 +966,7 @@ function parseAnswerSpecialCase() {
 					return;
 				}
 			}
-		}yes
+		}
 	}
 }
 function clearQuestionBlock(){
@@ -979,6 +987,7 @@ function saveLastQuestion() {
 	pLog.setLastScore(0);
 	if(atsScore == '' && alcoholicScore == '' || (atsScore == 0 && alcoholicScore == 0)) {
 		atsScore = pLog.getATSScore();
+		console.log(pLog.getAlcoholScore());
 		alcoholicScore = pLog.getAlcoholScore();
 	}
 	pLog.setATSScore(atsScore);

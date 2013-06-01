@@ -46,6 +46,8 @@ var QuestionDao = new Class({
 					item.setQuestionCode(dataset.item(i)["questionCode"]);
 					item.setDescription1(dataset.item(i)["description1"]);
 					item.setDescription2(dataset.item(i)["description2"]);
+					item.setIntroduction1(dataset.item(i)["introduction1"]);
+					item.setIntroduction2(dataset.item(i)["introduction2"]);
 					item.setQuestionTypeId(dataset.item(i)["questionTypeId"]);
 					item.setAllowNull(dataset.item(i)["allowNull"]);
 					item.setNumberRange(dataset.item(i)["numberRange"]);
@@ -70,6 +72,8 @@ var QuestionDao = new Class({
 					item.setQuestionCode(dataset.item(i)["questionCode"]);
 					item.setDescription1(dataset.item(i)["description1"]);
 					item.setDescription2(dataset.item(i)["description2"]);
+					item.setIntroduction1(dataset.item(i)["introduction1"]);
+					item.setIntroduction2(dataset.item(i)["introduction2"]);
 					item.setQuestionTypeId(dataset.item(i)["questionTypeId"]);
 					item.setAllowNull(dataset.item(i)["allowNull"]);
 					item.setParentId(dataset.item(i)["parentId"]);
@@ -109,6 +113,8 @@ var QuestionDao = new Class({
 					item.setQuestionCode(dataset.item(i)["questionCode"]);
 					item.setDescription1(dataset.item(i)["description1"]);
 					item.setDescription2(dataset.item(i)["description2"]);
+					item.setIntroduction1(dataset.item(i)["introduction1"]);
+					item.setIntroduction2(dataset.item(i)["introduction2"]);
 					item.setQuestionTypeId(dataset.item(i)["questionTypeId"]);
 					item.setAllowNull(dataset.item(i)["allowNull"]);
 					item.setParentId(dataset.item(i)["parentId"]);

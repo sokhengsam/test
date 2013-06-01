@@ -265,6 +265,14 @@ var Question = new Class({
 			name: 'description2', //question in khmer
 			dataType: 'TEXT'
 		},
+		introduction1: {
+			name:"introduction1",
+			dataType: 'TEXT'
+		},
+		introduction2: {
+			name: "introduction2",
+			dataType: "TEXT"
+		},
 		parentId: {
 			name: 'parentId', //parent question id
 			dataType: 'INTEGER',
@@ -313,6 +321,8 @@ var Question = new Class({
 		allowNull:'',
 		description1:'',
 		description2: '',
+		introduction1: '',
+		introduction2: '',
 		parentId: '',
 		questionTypeId: '',
 		enableOther: '',
@@ -327,8 +337,8 @@ var Question = new Class({
 	jQuery: "Question",
 	initialize: function(options){
 		//nothing to do with the initialize
-		//this.setFields(this.fields); // inherited from Options like jQuery.extend();
-		//this.setOptions(this.options);
+		this.setFields(this.fields); // inherited from Options like jQuery.extend();
+		this.setOptions(this.options);
 	},
 	setImage: function(image) {
 		this.options.image = image;
@@ -350,6 +360,12 @@ var Question = new Class({
 	},
 	setDescription2: function(description2) {
 		this.options.description2 = description2;
+	},
+	setIntroduction1: function(introduction1) {
+		this.options.introduction1 = introduction1;
+	},
+	setIntroduction2: function(introduction2) {
+		this.options.introduction2 = introduction2;
 	},
 	setParentId: function(parentId) {
 		this.options.parentId = parentId;
@@ -398,6 +414,12 @@ var Question = new Class({
 	},
 	getDescription2: function() {
 		return this.options.description2;
+	},
+	getIntroduction1: function() {
+		return this.options.introduction1;
+	},
+	getIntroduction2: function() {
+		return this.options.introduction2;
 	},
 	getParentId: function() {
 		return this.options.parentId;

@@ -52,7 +52,7 @@
 <div id="scrollWrapper" class="questionaire-page">
 	<div class="scrollable" id="scrollable">
   		<div class="question-block">
-			<div class="pquestion">${parentQuestion}</div>
+			<div class="pquestion">${introduction} <br/> ${parentQuestion}</div>
 			<div class="question" id="${questionId}" qtype="${questionTypeId}" allowNull="${allowNull}" qcode="${questionCode}" numberRange="${numberRange}">${questionCode}. ${text}</div>
 			<div class="answer-block"></div>
   		</div>
@@ -70,7 +70,7 @@
 <div id="scrollWrapper" class="questionaire-page">
 	<div class="scrollable" id="scrollable">
   		<div class="question-block">
-			<div class="question" qcode="${questionCode}" skipQuestionIdWidthScore="${skipToId}">${questionCode}. ${text}</div>
+			<div class="question" qcode="${questionCode}" skipQuestionIdWidthScore="${skipToId}">${introduction} <br/> ${questionCode}. ${text}</div>
   		</div>
 	</div>
 </div>

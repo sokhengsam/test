@@ -74,6 +74,8 @@ var JSONParser = new Class({
 			question.setAllowNull(q.AllowNull);
 			question.setDescription1(q.Description1);
 			question.setDescription2(q.Description2);
+			question.setIntroduction1(q.Introduction1);
+			question.setIntroduction2(q.Introduction2);
 			question.setParentId(q.ParentID);
 			question.setQuestionTypeId(q.QuestionTypeID);
 			question.setEnableOther(q.EnableOther);
