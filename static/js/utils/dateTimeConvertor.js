@@ -47,5 +47,26 @@ var DateTimeConvertor = new Class({
 	},
 	getCurrentDateTime: function() {
 		return this.getCurrentUSDate() + " " + this.getCurrentTime();
+	},
+	getDateFromMilli: function(milli){
+		if(milli == '' || typeof(milli) == 'undefined'){
+			return '';
+		}
+		var now = new Date(milli);
+		var day = now.getDate();
+		var month = now.getMonth();
+		var year = now.getFullYear();
+		
+		month++;
+
+		if(day < 10){
+			day = "0"+day;
+		}
+		if(month < 10){
+			month = "0"+month;
+		}
+
+		return month+'-'+day+'-'+year;
 	}
+	
 });

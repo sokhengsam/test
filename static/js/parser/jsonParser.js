@@ -25,7 +25,7 @@ var JSONParser = new Class({
 			survey.setDescription2(s.Description2);
 			survey.setStatus(s.Status);
 			survey.setEditedDate(s.EditedDate);
-			survey.setLastDownload(this.getCurrentDate());
+			survey.setLastDownload(this.getTimeStamp());
 			survey.setLogo(s.Logo);
 			survey.setIntroduction1(s.Introduction1);
 			survey.setIntroduction2(s.Introduction2);
@@ -83,7 +83,7 @@ var JSONParser = new Class({
 			question.setDateRange(q.DateRangeFrom + "-" + q.DateRangeTo);
 			question.setImage(q.Image);
 			question.setOrder(q.OrderNo);
-			question.setStatus("");
+			question.setStatus(q.Status);
 			question.setDependencyId(q.DependencyID);
 			question.setSkipToId(q.SkipToID);
 			questionDao.persist(question,persistCallback);

@@ -53,11 +53,11 @@ var CASIAPIRequests = new Class({
 	downloadSurvey: function(lastmodified) {
 		var mobileKey = mobile.getMobileKey();
 		
-		requestData={
+		var requestData={
 			"mobilekey": mobileKey 
 		};
 		if(lastmodified != undefined) {
-			requestData.last-modified-since = lastmodified;
+			requestData["last-modified-since"] = lastmodified;
 		}
 		var self = this;
 		this.getRequest("http://cenat.gov.kh:8090/CASIMS/index.php/home/getjsondata", requestData, function(response){self.insertDB(response);}, function(){self.downloadSurveyFail();});

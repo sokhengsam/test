@@ -15,7 +15,7 @@ var QuestionDao = new Class({
 		});
 */	},
 	getAll: function() {
-		var selectAll = "SELECT * FROM "+this.options.tableName + " Order By orderNo asc";
+		var selectAll = "SELECT * FROM "+this.options.tableName + " where status=1 Order By orderNo asc";
 		var items = [];
 		this.options.db.transaction(function(tx){
 			tx.executeSql(selectAll, [], function(tx, result) {
@@ -34,7 +34,7 @@ var QuestionDao = new Class({
 		return items;
 	},
 	getChild: function(id, success) {
-		var selectAll = "SELECT * FROM "+this.options.tableName + " WHERE parentId = " + id + " Order By orderNo asc";
+		var selectAll = "SELECT * FROM "+this.options.tableName + " WHERE status = 1 and parentId = " + id + " Order By orderNo asc";
 		var items = [];
 		this.options.db.transaction(function(tx){
 			tx.executeSql(selectAll, [], function(tx, result) {
@@ -60,7 +60,7 @@ var QuestionDao = new Class({
 		});
 	},
 	getBySection: function(sectionId, successCallback) {
-		var selectAll = "SELECT * FROM "+this.options.tableName + " WHERE sectionId = " + sectionId + " Order By orderNo asc";
+		var selectAll = "SELECT * FROM "+this.options.tableName + " WHERE status = 1 and sectionId = " + sectionId + " Order By orderNo asc";
 		var items = [];
 		this.options.db.transaction(function(tx){
 			tx.executeSql(selectAll, [], function(tx, result) {
@@ -87,7 +87,7 @@ var QuestionDao = new Class({
 		});
 	},
 	findSectionKeyByQuestionKey: function(questionId,successCallback){
-		var sql = "SELECT sectionId FROM " + this.options.tableName + " WHERE questionId=" + questionId;
+		var sql = "SELECT sectionId FROM " + this.options.tableName + " WHERE status = 1 and questionId=" + questionId;
 		var sectionId;
 		this.options.db.transaction(function(tx){
 			tx.executeSql(sql, [], function(tx, result) {
