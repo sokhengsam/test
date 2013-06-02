@@ -43,12 +43,17 @@ function getQuestion(mode) {
 		lastQid = question.getQuestionId();
 		sectionId = question.getSectionId();
 		var qOption = question.options;
-		qOption.introduction = question.getIntroduction1();
+		if(question.getIntroduction1() != null && question.getIntroduction1() != "") {
+			console.log(question.getIntroduction1());
+			qOption.introduction = question.getIntroduction1() + "<br/>";
+		}
 		qOption.text = question.getDescription1();
 		qOption.displaySectionName = questionaires.displaySectionName;
 		
 		if(lang == 2) {
-			qOption.introduction = question.getIntroduction2();
+			if(question.getIntroduction2() != null && question.getIntroduction2() != "") {
+				qOption.introduction = question.getIntroduction2() + "<br/>";
+			}
 			qOption.text = question.getDescription2();
 		}
 		if(qOption.questionTypeId == 6) {
@@ -147,11 +152,13 @@ function skipSimpleQuestionDependency(mode,questions,question,qOption){
 function renderSimpleQuestionAnswerAndSpecialParentChildQuestion(question,qOption){
 	if(qOption.parentId != null){
 		questionDao.findQuestionByPrimaryKey(qOption.parentId,function(parentQuestion){
+			$(".pquestion").css("display", "block");
 			qOption.parentQuestion = parentQuestion.getQuestionCode() + ". " + (lang == 2? parentQuestion.getDescription2(): parentQuestion.getDescription1());
 			populateSimpleQuestionAnswer(question,qOption);
 		});
 	}
 	else{
+		$(".pquestion").css("display", "none");
 		populateSimpleQuestionAnswer(question,qOption);
 	}
 }
