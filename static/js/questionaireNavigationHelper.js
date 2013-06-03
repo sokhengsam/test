@@ -945,7 +945,7 @@ function showScoreMessage(message) {
  */
 function parseAnswerSpecialCase() {
 	var selectedSurvey = $("#selectedSurvey").data("selectedSurvey");
-	if(selectedSurvey.surveyId == 3) {
+	if(selectedSurvey.surveyId == 10) {
 		var qType = $(".question-block > .question").attr("qtype");
 		//parent child question doesn't stored question type in the parent div
 		if(qType == undefined) {
@@ -967,7 +967,7 @@ function parseAnswerSpecialCase() {
 		else {
 			//can't be null
 			if(Number(qType) == 4 ) {
-				t = $(".answer-block input[type='radio']:checked").val();
+				t = $(".answer-block input[type='radio']:checked").siblings()[1].innerText;
 				if(t == "No") {
 					yes = false;
 					return;
