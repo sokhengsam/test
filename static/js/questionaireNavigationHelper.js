@@ -1166,7 +1166,22 @@ function answerValidated() {
 						break;
 					case 5: //multiple question type
 						//how to store the answer id in the participant answer for this???
+						var breakCondition = false;
 						t = $(".answer-block input[type='checkbox']:checked").length > 0;
+						$(".answer-block input[type='checkbox']:checked").each(function(){
+							answerTypeId = $(this).attr('answerTypeId');
+							if(answerTypeId == 3 || answerTypeId == 5){ // answer type id 3 and 5 is other require
+								var emptyValidation = validateEmpty($(this).siblings("input").val());
+								if(!emptyValidation.state){
+									alert(emptyValidation.message);
+									breakCondition = true;
+									return false;
+								}
+							}
+						});
+						if(breakCondition){
+							return false;
+						}
 						break;
 					default:
 						console.log("unknow answer type");
