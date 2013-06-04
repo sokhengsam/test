@@ -32,6 +32,8 @@ var ParticipantLogDao = new Class({
 					item.setLastSectionIndex(dataset.item(i)["lastSectionIndex"]);
 					item.setLastQuestionIndex(dataset.item(i)["lastQuestionIndex"]);
 					item.setLanguage(dataset.item(i)["language"]);
+					item.setCRF2Pass(dataset.item(i)["crf2pass"]);
+					item.setA1AValid(dataset.item(i)["a1avalid"]);
 					items.push(item);
 				}
 				successCallback(items);
@@ -60,6 +62,8 @@ var ParticipantLogDao = new Class({
 					item.setLastQuestionIndex(dataset.item(i)["lastQuestionIndex"]);
 					item.setLastSectionId(dataset.item(i)["lastSectionId"]);
 					item.setLanguage(dataset.item(i)["language"]);
+					item.setCRF2Pass(dataset.item(i)["crf2pass"]);
+					item.setA1AValid(dataset.item(i)["a1avalid"]);
 				}
 				successCallback(item);
 			});
@@ -86,6 +90,8 @@ var ParticipantLogDao = new Class({
 					item.setLastQuestionIndex(dataset.item(i)["lastQuestionIndex"]);
 					item.setLastSectionId(dataset.item(i)["lastSectionId"]);
 					item.setLanguage(dataset.item(i)["language"]);
+					item.setCRF2Pass(dataset.item(i)["crf2pass"]);
+					item.setA1AValid(dataset.item(i)["a1avalid"]);
 					items.push(item);
 				}
 				successCallback(items);

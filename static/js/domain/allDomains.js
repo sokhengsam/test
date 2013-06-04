@@ -1078,6 +1078,14 @@ var ParticipantLog = new Class({
 		language: {
 			name: "language",
 			dataType: "INTEGER"
+		},
+		crf2pass: {
+			name: "crf2pass",
+			dataType: "INTEGER",
+		},
+		a1avalid: {
+			name: "a1avalid",
+			dataType: "INTEGER"
 		}
 	},
 	options: {
@@ -1093,7 +1101,9 @@ var ParticipantLog = new Class({
 		lastSectionIndex: "",
 		lastQuestionIndex: "",
 		lastSectionId: "",
-		language: ''
+		language: '',
+		crf2pass:'',
+		a1avalid:''
 	},
 	setParticipantLogId: function(id){
 		this.options.participantLogId = id;
@@ -1172,7 +1182,20 @@ var ParticipantLog = new Class({
 	},
 	getLastSectionId: function(){
 		return this.options.lastSectionId;
+	},
+	setCRF2Pass: function(p) {
+		this.options.crf2pass = p;
+	},
+	getCRF2Pass: function() {
+		return this.options.crf2pass;
+	},
+	setA1AValid: function(valid) {
+		this.options.a1avalid = valid;
+	},
+	getA1AValid: function() {
+		return this.options.a1avalid;
 	}
+	
 });
 
 /**

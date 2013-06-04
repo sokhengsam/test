@@ -24,7 +24,10 @@ var surveyDao = null,
 	atsPartId = [223, 242, 253, 264, 275, 286, 297, 391],
 	introductionScroller = null,
 	sectionScroller = null,
-	debug = false;
+	debug = false,
+	A1aScoreId = 442,// specific case for CRF2
+	A3bScoreId = 445,//specific case for CRF2
+	A4aScoreId = 446;
 
 
 var sampleJson = 

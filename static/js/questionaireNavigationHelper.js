@@ -5,6 +5,8 @@ var qIndex = 0,
 	lastQid,
 	questionaires,
 	yes = true,
+	passCCT = true,
+	passed = false,
 	lang=1,
 	MOVE_NEXT_MODE = 1,
 	MOVE_PREVIOUS_MODE = 2,
@@ -420,6 +422,7 @@ function parseInputValue(child, participantA, type) {
 }
 //TODO: there are duplicate code in this function. it's should be split
 function parseParticipantAnswer(onCompleteUpsert) {
+	var pLog = $("#participantLog").data("participantLog");
 	calculateUpsertParticipantAnswer();
 	var pSurvey = $("#participant").data("participant");
 	var childQuestions = $(".child-question");
@@ -578,7 +581,18 @@ function parseParticipantAnswer(onCompleteUpsert) {
 						else {
 							participantA.setAnswerId("");
 						}
-						participantA.setQuestionId($(".question").attr("id"));
+						var svalue = $(".answer").find("input[type='radio']:checked").attr("svalue");
+						var aqId = $(".question").attr("id");
+						participantA.setQuestionId(aqId);
+						passed = pLog.getCRF2Pass() == 1? true : false;
+						passCCT = pLog.getA1AValid() == 1? true : false;
+						//Special case for CRF2
+						if(A1aScoreId == aqId) {
+							passCCT = svalue == 1? true : false;
+						}
+						else if(!passed && passCCT && (aqId == A3bScoreId || aqId == A4aScoreId) && svalue == 1) {
+							passed = true;
+						}
 						var description = "";
 						if([2, 3, 4, 5].indexOf(Number(answerType)) != -1) {
 							description = $(".answer").find("input[type='radio']:checked").siblings("input").val();
@@ -947,6 +961,10 @@ function parseAnswerSpecialCase() {
 	var selectedSurvey = $("#selectedSurvey").data("selectedSurvey");
 	if(selectedSurvey.surveyId == 10) {
 		var qType = $(".question-block > .question").attr("qtype");
+		var qId = $(".question-block > .question").attr("id");
+		if(qId == 16) {
+			return;
+		}
 		//parent child question doesn't stored question type in the parent div
 		if(qType == undefined) {
 			//loop through the children
@@ -1003,6 +1021,8 @@ function saveLastQuestion() {
 	pLog.setLastQuestionIndex(qIndex);
 	pLog.setLastSectionId(sectionId);
 	pLog.setLanguage(language);
+	pLog.setCRF2Pass(passed == true? 1 : 0);
+	pLog.setA1AValid(passCCT == true? 1 : 0);
 	participantLogDao.update(pLog);
 }
 /**
@@ -1226,18 +1246,25 @@ function showDailog(){
 		participantLogDao.update(participantSurveyLog);
 		if(selectedSurvey.surveyId != 10) {
 			var alertStr = "";
-			if(atsScore == '' && alcoholicScore == '' || (atsScore == 0 && alcoholicScore == 0)) {
-				atsScore = participantSurveyLog.getATSScore();
-				alcoholicScore = participantSurveyLog.getAlcoholScore();
+			if(selectedSurvey.surveyId == 11) {
+				if(passed) {
+					alertStr = "Eligible for CCT!";
+				}
 			}
-			if(atsScore >=1 && atsScore < 4) {
-				alertStr = "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ ATS >= ១ សូមផ្តល់ការប្រឹក្សាស្តីពីការប្រើប្រាស់ ATS)\n";
-			}
-			else if(atsScore >=4) {
-				alertStr = "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ ATS >= 4 អ្នកចូលរួមអាចនឹងត្រូវលក្ខខណ្ឌចូលរួមកម្មវិធី CCT\n";
-			}
-			if(alcoholicScore >=6) {
-				alertStr += "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ គ្រឿងស្រវឹង >= 6 សូមផ្តល់ការប្រឹក្សាស្តីពីការប្រើប្រាស់គ្រឿងស្រវឹង";
+			else {
+				if(atsScore == '' && alcoholicScore == '' || (atsScore == 0 && alcoholicScore == 0)) {
+					atsScore = participantSurveyLog.getATSScore();
+					alcoholicScore = participantSurveyLog.getAlcoholScore();
+				}
+				if(atsScore >=1 && atsScore < 4) {
+					alertStr = "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ ATS >= ១ សូមផ្តល់ការប្រឹក្សាស្តីពីការប្រើប្រាស់ ATS)\n";
+				}
+				else if(atsScore >=4) {
+					alertStr = "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ ATS >= 4 អ្នកចូលរួមអាចនឹងត្រូវលក្ខខណ្ឌចូលរួមកម្មវិធី CCT\n";
+				}
+				if(alcoholicScore >=6) {
+					alertStr += "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ គ្រឿងស្រវឹង >= 6 សូមផ្តល់ការប្រឹក្សាស្តីពីការប្រើប្រាស់គ្រឿងស្រវឹង";
+				}
 			}
 			if(alertStr != "") {
 				showScoreMessage(alertStr);
