@@ -956,8 +956,8 @@ function parseAnswerSpecialCase() {
 				var qType = $(child[i]).find(".group-question-row").attr("qtype");
 				var tq;
 				if(Number(qType) == 4) {
-					tq = $(child[i]).find(".answer > input[type='radio']:checked").val();
-					if(tq == "No" || tq == "ទេ") {
+					tq = $(child[i]).find(".answer > input[type='radio']:checked").attr("svalue");
+					if(tq == 0) {
 						yes = false;
 						return;
 					}
@@ -967,8 +967,8 @@ function parseAnswerSpecialCase() {
 		else {
 			//can't be null
 			if(Number(qType) == 4 ) {
-				t = $(".answer-block input[type='radio']:checked").siblings()[1].innerText;
-				if(tq == "No" || tq == "ទេ") {
+				t = $(".answer-block input[type='radio']:checked").attr("svalue");
+				if(t == 0) {
 					yes = false;
 					return;
 				}
