@@ -957,7 +957,7 @@ function parseAnswerSpecialCase() {
 				var tq;
 				if(Number(qType) == 4) {
 					tq = $(child[i]).find(".answer > input[type='radio']:checked").val();
-					if(tq == "No") {
+					if(tq == "No" || tq == "ទេ") {
 						yes = false;
 						return;
 					}
@@ -968,7 +968,7 @@ function parseAnswerSpecialCase() {
 			//can't be null
 			if(Number(qType) == 4 ) {
 				t = $(".answer-block input[type='radio']:checked").siblings()[1].innerText;
-				if(t == "No") {
+				if(tq == "No" || tq == "ទេ") {
 					yes = false;
 					return;
 				}
