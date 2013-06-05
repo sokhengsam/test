@@ -43,6 +43,7 @@ js/component/CASIRadio.js
 js/utils/dateTimeConvertor.js
 js/utils/hashString.js
 js/utils/popuphelper.js
+js/utils/NumberFormatHelper.js
 
 js/questionaireNavigationHelper.js
 

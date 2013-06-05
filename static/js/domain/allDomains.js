@@ -1086,6 +1086,10 @@ var ParticipantLog = new Class({
 		a1avalid: {
 			name: "a1avalid",
 			dataType: "INTEGER"
+		},
+		previousHistoryLog: {
+			name: "previousHistoryLog",
+			dataType: "TEXT"
 		}
 	},
 	options: {
@@ -1103,7 +1107,8 @@ var ParticipantLog = new Class({
 		lastSectionId: "",
 		language: '',
 		crf2pass:'',
-		a1avalid:''
+		a1avalid:'',
+		previousHistoryLog: ''
 	},
 	setParticipantLogId: function(id){
 		this.options.participantLogId = id;
@@ -1143,6 +1148,9 @@ var ParticipantLog = new Class({
 	},
 	setLanguage: function(langId) {
 		this.options.language = langId;
+	},
+	setPreviousHistoryLog: function(previousHistoryLog) {
+		this.options.previousHistoryLog = previousHistoryLog;
 	},
 	getLanguage: function() {
 		return this.options.language;
@@ -1194,6 +1202,9 @@ var ParticipantLog = new Class({
 	},
 	getA1AValid: function() {
 		return this.options.a1avalid;
+	},
+	getPreviousHistoryLog: function(){
+		return this.options.previousHistoryLog;
 	}
 	
 });

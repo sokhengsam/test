@@ -29,11 +29,14 @@ var AnswerAdapter = new Class({
 					break;
 				case 2: //number
 					if(this.participanAnswer != undefined) {
-						aOption.value = this.participanAnswer.getDescription();
+						//aOption.value = this.participanAnswer.getDescription();
+						aOption.value = numberFormatHelper.getStandardNumberFormat(this.participanAnswer.getDescription());
 						aOption.panswerid = this.participanAnswer.getParticipantAnswerId();
 					}
-					var inputNumberAnswer = new InputNumberAnswer(aOption);
-					inputNumberAnswer.mergeTemplate();
+					//var inputNumberAnswer = new InputNumberAnswer(aOption);
+					//inputNumberAnswer.mergeTemplate();
+					var inputTextAnswer = new InputTextAnswer(aOption);
+					inputTextAnswer.mergeTemplate();
 					//$("input[type='number']:first").focus();
 					break;
 				case 3: //date

@@ -12,7 +12,8 @@ var qIndex = 0,
 	MOVE_PREVIOUS_MODE = 2,
 	startTimeQ,
 	dateConvertor = new DateTimeConvertor(),
-	numberUpsertAnswers = [];
+	numberUpsertAnswers = [],
+	numberFormatHelper = new NumberFormatHelper();
 
 function getQuestion(mode) {
 	$(".read-more-sign").hide();
@@ -441,7 +442,7 @@ function parseParticipantAnswer(onCompleteUpsert) {
 					participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
 					participantA.setAnswerId("");
 					participantA.setQuestionId(q.attr("id"));
-					participantA.setDescription(input.val());
+					participantA.setDescription(Number(type) == 2? numberFormatHelper.getNumberValue(input.val()) : input.val());
 					participantA.setStartDateTime(startTimeQ);
 					participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 					participantA.setStatus("");
@@ -454,7 +455,7 @@ function parseParticipantAnswer(onCompleteUpsert) {
 					participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
 					participantA.setAnswerId("");
 					participantA.setQuestionId(q.attr("id"));
-					participantA.setDescription(input.val());
+					participantA.setDescription(Number(type) == 2? numberFormatHelper.getNumberValue(input.val()) : input.val());
 					participantA.setStartDateTime(startTimeQ);
 					participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 					participantA.setStatus("");
@@ -546,11 +547,12 @@ function parseParticipantAnswer(onCompleteUpsert) {
 		if(Number(type) == 1 || Number(type) == 2 || Number(type) == 3 || Number(type) == 6) {
 			//check if it's an update or new insert
 			var input = $(".answer").find("input");
+			var inputValue = input.val();
 			panswer = input.attr("panswer");
 			participantA.setParticipantSurveyId(pSurvey.getParticipantSurveyId());
 			participantA.setAnswerId("");
 			participantA.setQuestionId($(".question").attr("id"));
-			participantA.setDescription($(".answer").find("input").val());
+			participantA.setDescription(Number(type) == 2? numberFormatHelper.getNumberValue($(".answer").find("input").val()) : $(".answer").find("input").val());
 			participantA.setStartDateTime(startTimeQ);
 			participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
 			participantA.setStatus("");
@@ -623,6 +625,7 @@ function parseParticipantAnswer(onCompleteUpsert) {
 					var panswerid = $(".question").data("panswerid");//get the array of panswer id
 					//remove the existing answer and add new one. this is the best solution for the multiple answer??
 					if(panswerid.length > 0) {
+						console.log($("input[type='checkbox']:checked"));
 						participantAnswerDao.removeByIds(panswerid, function(){
 							if($(".answer-block").find(".answer input[type='checkbox']:checked").length > 0) {
 								$(".answer-block").find(".answer input[type='checkbox']:checked").each(function(i, ch){
@@ -725,7 +728,6 @@ function parseAnswer(mode, calculateComplete) {
 }
 
 $(function(){
-	
 	//init language
 	
 	lang = $("body").data("language");
@@ -1023,6 +1025,7 @@ function saveLastQuestion() {
 	pLog.setLanguage(language);
 	pLog.setCRF2Pass(passed == true? 1 : 0);
 	pLog.setA1AValid(passCCT == true? 1 : 0);
+	//pLog.setPreviousHistoryLog(skipQuestionHistory.join());
 	participantLogDao.update(pLog);
 }
 /**
@@ -1042,6 +1045,7 @@ function validateNumberRange(numberRange,inputNumber){
 		returnObj.message = "Invalide number range";
 		return returnObj;
 	}
+	inputNumber = numberFormatHelper.getNumberValue(inputNumber); 
 	var range = numberRange.split("-");
 	if(ignoreNumberRangeValidation(range) || (Number(range[0])<= Number(inputNumber) && Number(inputNumber) <= Number(range[1]))){
 		returnObj.state = true;
@@ -1078,6 +1082,18 @@ function validateTextLength(inputValue,maxLength){
 	return returnObj;
 }
 
+function validateNumber(inputValue){
+	var returnObj = {};
+	if(numberFormatHelper.getNumberValue(inputValue) != null){
+		returnObj.state = true;
+	}
+	else{
+		returnObj.state = false;
+		returnObj.message = "Please input number only.";
+	}
+	return returnObj;
+}
+
 function answerValidated() {
 	var qType = $(".question-block > .question").attr("qtype");
 	//parent child question doesn't stored question type in the parent div
@@ -1093,11 +1109,16 @@ function answerValidated() {
 			var tq;
 			if(allownull == 0) {
 				if(Number(qType) == 1 || Number(qType) == 2 || Number(qType) == 3 || Number(qType) == 6) {
-					var emptyValidation = validateEmpty($(child[i]).find(".answer > input").val());
-					var numberRangeValidation = Number(qType) == 2? validateNumberRange(numberRange,$(child[i]).find(".answer > input").val()) : null;
-					var textLengthValidation = Number(qType) == 1? validateTextLength($(child[i]).find(".answer > input").val(),80) : null;
+					var inputValue = $(child[i]).find(".answer > input").val();
+					var emptyValidation = validateEmpty(inputValue);
+					var numberRangeValidation = Number(qType) == 2? validateNumberRange(numberRange,inputValue) : null;
+					var numberRangeValidation = Number(qType) == 2? validateNumberRange(numberRange,inputValue) : null;
+					var textLengthValidation = Number(qType) == 1? validateTextLength(inputValue,80) : null;
 					if(!emptyValidation.state){
 						alert(emptyValidation.message + " " + $(child[i]).find(".group-question-row").attr('qcode') + ".");
+					}
+					else if(null != numberValidation && !numberValidation.state){
+						alert(numberValidation.message);
 					}
 					else if(null != numberRangeValidation && !numberRangeValidation.state) {
 						alert(numberRangeValidation.message + " in " + $(child[i]).find(".group-question-row").attr('qcode') + ".");
@@ -1105,7 +1126,7 @@ function answerValidated() {
 					else if(null != textLengthValidation && !textLengthValidation.state) {
 						alert(textLengthValidation.message + " in " + $(child[i]).find(".group-question-row").attr('qcode') + ".");
 					}
-					if(!emptyValidation.state || (null != numberRangeValidation && !numberRangeValidation.state) || (null != textLengthValidation && !textLengthValidation.state)){
+					if(!emptyValidation.state || (null != numberValidation && !numberValidation.state) || (null != numberRangeValidation && !numberRangeValidation.state) || (null != textLengthValidation && !textLengthValidation.state)){
 						return false;
 					}
 				}
@@ -1152,15 +1173,20 @@ function answerValidated() {
 			var textVal;
 			if(Number(qType) == 1 || Number(qType) == 2 || Number(qType) == 3 || Number(qType) == 6) {
 				var numberRange = $(".question-block > .question").attr("numberRange");
-				var emptyValidation = validateEmpty($(".question-block > .answer-block").find("input").val());
-				var numberRangeValidation = Number(qType) == 2? validateNumberRange(numberRange,$(".question-block > .answer-block").find("input").val()) : null;
+				var inputValue = $(".question-block > .answer-block").find("input").val();
+				var emptyValidation = validateEmpty(inputValue);
+				var numberRangeValidation = Number(qType) == 2? validateNumberRange(numberRange,inputValue) : null;
+				var numberValidation = Number(qType) == 2? validateNumber(inputValue) : null;
 				if(!emptyValidation.state){
 					alert(emptyValidation.message);
+				}
+				else if(null != numberValidation && !numberValidation.state){
+					alert(numberValidation.message);
 				}
 				else if(null != numberRangeValidation && !numberRangeValidation.state) {
 					alert(numberRangeValidation.message);
 				}
-				return emptyValidation.state && numberRangeValidation.state;
+				return emptyValidation.state && numberRangeValidation.state && numberValidation.state;
 			}
 			else if(Number(qType) == 4 || Number(qType) == 5) {
 				var t;
