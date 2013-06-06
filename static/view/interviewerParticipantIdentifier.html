@@ -60,7 +60,7 @@
 			}
 
 			//save participant survey + log
-			if(!isParticipantExist($("#participantId").val(), $("#evaluationOutcome option:selected").val())) {
+			//if(!isParticipantExist($("#participantId").val(), $("#evaluationOutcome option:selected").val())) {
 				var participantCode = $("#participantId").val();
 				var participantSurvey = new ParticipantSurvey();
 				participantSurvey.setSurveyId($("#selectedSurvey").data("selectedSurvey").surveyId);
@@ -97,7 +97,7 @@
 						$("#participantLog").data("participantLog", participantLog);
 					});
 				});
-			}
+			//}
 			var lang = $("body").data("language");
 			if(lang == 2) {
 				if(surv.introduction2 != "null") {
