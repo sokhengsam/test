@@ -20,25 +20,25 @@
 <script id="singleTemplate" type="x-jquery-tmpl">
 	<div class="answer">
 		<img src="static/css/images/radio-off.png">
-		<input svalue="${value}" type="radio" name="${questionId}" id="a${answerId}" panswer="${panswerid}" answerTypeId="${answerTypeId}"><span class="answer-descriptoin"><label for="a${answerId}">${text}</label></span>
+		<input svalue="${value}" type="radio" name="${questionId}" id="a${answerId}" panswer="${panswerid}" answerTypeId="${answerTypeId}"><span class="answer-descriptoin"><label for="a${answerId}">{{html text}}</label></span>
 	</div>
 </script>
 
 <!-- number answer template -->
 <script id="numberTemplate" type="x-jquery-tmpl">
-	<div class="answer"><input type="number" name="answer" value="${value}" panswer="${panswerid}"/>${text}</div>
+	<div class="answer"><input type="number" name="answer" value="${value}" panswer="${panswerid}"/>{{html text}}</div>
 </script>
 
 <!-- text answer template -->
 <script id="textTemplate" type="x-jquery-tmpl">
-	<div class="answer"><input type="text" name="answer" value="${value}" panswer="${panswerid}"/>${text}</div>
+	<div class="answer"><input type="text" name="answer" value="${value}" panswer="${panswerid}"/>{{html text}}</div>
 </script>
 
 <!-- multiple answer template -->
 <script id="multipleTemplate" type="x-jquery-tmpl">
   <div class="answer">
 	<img src="static/css/images/check-off.png">
-	<input svalue="${value}" type="checkbox" id="a${answerId}" panswer="${panswerid}" answerTypeId="${answerTypeId}"/><span class="answer-descriptoin"><label for="a${answerId}">${text}</label></span>
+	<input svalue="${value}" type="checkbox" id="a${answerId}" panswer="${panswerid}" answerTypeId="${answerTypeId}"/><span class="answer-descriptoin"><label for="a${answerId}">{{html text}}</label></span>
   </div>
 </script>
 
@@ -80,7 +80,7 @@
 <script id="groupQuestionTemplate" type="x-jquery-tmpl">
 	<div class="child-question">
 		<div class="group-question-row" id="${questionId}" qtype="${questionTypeId}" allowNull="${allowNull}" qcode="${qcode}" numberRange="${numberRange}">
-			${questionCode}. ${text}
+			${questionCode}. {{html text}}
 		</div>
 		<div class="answer-block group-question-answers"></div>
 	</div>
