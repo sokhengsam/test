@@ -1078,7 +1078,6 @@ function clearQuestionBlock(){
 	$(".question-block").remove();
 	$("#scrollWrapper").remove();
 }
-
 /**
  * Save the last question and section index of the participant 
  * to avoid the losing data when user click on back button of the browswer
