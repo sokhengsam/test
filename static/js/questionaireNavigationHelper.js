@@ -310,8 +310,7 @@ function autoCheckUpsertParticipantAnswer(onComplete){
 	numberUpsertAnswers.shift();
 	console.log("numberUpsertAnswers : " + numberUpsertAnswers.length);
 	if(numberUpsertAnswers.length == 0){
-		setTimeout(function(){enablepage();}, 400);
-		onComplete();
+		setTimeout(function(){enablepage();onComplete();}, 400);
 	}
 }
 
@@ -803,9 +802,11 @@ $(function(){
 						});
 					}
 					else {
-						//total score and show dialog
-						showDailog();
-						qIndex--; // keep index of current question, prevent deny dialog
+						parseParticipantAnswer(function(){
+							//total score and show dialog
+							showDailog();
+							qIndex--; // keep index of current question, prevent deny dialog
+						});
 					}
 				}	
 			//}
