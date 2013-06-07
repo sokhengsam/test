@@ -214,6 +214,7 @@ function getGroupQuesion(qOption) {
 	groupQuestion.parentQuestionCode = qOption.questionCode;
 	groupQuestion.label = qOption.text;
 	groupQuestion.displaySectionName = qOption.displaySectionName;
+	groupQuestion.introduction = qOption.introduction;
 	groupQuestion.skipToId = qOption.skipToId;
 	groupQuestionAdapter.mergeGroupQuestionParent(groupQuestion); // merge parent question info 
 	var pSurvey = $("#participant").data("participant");
