@@ -7740,7 +7740,7 @@ var sampleJson =
 		QuestionTypeID: "2",
 		Image: null,
 		OrderNo: "2",
-		AllowNull: "0",
+		AllowNull: "1",
 		EnableOther: "0",
 		NumberRangeFrom: "0",
 		NumberRangeTo: "500",

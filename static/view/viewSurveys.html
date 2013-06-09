@@ -1,6 +1,7 @@
 <div class="home-navigation">
 	<span class="back-top">Back</span>
 	<span class="title">View History</span>
+	<span class="backup" id="backup">Backup</span>
 </div>
 <div class="home">
 	<div class="survey-block">
@@ -17,6 +18,9 @@
 
 <script>
 $(function(){
+	$("#backup").click(function(){
+		
+	});
 	surveyDao.getAll(function(surveys) {
 		$.each(surveys,function(index,survey){
 			var surveyId = survey.getSurveyId();

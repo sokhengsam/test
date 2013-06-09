@@ -69,8 +69,12 @@ var CASIAPIRequests = new Class({
 		}, function(){console.log("fail to get mobile key");});
 	},
 	insertDB: function(response){
-		//this.parseJson(sampleJson);
-		this.parseJson(response);
+		if(debug){
+			this.parseJson(sampleJson);
+		}
+		else {
+			this.parseJson(response);
+		}
 	},
 	downloadSurveyFail: function() {
 		console.log("download survey fail.");

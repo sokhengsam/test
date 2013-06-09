@@ -795,7 +795,13 @@ function moveNextQuestion() {
 
 $(function(){
 	//init language
-	
+	//special case for C2
+	$(document).on("click", "#a1309", function(){
+		$("#318").attr("allownull", 0);
+	});
+	$(document).on("click", "#a1310", function(){
+		$("#318").attr("allownull", 1);
+	});
 	lang = $("body").data("language");
 	
 	// continue questionnaire in incomplete questionnaire
@@ -842,16 +848,21 @@ $(function(){
 				console.log(child);
 				var c2a = child[0], c2b = child[1];
 				var compareValue = $(c2a).find(".answer > input[type='radio']:checked").siblings("input").val();
-				var inputValue = $(c2b).find(".answer > input").val();
-				validateDependency(compareValue, null, IS_BIGGER_THAN_OR_EQUAL, inputValue, function(valueDependencyValidation){
-					if(!valueDependencyValidation.state) {
-						alert("Number in C2b can't be bigger than C2a");
-						return false;
-					}
-					else {
-						moveNextQuestion();
-					}
-				});
+				if(compareValue != null) {
+					var inputValue = $(c2b).find(".answer > input").val();
+					validateDependency(compareValue, null, IS_BIGGER_THAN_OR_EQUAL, inputValue, function(valueDependencyValidation){
+						if(!valueDependencyValidation.state) {
+							alert("Number in C2b can't be bigger than C2a");
+							return false;
+						}
+						else {
+							moveNextQuestion();
+						}
+					});
+				}
+				else {
+					moveNextQuestion();
+				}
 			}
 			else {
 				moveNextQuestion();
@@ -1176,10 +1187,19 @@ function validateDependency(compareValue, dependsOnQuestionId, condition, inputV
 		participantAnswerDao.queryByQuestionId(dependsOnQuestionId, function(items){
 			if(items != undefined) {
 				var answerObject = items[0];
-				if(answerObject  != undefined) {
+				console.log(answerObject.getDescription());
+				if(answerObject  != undefined && answerObject.getDescription() != "") {
 					//lazy coding
 					validateDependency(answerObject.getDescription(), null, IS_BIGGER_THAN_OR_EQUAL, inputValue, successCallback);
 				}
+				else {
+					returnObj.state = true;
+					successCallback(returnObj);
+				}
+			}
+			else {
+				returnObj.state = true;
+				successCallback(returnObj);
 			}
 		});
 	}
