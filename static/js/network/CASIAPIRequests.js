@@ -51,7 +51,7 @@ var CASIAPIRequests = new Class({
 		this.postRequest(this.baseUrl,requestData,responseHandler,failureHandler);
 	},
 	downloadSurvey: function(lastmodified) {
-		var mobileKey = mobile.getMobileKey();
+		var mobileKey = debug? "debug" : mobile.getMobileKey();
 		
 		var requestData={
 			"mobilekey": mobileKey 
@@ -66,7 +66,7 @@ var CASIAPIRequests = new Class({
 		var self = this;
 		this.getRequest("http://cenat.gov.kh:8090/CASIMS/index.php/home/getmobilekey", {}, function(response){
 			self.storeMobileKey(response, successCallback);
-		});
+		}, function(){console.log("fail to get mobile key");});
 	},
 	insertDB: function(response){
 		//this.parseJson(sampleJson);

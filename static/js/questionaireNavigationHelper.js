@@ -10,6 +10,11 @@ var qIndex = 0,
 	lang=1,
 	MOVE_NEXT_MODE = 1,
 	MOVE_PREVIOUS_MODE = 2,
+	IS_EQUAL = 1,
+	IS_BIGGER_THAN = 2,
+	IS_BIGGER_THAN_OR_EQUAL = 3,
+	IS_SMALLER_THAN = 4,
+	IS_SMALLER_THAN_OR_EQUAL = 4,
 	startTimeQ,
 	dateConvertor = new DateTimeConvertor(),
 	numberUpsertAnswers = [],
@@ -213,6 +218,7 @@ function getGroupQuesion(qOption) {
 	var groupQuestion = new Object();
 	groupQuestion.parentQuestionCode = qOption.questionCode;
 	groupQuestion.label = qOption.text;
+	groupQuestion.introduction = qOption.introduction;
 	groupQuestion.displaySectionName = qOption.displaySectionName;
 	groupQuestion.introduction = qOption.introduction;
 	groupQuestion.skipToId = qOption.skipToId;
@@ -727,6 +733,66 @@ function parseAnswer(mode, calculateComplete) {
 	//alert(answerVal);
 }
 
+function moveNextQuestion() {
+	var totalScore = calculateTotalAnswerValues();
+	var goToQuestionId = getSelectedSingleAnswer().data("goToQuestionId");
+	var skipToQuestionAttr = $(".question-block > .question").attr("skipquestionidwidthscore");
+	var skipToQuestionId = skipToQuestionAttr != undefined && skipToQuestionAttr != "" && skipToQuestionAttr != null ? skipToQuestionAttr : "";
+	if(totalScore == 0 && skipToQuestionId != ""){
+		gotoQuestion(skipToQuestionId);
+	}
+	else if(null != goToQuestionId){
+		gotoQuestion(goToQuestionId);
+	}
+	else{
+		if(skipQuestionHistory.length > 0){
+			skipQuestionHistory.push(-1);
+		}
+		//validate answer before going next
+		var selectedSectionId = $("body").data("questionaire").sectionId;
+		//if(valid) {
+			/*if(qIndex == totalQ) {
+				return;
+			}*/
+			qIndex = qIndex + 1;
+			if(qIndex < totalQ) {
+				if(selectedSectionId == 9) {
+					parseAnswer(MOVE_NEXT_MODE);
+				}
+				showLoadingDialog();
+				parseParticipantAnswer(function(){
+					clearQuestionBlock();
+					//save the last question 
+					saveLastQuestion();
+					getQuestion(MOVE_NEXT_MODE);
+				});	
+				//we have speciall case for the surveyId =3
+				parseAnswerSpecialCase();
+				$("#previousQuestion").show();
+				//clearQuestionBlock();
+				//getQuestion(MOVE_NEXT_MODE);
+			}
+			else {
+				//save the last question of the section and clear the question block
+				//check the survey displayed. 
+				//if all the survey already displayed meant they are at the end so, show dialog. Otherwise, load next section
+				//sectionDisplayed started from 0
+				if(sectionDisplayed < $("body").data("sections").length -1) {
+					parseParticipantAnswer(function(){
+						clearQuestionBlock();
+						$("#content").load("static/view/section.html");
+					});
+				}
+				else {
+					//total score and show dialog
+					showDailog();
+					qIndex--; // keep index of current question, prevent deny dialog
+				}
+			}	
+		//}
+	}
+}
+
 $(function(){
 	//init language
 	
@@ -752,65 +818,46 @@ $(function(){
 		if(!answerValidated()){
 			return false;
 		}
-		var totalScore = calculateTotalAnswerValues();
-		var goToQuestionId = getSelectedSingleAnswer().data("goToQuestionId");
-		var skipToQuestionAttr = $(".question-block > .question").attr("skipquestionidwidthscore");
-		var skipToQuestionId = skipToQuestionAttr != undefined && skipToQuestionAttr != "" && skipToQuestionAttr != null ? skipToQuestionAttr : "";
-		if(totalScore == 0 && skipToQuestionId != ""){
-			gotoQuestion(skipToQuestionId);
-		}
-		else if(null != goToQuestionId){
-			gotoQuestion(goToQuestionId);
-		}
-		else{
-			if(skipQuestionHistory.length > 0){
-				skipQuestionHistory.push(-1);
-			}
-			//validate answer before going next
-			var selectedSectionId = $("body").data("questionaire").sectionId;
-			//if(valid) {
-				/*if(qIndex == totalQ) {
-					return;
-				}*/
-				qIndex = qIndex + 1;
-				if(qIndex < totalQ) {
-					if(selectedSectionId == 9) {
-						parseAnswer(MOVE_NEXT_MODE);
-					}
-					showLoadingDialog();
-					parseParticipantAnswer(function(){
-						clearQuestionBlock();
-						//save the last question 
-						saveLastQuestion();
-						getQuestion(MOVE_NEXT_MODE);
-					});	
-					//we have speciall case for the surveyId =3
-					parseAnswerSpecialCase();
-					$("#previousQuestion").show();
-					//clearQuestionBlock();
-					//getQuestion(MOVE_NEXT_MODE);
-				}
-				else {
-					//save the last question of the section and clear the question block
-					//check the survey displayed. 
-					//if all the survey already displayed meant they are at the end so, show dialog. Otherwise, load next section
-					//sectionDisplayed started from 0
-					if(sectionDisplayed < $("body").data("sections").length -1) {
-						parseParticipantAnswer(function(){
-							clearQuestionBlock();
-							$("#content").load("static/view/section.html");
-						});
+		else {
+			var qcode = $(".question-block > .question").attr("qcode");
+			//test C3
+			//return base on C3 validate
+			var passC3 = true;
+			//C3 id is 319 and it's a number input text
+			if(319 == $(".question-block > .question").attr("id")) {
+				var inputValue = $(".answer > input").val();
+				validateDependency(undefined, 317, IS_BIGGER_THAN_OR_EQUAL, inputValue, function(valueDependencyValidation){
+					if(!valueDependencyValidation.state) {
+						passC3 = false;
+						alert("Number in C3 can't be bigger than C2a");
+						return false;
 					}
 					else {
-						parseParticipantAnswer(function(){
-							//total score and show dialog
-							showDailog();
-							qIndex--; // keep index of current question, prevent deny dialog
-						});
+						moveNextQuestion();
 					}
-				}	
-			//}
+				});
+			}
+			else if(qcode == "C2") {
+				var child = $(".child-question");
+				console.log(child);
+				var c2a = child[0], c2b = child[1];
+				var compareValue = $(c2a).find(".answer > input[type='radio']:checked").siblings("input").val();
+				var inputValue = $(c2b).find(".answer > input").val();
+				validateDependency(compareValue, null, IS_BIGGER_THAN_OR_EQUAL, inputValue, function(valueDependencyValidation){
+					if(!valueDependencyValidation.state) {
+						alert("Number in C2b can't be bigger than C2a");
+						return false;
+					}
+					else {
+						moveNextQuestion();
+					}
+				});
+			}
+			else {
+				moveNextQuestion();
+			}
 		}
+		
 	});
 	
 	$("#previousQuestion").click(function(){
@@ -955,7 +1002,7 @@ function showScoreMessage(message) {
 		deleteData();
 		$("#content").load("static/view/home.html");
 	}));
-	$("#popup").append($("<div class='score-dialog-message'></div>").text(message));
+	$("#popup").append($("<div class='score-dialog-message'></div>").html(message));
 	$("#popup").append(actionBlock);
 }
 /**
@@ -1096,8 +1143,54 @@ function validateNumber(inputValue){
 	return returnObj;
 }
 
+/**
+ * Validate the input value base on the dependency answer id
+ * @param inputValue
+ * @param dependsOnQuestionId
+ * @param condition
+ * @param pareValue
+ */
+function validateDependency(compareValue, dependsOnQuestionId, condition, inputValue, successCallback) {
+	var returnObj = {};
+	//if compare value provide let just check it directly, otherwise grap the answer back from database and compare
+	if(compareValue != undefined) {
+		//handle just one case now
+		switch (condition) {
+		case IS_BIGGER_THAN_OR_EQUAL:
+			if(compareValue >= inputValue) {
+				returnObj.state = true;
+			}
+			else {
+				returnObj.state = false;
+				//returnObj.message = errorMessage;
+			}
+			break;
+
+		default:
+			
+			break;
+		}
+		successCallback(returnObj);
+	}
+	else {
+		participantAnswerDao.queryByQuestionId(dependsOnQuestionId, function(items){
+			if(items != undefined) {
+				var answerObject = items[0];
+				if(answerObject  != undefined) {
+					//lazy coding
+					validateDependency(answerObject.getDescription(), null, IS_BIGGER_THAN_OR_EQUAL, inputValue, successCallback);
+				}
+			}
+		});
+	}
+//	return returnObj;
+}
+
 function answerValidated() {
+	//specific case for C2a, C2b and C3
+	//C2b can't be bigger then the C2a
 	var qType = $(".question-block > .question").attr("qtype");
+	var qcode = $(".question-block > .question").attr("qcode");
 	//parent child question doesn't stored question type in the parent div
 	if(qType == undefined) {
 		//loop through the children
@@ -1241,6 +1334,7 @@ function answerValidated() {
 			}
 		}
 	}
+	
 	return true;
 }
 function deleteData() {
@@ -1276,7 +1370,10 @@ function showDailog(){
 			var alertStr = "";
 			if(selectedSurvey.surveyId == 11) {
 				if(passed) {
-					alertStr = "Eligible for CCT!";
+					alertStr = "<font color='blue'>គ្រប់ល័ក្ខខ័ណ្ឌចូលរួមកម្មវិធី CCT!</font>";
+				}
+				else {
+					alertStr = "<font color='red'>មិនគ្រប់ល័ក្ខខ័ណ្ឌចូលរួមកម្មវិធី CCT ទេ!</font>";
 				}
 			}
 			else {
@@ -1285,10 +1382,10 @@ function showDailog(){
 					alcoholicScore = participantSurveyLog.getAlcoholScore();
 				}
 				if(atsScore >=1 && atsScore < 4) {
-					alertStr = "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ ATS >= ១ សូមផ្តល់ការប្រឹក្សាស្តីពីការប្រើប្រាស់ ATS)\n";
+					alertStr = "ពិន្ទុ​ ASSIST សម្រាប់ ATS លើសពី ១។ សូមផ្តល់ប្រឹក្សាស្តីពីគ្រេាះថ្នាក់ដោយសារ ការប្រើប្រាស់ ATS។\n";
 				}
 				else if(atsScore >=4) {
-					alertStr = "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ ATS >= 4 អ្នកចូលរួមអាចនឹងត្រូវលក្ខខណ្ឌចូលរួមកម្មវិធី CCT\n";
+					alertStr = "ពិន្ទុ​ ASSIST​ សម្រាប់ ATS >= 4។ ស្រ្តីអាចនឹងគ្រប់ល័ក្ខខ័ណ្ឌចូលរួមកម្មវិធី CCT\n";
 				}
 				if(alcoholicScore >=6) {
 					alertStr += "ពិន្ទុជំនួយ (ASSIST SCORE) សម្រាប់ គ្រឿងស្រវឹង >= 6 សូមផ្តល់ការប្រឹក្សាស្តីពីការប្រើប្រាស់គ្រឿងស្រវឹង";

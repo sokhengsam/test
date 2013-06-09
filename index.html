@@ -91,7 +91,7 @@ $(function(){
 	request = new CASIAPIRequests();
 	mobileDao.getAll(function(m){
 		mobile = m;
-		if(mobile == undefined) {
+		if(mobile == undefined && !debug) {
 			request.getMobileKey(function(m){
 				mobile = m;
 			});

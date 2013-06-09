@@ -116,5 +116,27 @@ var ParticipantAnswerDao = new Class({
 		this.options.db.transaction(function(tx) {
 			tx.executeSql(sql, [], function(){console.log("Delete record succed");onSuccess();}, function(tx, error){console.log("Delete fail " + error.message);});
 		});
+	},
+	queryByQuestionId: function(questionId, successCallback) {
+		var sql = "SELECT * FROM " + this.options.tableName + " WHERE questionId = " + questionId;
+		console.log(sql);
+		var items = [];
+		this.options.db.transaction(function(tx){
+			tx.executeSql(sql, [], function(tx, result) {
+				dataset = result.rows;
+				for (var i = 0; i < dataset.length; i++) {
+					var item = new ParticipantAnswer();
+					item.setParticipantAnswerId(dataset.item(i)["participantAnswerId"]);
+					item.setParticipantSurveyId(dataset.item(i)["participantSurveyId"]);
+					item.setQuestionId(dataset.item(i)["questionId"]);
+					item.setAnswerId(dataset.item(i)["answerId"]);
+					item.setDescription(dataset.item(i)["description"]);
+					item.setStartDateTime(dataset.item(i)["startDateTime"]);
+					item.setEndDateTime(dataset.item(i)["endDateTime"]);
+					items.push(item);
+				}
+				successCallback(items);
+			});
+		});
 	}
 });
