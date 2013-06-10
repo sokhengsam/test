@@ -45,6 +45,7 @@ js/utils/hashString.js
 js/utils/popuphelper.js
 js/utils/NumberFormatHelper.js
 
+js/questionaireNavigationHelper.js
 
 css/fonts/KhmerOS.ttf
 css/images/back.png
