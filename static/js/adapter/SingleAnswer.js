@@ -24,7 +24,7 @@ var SingleAnswer = new Class({
 			singleAnswerTemplate.append($("<input type='text' />").val(description));
 		}
 		else if(this.answer.answerTypeId == this.NUMBER_ANSWERTYPE || this.answer.answerTypeId == this.NUMBER_ANSWERTYPE_REQUIRE){
-			singleAnswerTemplate.append($("<input type='number' />").val(description));
+			singleAnswerTemplate.append($("<input type='text' />").val(numberFormatHelper.getStandardNumberFormat(description)));
 		}
 		singleAnswerTemplate.appendTo($(".answer-block :last"));
 		if(this.pAnswer != undefined) {

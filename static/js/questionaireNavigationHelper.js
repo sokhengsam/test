@@ -490,6 +490,9 @@ function parseParticipantAnswer(onCompleteUpsert) {
 							if([2, 3, 4, 5].indexOf(Number(answerType)) != -1) {
 								description = $(child).find(".answer input[type='radio']:checked").siblings("input").val();
 							}
+							if([4, 5].indexOf(Number(answerType)) != -1) {
+								description = numberFormatHelper.getNumberValue($(child).find(".answer input[type='radio']:checked").siblings("input").val());
+							}
 							participantA.setDescription(description);
 							participantA.setStartDateTime(startTimeQ);
 							participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
@@ -526,6 +529,9 @@ function parseParticipantAnswer(onCompleteUpsert) {
 								var description = "";
 								if([2, 3, 4, 5].indexOf(Number($(ch).attr("answertypeid"))) != -1) {
 									description = $(ch).siblings("input").val();
+								}
+								if([4, 5].indexOf(Number($(ch).attr("answertypeid"))) != -1) {
+									description = numberFormatHelper.getNumberValue($(ch).siblings("input").val());
 								}
 								participantA.setDescription(description);
 								participantA.setStartDateTime(startTimeQ);
@@ -605,6 +611,9 @@ function parseParticipantAnswer(onCompleteUpsert) {
 						if([2, 3, 4, 5].indexOf(Number(answerType)) != -1) {
 							description = $(".answer").find("input[type='radio']:checked").siblings("input").val();
 						}
+						if([4, 5].indexOf(Number(answerType)) != -1) {
+							description = numberFormatHelper.getNumberValue($(".answer").find("input[type='radio']:checked").siblings("input").val());
+						}
 						participantA.setDescription(description);
 						participantA.setStartDateTime(startTimeQ);
 						participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
@@ -649,6 +658,9 @@ function parseParticipantAnswer(onCompleteUpsert) {
 									if([2, 3, 4, 5].indexOf(Number(answerType)) != -1) {
 										description = $(ch).siblings("input").val();
 									}
+									if([4, 5].indexOf(Number(answerType)) != -1) {
+										description = numberFormatHelper.getNumberValue($(ch).siblings("input").val());
+									}
 									participantA.setDescription(description);
 									participantA.setStartDateTime(startTimeQ);
 									participantA.setEndDateTime(dateConvertor.getCurrentDateTime());
@@ -674,6 +686,9 @@ function parseParticipantAnswer(onCompleteUpsert) {
 								var description = "";
 								if([2, 3, 4, 5].indexOf(Number(answerType)) != -1) {
 									description = $(ch).find(".answer input[type='radio']:checked").siblings("input").val();
+								}
+								if([4, 5].indexOf(Number(answerType)) != -1) {
+									description = numberFormatHelper.getNumberValue($(ch).find(".answer input[type='radio']:checked").siblings("input").val());
 								}
 								participantA.setDescription(description);
 								participantA.setStartDateTime(startTimeQ);
@@ -1258,7 +1273,14 @@ function answerValidated() {
 									return false;
 								}
 							}
-							else if(answerTypeId == 2 || answerTypeId == 3){
+							if(answerTypeId == 4 || answerTypeId == 5){
+								var numberValidation = validateNumber(radio.siblings("input").val());
+								if(!numberValidation.state){
+									alert(numberValidation.message);
+									return false;
+								}
+							}
+							if(answerTypeId == 2 || answerTypeId == 3){
 								var textLengthValidation = validateTextLength(radio.siblings("input").val(), 80);
 								if(!textLengthValidation.state){
 									alert(textLengthValidation.message);
@@ -1270,6 +1292,28 @@ function answerValidated() {
 						case 5: //multiple question type
 							//how to store the answer id in the participant answer for this???
 							tq = $(child[i]).find(".answer > input[type='checkbox']:checked").length > 0;
+							$(child[i]).find(".answer > input[type='checkbox']:checked").each(function(){
+								answerTypeId = $(this).attr('answerTypeId');
+								if(answerTypeId == 3 || answerTypeId == 5){ // answer type id 3 and 5 is other require
+									var emptyValidation = validateEmpty($(this).siblings("input").val());
+									if(!emptyValidation.state){
+										alert(emptyValidation.message);
+										breakCondition = true;
+										return false;
+									}
+								}
+								if(answerTypeId == 4 || answerTypeId == 5){
+									var numberValidation = validateNumber($(this).siblings("input").val());
+									if(!numberValidation.state){
+										alert(numberValidation.message);
+										breakCondition = true;
+										return false;
+									}
+								}
+							});
+							if(breakCondition){
+								return false;
+							}
 							break;
 						default:
 							console.log("unknow answer type");
@@ -1307,6 +1351,7 @@ function answerValidated() {
 				var t;
 				switch(Number(qType)) {
 					case 4: //single question type
+						
 						var radio = $(".answer-block input[type='radio']:checked");
 						var answerTypeId = radio.attr("answerTypeId")
 						if(answerTypeId == 3 || answerTypeId == 5){ // answer type id 3 and 5 is other require
@@ -1316,7 +1361,14 @@ function answerValidated() {
 								return false;
 							}
 						}
-						else if(answerTypeId == 2 || answerTypeId == 3){
+						if(answerTypeId == 4 || answerTypeId == 5){
+							var numberValidation = validateNumber(radio.siblings("input").val());
+							if(!numberValidation.state){
+								alert(numberValidation.message);
+								return false;
+							}
+						}
+						if(answerTypeId == 2 || answerTypeId == 3){
 							var textLengthValidation = validateTextLength(radio.siblings("input").val(), 80);
 							if(!textLengthValidation.state){
 								alert(textLengthValidation.message);
@@ -1335,6 +1387,14 @@ function answerValidated() {
 								var emptyValidation = validateEmpty($(this).siblings("input").val());
 								if(!emptyValidation.state){
 									alert(emptyValidation.message);
+									breakCondition = true;
+									return false;
+								}
+							}
+							if(answerTypeId == 4 || answerTypeId == 5){
+								var numberValidation = validateNumber($(this).siblings("input").val());
+								if(!numberValidation.state){
+									alert(numberValidation.message);
 									breakCondition = true;
 									return false;
 								}

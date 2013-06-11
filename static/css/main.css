@@ -307,6 +307,9 @@ li:HOVER{
 	font-weight: bold;
 }
 
+.answer-block input[type="text"],.answer-block input[type="number"]{
+	font-size: 27px;
+}
 .interviewer-participant-identifier .button, .interviewer-identifier .button{
 	float: none;
 	line-height: normal;

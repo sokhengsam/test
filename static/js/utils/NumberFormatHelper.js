@@ -10,7 +10,7 @@ var NumberFormatHelper = new Class({
 	    return numberArray.join(".");
 	},
 	getNumberValue: function(inputValue){
-		inputValue = inputValue.replace(",","");
+		inputValue = inputValue.replace(/,/g,"");
 		if(isNaN(inputValue)){
 			return null;
 		}
