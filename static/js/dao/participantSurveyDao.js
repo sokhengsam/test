@@ -12,6 +12,32 @@ var ParticipantSurveyDao = new Class({
 		//this is mock up. so, drop the table first to avoid the duplicate data
 		this.createTable();
 	},
+	getAllForBackup: function(successCallback) {
+		var selectAll = "SELECT * FROM "+this.options.tableName;
+		var items = [];
+		this.options.db.transaction(function(tx){
+			tx.executeSql(selectAll, [], function(tx, result) {
+				dataset = result.rows;
+				for (var i = 0; i < dataset.length; i++) {
+					var item = {};
+					item.ParticipantSurveyId = dataset.item(i)["participantSurveyId"];
+					item.SurveyId = dataset.item(i)["surveyId"];
+					item.SurveyDate = dataset.item(i)["surveyDate"];
+					item.InterviewCode = dataset.item(i)["interviewCode"];
+					item.ParticipantCode = dataset.item(i)["participantCode"];
+					item.PlaceOfInterview = dataset.item(i)["placeOfInterview"];
+					item.ProvinceId = dataset.item(i)["provinceId"];
+					item.OutComeEvaluationId = dataset.item(i)["outComeEvaluationId"];
+					item.LanguageId = dataset.item(i)["languageId"];
+					item.StartDateTime = dataset.item(i)["startDateTime"];
+					item.EndDateTime = dataset.item(i)["endDateTime"];
+					item.Status = dataset.item(i)["status"];
+					items.push(item);
+				}
+				successCallback(items);
+			});
+		});
+	},
 	getAll: function(successCallback) {
 		var selectAll = "SELECT * FROM "+this.options.tableName;
 		var items = [];

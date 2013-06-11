@@ -29,5 +29,23 @@ var OutComeEvaluationDao = new Class({
 				successCallback(items);
 			});
 		});
+	},
+	getAllForBackup: function(successCallback) {
+		var selectAll = "SELECT * FROM "+this.options.tableName;
+		var items = [];
+		this.options.db.transaction(function(tx){
+			tx.executeSql(selectAll, [], function(tx, result) {
+				dataset = result.rows;
+				for (var i = 0; i < dataset.length; i++) {
+					var item = {};
+					item.OutcomeEvaluationId = dataset.item(i)["outcomeEvaluationId"];
+					item.OutcomeEvaluationCode = dataset.item(i)["outcomeEvaluationCode"];
+					item.Description1 = dataset.item(i)["description1"];
+					item.Description2 = dataset.item(i)["description2"];
+					items.push(item);
+				}
+				successCallback(items);
+			});
+		});
 	}
 });

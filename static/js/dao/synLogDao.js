@@ -25,5 +25,25 @@ var SynLogDao = new Class({
 				successCallback(synced);
 			});
 		});
+	},
+	getAllForBackup: function(success) {
+		console.log("Retrieving synlog...");
+		var selectAll = "select * from SynLog";
+		var items = [];
+		this.options.db.transaction(function(tx){
+			tx.executeSql(selectAll, [], function(tx, result) {
+				dataset = result.rows;
+				for (var i = 0; i < dataset.length; i++) {
+					var item = {};
+					item.SynLogId = dataset.item(i)["synLogId"];
+					item.ParticipantSurveyId = dataset.item(i)["participantSurveyId"];
+					item.SurveyId = dataset.item(i)["surveyId"];
+					item.SynDate = dataset.item(i)["synDate"];
+					item.Status = dataset.item(i)["status"];
+					items.push(item);
+				}
+				success(items);
+			});
+		});
 	}
 });

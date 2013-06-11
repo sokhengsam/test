@@ -55,6 +55,27 @@ var ParticipantAnswerDao = new Class({
 			});
 		});
 	},
+	getAllForBackup: function(successCallback) {
+		var selectAll = "SELECT * FROM "+this.options.tableName;
+		var items = [];
+		this.options.db.transaction(function(tx){
+			tx.executeSql(selectAll, [], function(tx, result) {
+				dataset = result.rows;
+				for (var i = 0; i < dataset.length; i++) {
+					var item = {};
+					item.ParticipantAnswerId = dataset.item(i)["participantAnswerId"];
+					item.ParticipantSurveyId = dataset.item(i)["participantSurveyId"];
+					item.QuestionId = dataset.item(i)["questionId"];
+					item.AnswerId = dataset.item(i)["answerId"];
+					item.Description = dataset.item(i)["description"];
+					item.StartDateTime = dataset.item(i)["startDateTime"];
+					item.EndDateTime = dataset.item(i)["endDateTime"];
+					items.push(item);
+				}
+				successCallback(items);
+			});
+		});
+	},
 	getBySurveyList: function(psIds, successCallback) {
 		var selectAll = "SELECT * FROM "+this.options.tableName + " Where participantSurveyId IN (" + psIds.join() + ")";
 		var items = [];

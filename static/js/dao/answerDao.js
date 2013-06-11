@@ -12,6 +12,27 @@ var AnswerDao = new Class({
 		//this is mock up. so, drop the table first to avoid the duplicate data
 		this.createTable();
 	},
+	getAllForBackup: function(successCallback) {
+		var selectAll = "SELECT * FROM "+this.options.tableName;
+		var items = [];
+		this.options.db.transaction(function(tx){
+			tx.executeSql(selectAll, [], function(tx, result) {
+				dataset = result.rows;
+				for (var i = 0; i < dataset.length; i++) {
+					var item = {};
+					item.QuestionId = dataset.item(i)["questionId"];
+					item.AnswerId = dataset.item(i)["answerId"];
+					item.Description1 = dataset.item(i)["description1"];
+					item.Description2 = dataset.item(i)["description2"];
+					item.AnswerTypeId = dataset.item(i)["answerTypeId"];
+					item.Value = dataset.item(i)["value"];
+					item.GoToQuestionId = dataset.item(i)["goToQuestionId"];
+					items.push(item);
+				}
+				successCallback(items);
+			});
+		});
+	},
 	getAll: function() {
 		var selectAll = "SELECT * FROM "+this.options.tableName;
 		var items = [];

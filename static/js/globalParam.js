@@ -28,7 +28,7 @@ var surveyDao = null,
 	A1aScoreId = 442,// specific case for CRF2
 	A3bScoreId = 445,//specific case for CRF2
 	A4aScoreId = 446;
-
+	var fis;
 
 var sampleJson = 
 {

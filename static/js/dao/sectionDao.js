@@ -70,6 +70,26 @@ var SectionDao = new Class({
 			});
 		});
 		return q;
+	},
+	getAllForBackup: function(success) {
+		var selectAll = "SELECT * FROM "+this.options.tableName;
+		var items = [];
+		this.options.db.transaction(function(tx){
+			tx.executeSql(selectAll, [], function(tx, result) {
+				dataset = result.rows;
+				for (var i = 0; i < dataset.length; i++) {
+					var item = {};
+					item.SectionId = dataset.item(i)["sectionId"];
+					item.SectionCode = dataset.item(i)["sectionCode"];
+					item.Description1 = dataset.item(i)["description1"];
+					item.Description2 = dataset.item(i)["description2"];
+					item.Introduction1 = dataset.item(i)["introduction1"];
+					item.Introduction2 = dataset.item(i)["introduction2"];
+					items.push(item);
+				}
+				success(items);
+			});
+		});
 	}
 	
 });

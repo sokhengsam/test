@@ -27,5 +27,22 @@ var ProvinceDao = new Class({
 				successCallback(items);
 			});
 		});
+	},
+	getAllForBackup: function(successCallback) {
+		var selectAll = "SELECT * FROM "+this.options.tableName;
+		var items = [];
+		this.options.db.transaction(function(tx){
+			tx.executeSql(selectAll, [], function(tx, result) {
+				dataset = result.rows;
+				for (var i = 0; i < dataset.length; i++) {
+					var item = {};
+					item.ProvinceId = dataset.item(i)["provinceId"];
+					item.ProvinceCode = dataset.item(i)["provinceCode"];
+					item.ProvinceName = dataset.item(i)["provinceName"];
+					items.push(item);
+				}
+				successCallback(items);
+			});
+		});
 	}
 });

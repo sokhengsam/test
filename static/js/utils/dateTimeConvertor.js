@@ -67,6 +67,9 @@ var DateTimeConvertor = new Class({
 		}
 
 		return month+'-'+day+'-'+year;
+	},
+	getCurrentDateAndTime: function() {
+		return this.getCurrentUSDate()+"-"+this.getCurrentTime();
 	}
 	
 });

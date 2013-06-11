@@ -12,6 +12,22 @@ var QuestionTypeDao = new Class({
 		//this is mock up. so, drop the table first to avoid the duplicate data
 		this.createTable();
 	},
+	getAllForBackup: function(callback) {
+		var self = this;
+		var items = [];
+		this.options.db.transaction(function(tx){
+			tx.executeSql(self.getSelectAllStatement(), [], function(tx, result) {
+				dataset = result.rows;
+				for (var i = 0; i < dataset.length; i++) {
+					var item = {};
+					item.QuestionTypeId = dataset.item(i)["questionTypeId"];
+					item.QuestionTypeName = dataset.item(i)["questionTypeName"];
+					items.push(item);
+				}
+			});
+			callback(items);
+		});
+	},
 	getAll: function() {
 		var self = this;
 		var items = [];

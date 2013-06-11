@@ -26,5 +26,20 @@ var MobileDao = new Class({
 				successCallback(item);
 			});
 		});
+	},
+	getAllForBackup: function(successCallback) {
+		var selectAll = "SELECT * FROM "+this.options.tableName;
+		var item;
+		this.options.db.transaction(function(tx){
+			tx.executeSql(selectAll, [], function(tx, result) {
+				dataset = result.rows;
+				for (var i = 0; i < dataset.length; i++) {
+					item = {};
+					item.MobileId = dataset.item(i)["mobileId"];
+					item.MobileKey = dataset.item(i)["mobileKey"];
+				}
+				successCallback(item);
+			});
+		});
 	}
 });

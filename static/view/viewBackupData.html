@@ -1,0 +1,31 @@
+<div class="home-navigation">
+	<span class="back-top">Back</span>
+	<span class="title">View Backup Data</span>
+</div>
+<div class="home">
+	<div class="survey-block">
+		<div class="survey-title"></div>
+		<div class="home-menu-list">
+			<div class="empty_list" id="empty_list"></div>
+			<ul id="participant-list"></ul>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+ $(function(){
+	 $(".back-top").click(function(){
+		 $("#content").load("static/view/home.html");
+	 });
+	 listBackupFiles(function(entries){
+		 console.log(fis.root.toURL());
+		 if(!entries.length) {
+			 $("#empty_list").text("No data has been backup yet.");
+		 }
+		 else {
+			 for(var i = 0; i < entries.length; i++) {
+				 $("#participant-list").append("<li><a download='" +entries[i].name+ "' href='"+ fis.root.toURL() + ""+ entries[i].name + "'>"+entries[i].name+"</a></li>");
+			 }
+		 }
+	 });
+ });
+</script>

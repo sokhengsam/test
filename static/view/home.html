@@ -6,9 +6,10 @@
 	<div class="welcome-text">Welcome</div>
 	<div class="home-menu-list">
 		<ul>
-			<li>Select Survey</li>
-			<li>View History</li>
-			<li>Clear Data</li>
+			<li id="select_survey">Select Survey</li>
+			<li id="view_history">View History</li>
+			<li id="view_backup_data">View Backup Data</li>
+			<li id="clear_data">Clear Data</li>
 		</ul>
 	</div>
 	<div class="poweredby">
@@ -33,13 +34,16 @@ $(function(){
 		showLoadingDialog();
 		request.downloadSurvey();
 	}
-	$(".home-menu-list ul li:first").click(function(){
+	$("ul #select_survey").click(function(){
 		$("#content").load("static/view/surveyList.html");
 	});
-	$(".home-menu-list ul li:first").next().click(function(){
+	$("ul #view_history").click(function(){
 		$("#content").load("static/view/viewSurveys.html");
 	});
-	$(".home-menu-list ul li:first").next().next().click(function(){
+	$("ul #view_backup_data").click(function(){
+		$("#content").load("static/view/viewBackupData.html");
+	});
+	$("ul #clear_data").next().next().click(function(){
 		showConfirmDialog("Are you sure you want to clear data?",function(){
 			enablepage();
 			participantAnswerDao.clear();

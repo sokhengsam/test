@@ -11,6 +11,35 @@ var ParticipantLogDao = new Class({
 		//this is mock up. so, drop the table first to avoid the duplicate data
 		this.createTable();
 	},
+	getAllForBackup: function(successCallback) {
+		var selectAll = "SELECT * FROM " + this.options.tableName;
+		console.log("Select p survey: " + selectAll);
+		var items = [];
+		this.options.db.transaction(function(tx){
+			tx.executeSql(selectAll, [], function(tx, result) {
+				dataset = result.rows;
+				for (var i = 0; i < dataset.length; i++) {
+					var item = {};
+					item.ParticipantLogId = dataset.item(i)["participantLogId"];
+					item.ParticipantSurveyId = dataset.item(i)["participantSurveyId"];
+					item.ParticipantCode = dataset.item(i)["participantCode"];
+					item.StartDateTime = dataset.item(i)["startDateTime"];
+					item.EndDateTime = dataset.item(i)["endDateTime"];
+					item.LastQuestion = dataset.item(i)["lastQuestion"];
+					item.ATSScore = dataset.item(i)["atsScore"];
+					item.AlcoholScore = dataset.item(i)["alcoholicScore"];
+					item.LastSectionId = dataset.item(i)["lastSectionId"];
+					item.LastSectionIndex = dataset.item(i)["lastSectionIndex"];
+					item.LastQuestionIndex = dataset.item(i)["lastQuestionIndex"];
+					item.Language = dataset.item(i)["language"];
+					item.CRF2Pass = dataset.item(i)["crf2pass"];
+					item.A1AValid = dataset.item(i)["a1avalid"];
+					items.push(item);
+				}
+				successCallback(items);
+			});
+		});
+	},
 	getByParticipantSurveyId: function(partcipantSurveyId, successCallback) {
 		var selectAll = "SELECT * FROM "+this.options.tableName + " WHERE participantSurveyId = " + partcipantSurveyId;
 		console.log("Select p survey: " + selectAll);

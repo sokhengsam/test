@@ -19,6 +19,28 @@ var SurveysDao = new Class({
 			tx.executeSql(updateStatement, [status], function(){console.log("update status done!");}, function(tx, error){console.log("update status fail " + error.message);});
 		}); 
 	},
+	getAllForBackup: function(successCallback) {
+		var selectAll = "SELECT * FROM "+this.options.tableName;
+		var items = [];
+		this.getDB().transaction(function(tx){
+			tx.executeSql(selectAll, [], function(tx, result) {
+				dataset = result.rows;
+				for (var i = 0; i < dataset.length; i++) {
+					var item = {};
+					item.SurveyId = dataset.item(i)["surveyId"];
+					item.SurveyCode = dataset.item(i)["surveyCode"];
+					item.Description1 = dataset.item(i)["description1"];
+					item.Description2 = dataset.item(i)["description2"];
+					item.Status = dataset.item(i)["status"];
+					item.LastDownload = dataset.item(i)["lastDownload"];
+					item.Introduction1 = dataset.item(i)["introduction1"];
+					item.Introduction2 = dataset.item(i)["introduction2"];
+					items.push(item);
+				}
+				successCallback(items);
+			});
+		});
+	},
 	getAll: function(successCallback) {
 		var selectAll = "SELECT * FROM "+this.options.tableName;
 		var items = [];
