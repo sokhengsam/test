@@ -27,6 +27,7 @@ var AnswerDao = new Class({
 					item.AnswerTypeId = dataset.item(i)["answerTypeId"];
 					item.Value = dataset.item(i)["value"];
 					item.GoToQuestionId = dataset.item(i)["goToQuestionId"];
+					item.setNumberRange(dataset.item(i)["numberRange"]);
 					items.push(item);
 				}
 				successCallback(items);
@@ -48,6 +49,7 @@ var AnswerDao = new Class({
 					item.setAnswerTypeId(dataset.item(i)["answerTypeId"]);
 					item.setValue(dataset.item(i)["value"]);
 					item.setGoToQuestionId(dataset.item(i)["goToQuestionId"]);
+					item.setNumberRange(dataset.item(i)["numberRange"]);
 					items.push(item);
 				}
 			});
@@ -69,6 +71,7 @@ var AnswerDao = new Class({
 					item.setAnswerTypeId(dataset.item(i)["answerTypeId"]);
 					item.setValue(dataset.item(i)["value"]);
 					item.setGoToQuestionId(dataset.item(i)["goToQuestionId"]);
+					item.setNumberRange(dataset.item(i)["numberRange"]);
 					items.push(item);
 				}
 				success(items);
@@ -93,6 +96,7 @@ var AnswerDao = new Class({
 					item.setAnswerTypeId(dataset.item(i)["answerTypeId"]);
 					item.setValue(dataset.item(i)["value"]);
 					item.setGoToQuestionId(dataset.item(i)["goToQuestionId"]);
+					item.setNumberRange(dataset.item(i)["numberRange"]);
 					break;
 				}
 				//console.log(item);

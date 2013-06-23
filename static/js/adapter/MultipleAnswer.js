@@ -20,7 +20,7 @@ var MultipleAnswer = new Class({
 			multipleAnswerTemplate.append($("<input type='text' />"))
 		}
 		else if(this.answer.answerTypeId == this.NUMBER_ANSWERTYPE || this.answer.answerTypeId == this.NUMBER_ANSWERTYPE_REQUIRE){
-			multipleAnswerTemplate.append($("<input type='text' />"))
+			multipleAnswerTemplate.append($("<input type='text' />").data("answerNumberRange",this.answer.numberRange))
 		}
 		multipleAnswerTemplate.appendTo($(".answer-block :last"));
 		if(this.pAnswer != undefined) {

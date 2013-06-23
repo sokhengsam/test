@@ -100,6 +100,8 @@ var JSONParser = new Class({
 			answer.setAnswerTypeId(a.AnswerTypeID);
 			answer.setValue(a.Value);
 			answer.setGoToQuestionId(a.GoToQuestionID);
+			answer.setStatus("");
+			answer.setNumberRange(a.NumberRangeFrom + "-" + a.NumberRangeTo);
 			answerDao.persist(answer,persistCallback);
 		}
 	},

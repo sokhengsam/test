@@ -532,7 +532,12 @@ var Answer = new Class({
 		status: {
 			name: 'status',
 			dataType: 'INTEGER'
+		},
+		numberRange: {
+			name: 'numberRange', //number question can have the range from - to. //Master db has 2 fields for this, but i would suggest to place it in one field contains from-to then we just substring when we validate the input 
+			dataType: 'TEXT'
 		}
+		
 	},
 	options: {
 		answerId:'',
@@ -542,7 +547,8 @@ var Answer = new Class({
 		answerTypeId: '',
 		value: '',
 		goToQuestionId: '',
-		status: ''
+		status: '',
+		numberRange: ''
 	},
 	setQuestionId: function(id) {
 		this.options.questionId = id;
@@ -568,6 +574,9 @@ var Answer = new Class({
 	setAnswerTypeId: function(id) {
 		this.options.answerTypeId = id;
 	},
+	setNumberRange: function(numberRange){
+		this.options.numberRange = numberRange;
+	},
 	getAnswerTypeId: function() {
 		return this.options.answerTypeId;
 	},
@@ -591,6 +600,9 @@ var Answer = new Class({
 	},
 	getStatus: function() {
 		return this.options.status;
+	},
+	getNumberRange: function(){
+		return this.options.numberRange;
 	}
 });
 

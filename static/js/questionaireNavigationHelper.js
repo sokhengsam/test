@@ -1242,7 +1242,6 @@ function answerValidated() {
 					var inputValue = $(child[i]).find(".answer > input").val();
 					var emptyValidation = validateEmpty(inputValue);
 					var numberRangeValidation = Number(qType) == 2? validateNumberRange(numberRange,inputValue) : null;
-					var numberRangeValidation = Number(qType) == 2? validateNumberRange(numberRange,inputValue) : null;
 					var textLengthValidation = Number(qType) == 1? validateTextLength(inputValue,80) : null;
 					if(!emptyValidation.state){
 						alert(emptyValidation.message + " " + $(child[i]).find(".group-question-row").attr('qcode') + ".");
@@ -1275,8 +1274,13 @@ function answerValidated() {
 							}
 							if(answerTypeId == 4 || answerTypeId == 5){
 								var numberValidation = validateNumber(radio.siblings("input").val());
+								var numberRangeValidation = validateNumberRange(radio.siblings("input").data("answerNumberRange"),radio.siblings("input").val()); 
 								if(!numberValidation.state){
 									alert(numberValidation.message);
+									return false;
+								}
+								if(!numberRangeValidation.state){
+									alert(numberRangeValidation.message);
 									return false;
 								}
 							}
@@ -1304,8 +1308,14 @@ function answerValidated() {
 								}
 								if(answerTypeId == 4 || answerTypeId == 5){
 									var numberValidation = validateNumber($(this).siblings("input").val());
+									var numberRangeValidation = validateNumberRange($(this).siblings("input").data("answerNumberRange"),$(this).siblings("input").val());
 									if(!numberValidation.state){
 										alert(numberValidation.message);
+										breakCondition = true;
+										return false;
+									}
+									if(!numberRangeValidation.state){
+										alert(numberRangeValidation.message);
 										breakCondition = true;
 										return false;
 									}
@@ -1363,8 +1373,13 @@ function answerValidated() {
 						}
 						if(answerTypeId == 4 || answerTypeId == 5){
 							var numberValidation = validateNumber(radio.siblings("input").val());
+							var numberRangeValidation = validateNumberRange(radio.siblings("input").data("answerNumberRange"),radio.siblings("input").val());
 							if(!numberValidation.state){
 								alert(numberValidation.message);
+								return false;
+							}
+							if(!numberRangeValidation.state){
+								alert(numberRangeValidation.message);
 								return false;
 							}
 						}
@@ -1393,8 +1408,14 @@ function answerValidated() {
 							}
 							if(answerTypeId == 4 || answerTypeId == 5){
 								var numberValidation = validateNumber($(this).siblings("input").val());
+								var numberRangeValidation = validateNumberRange($(this).siblings("input").data("answerNumberRange"),$(this).siblings("input").val());
 								if(!numberValidation.state){
 									alert(numberValidation.message);
+									breakCondition = true;
+									return false;
+								}
+								if(!numberRangeValidation.state){
+									alert(numberRangeValidation.message);
 									breakCondition = true;
 									return false;
 								}
