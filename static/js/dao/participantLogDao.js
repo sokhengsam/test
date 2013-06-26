@@ -20,11 +20,12 @@ var ParticipantLogDao = new Class({
 				dataset = result.rows;
 				for (var i = 0; i < dataset.length; i++) {
 					var item = {};
-					item.ParticipantLogId = dataset.item(i)["participantLogId"];
-					item.ParticipantSurveyId = dataset.item(i)["participantSurveyId"];
-					item.ParticipantCode = dataset.item(i)["participantCode"];
+					item.ParticipantLogID = dataset.item(i)["participantLogId"];
+					item.ParticipantSurveyID = dataset.item(i)["participantSurveyId"];
+					//item.ParticipantCode = dataset.item(i)["participantCode"];
 					item.StartDateTime = dataset.item(i)["startDateTime"];
 					item.EndDateTime = dataset.item(i)["endDateTime"];
+					/*
 					item.LastQuestion = dataset.item(i)["lastQuestion"];
 					item.ATSScore = dataset.item(i)["atsScore"];
 					item.AlcoholScore = dataset.item(i)["alcoholicScore"];
@@ -34,6 +35,7 @@ var ParticipantLogDao = new Class({
 					item.Language = dataset.item(i)["language"];
 					item.CRF2Pass = dataset.item(i)["crf2pass"];
 					item.A1AValid = dataset.item(i)["a1avalid"];
+					*/
 					items.push(item);
 				}
 				successCallback(items);

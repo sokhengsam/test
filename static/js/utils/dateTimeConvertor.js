@@ -26,6 +26,16 @@ var DateTimeConvertor = new Class({
 		}
 		return time + ":" + minutes + ":" + second;
 	},
+	getCurrentTimeString: function() {
+		var today = new Date();
+		var time = today.getHours();
+		var minutes = today.getMinutes();
+		var second = today.getSeconds();
+		if(minutes == 0) {
+			minutes = "00";
+		}
+		return time + "" + minutes + "" + second;
+	},
 	getCurrentUSDate: function() {
 		var today = new Date();
 		var dd = today.getDate();
@@ -69,7 +79,7 @@ var DateTimeConvertor = new Class({
 		return month+'-'+day+'-'+year;
 	},
 	getCurrentDateAndTime: function() {
-		return this.getCurrentUSDate()+"-"+this.getCurrentTime();
+		return this.getCurrentUSDate()+"-"+this.getCurrentTimeString();
 	}
 	
 });

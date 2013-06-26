@@ -63,13 +63,14 @@ var ParticipantAnswerDao = new Class({
 				dataset = result.rows;
 				for (var i = 0; i < dataset.length; i++) {
 					var item = {};
-					item.ParticipantAnswerId = dataset.item(i)["participantAnswerId"];
-					item.ParticipantSurveyId = dataset.item(i)["participantSurveyId"];
-					item.QuestionId = dataset.item(i)["questionId"];
-					item.AnswerId = dataset.item(i)["answerId"];
+					item.ParticipantAnswerID = dataset.item(i)["participantAnswerId"];
+					item.ParticipantSurveyID = dataset.item(i)["participantSurveyId"];
+					item.AnswerID = dataset.item(i)["answerId"];
+					item.QuestionID = dataset.item(i)["questionId"];
 					item.Description = dataset.item(i)["description"];
-					item.StartDateTime = dataset.item(i)["startDateTime"];
-					item.EndDateTime = dataset.item(i)["endDateTime"];
+					item.AddedDate = dataset.item(i)["startDateTime"];
+					//item.EndDateTime = dataset.item(i)["endDateTime"];
+					item.AddedBy = "Mobile_Web";
 					items.push(item);
 				}
 				successCallback(items);

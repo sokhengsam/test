@@ -20,17 +20,19 @@ var ParticipantSurveyDao = new Class({
 				dataset = result.rows;
 				for (var i = 0; i < dataset.length; i++) {
 					var item = {};
-					item.ParticipantSurveyId = dataset.item(i)["participantSurveyId"];
-					item.SurveyId = dataset.item(i)["surveyId"];
+					item.ParticipantSurveyID = dataset.item(i)["participantSurveyId"];
+					item.SurveyID = dataset.item(i)["surveyId"];
 					item.SurveyDate = dataset.item(i)["surveyDate"];
 					item.InterviewCode = dataset.item(i)["interviewCode"];
 					item.ParticipantCode = dataset.item(i)["participantCode"];
 					item.PlaceOfInterview = dataset.item(i)["placeOfInterview"];
 					item.ProvinceId = dataset.item(i)["provinceId"];
-					item.OutComeEvaluationId = dataset.item(i)["outComeEvaluationId"];
-					item.LanguageId = dataset.item(i)["languageId"];
+					item.OutComeEvaluationID = dataset.item(i)["outComeEvaluationId"];
+					item.LanguageID = dataset.item(i)["languageId"];
 					item.StartDateTime = dataset.item(i)["startDateTime"];
-					item.EndDateTime = dataset.item(i)["endDateTime"];
+					item.AddedDate = dataset.item(i)["startDateTime"];
+					//item.EndDateTime = dataset.item(i)["endDateTime"];
+					item.AddedBy = "Mobile_Web";
 					item.Status = dataset.item(i)["status"];
 					items.push(item);
 				}

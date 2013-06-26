@@ -24,47 +24,18 @@ $(function(){
 		initFS();
 		//read all data from db
 		var jsondata = {};
-		surveyDao.getAllForBackup(function(surveys){
-			jsondata.survey = surveys;
-			sectionDao.getAllForBackup(function(sections){
-				jsondata.section = sections;
-				questionDao.getAllForBackup(function(questions){
-					jsondata.question = questions;
-					synLogDao.getAllForBackup(function(l){
-						jsondata.synlog = l;
-						questionTypeDao.getAllForBackup(function(qt){
-							jsondata.questiontype = qt;
-							provinceDao.getAllForBackup(function(pr){
-								jsondata.province = pr;
-								participantSurveyDao.getAllForBackup(function(ps){
-									jsondata.participantsurvey = ps;
-									participantLogDao.getAllForBackup(function(pl){
-										jsondata.participantlog = pl;
-										participantAnswerDao.getAllForBackup(function(pa){
-											jsondata.participantanswer = pa;
-											outcomeEvaluationDao.getAllForBackup(function(oc){
-												jsondata.outcomeevaluation = oc;
-												mobileDao.getAllForBackup(function(m){
-													jsondata.mobile = m;
-													languageDao.getAllForBackup(function(l){
-														jsondata.language = l;
-														answerTypeDao.getAllForBackup(function(at){
-															jsondata.answertype = at;
-															answerDao.getAllForBackup(function(answers){
-																jsondata.answer = answers;
-																//call the write file function
-																backupData(JSON.stringify(jsondata));
-															});
-														});
-													});
-												});
-											});
-										});
-									});
-								});
-							});
-						});
-					});
+		/*
+		var participantsurvey = [];
+		var participantanswer = [];
+		var participantlog = [];
+		*/
+		participantSurveyDao.getAllForBackup(function(ps){
+			jsondata.participantsurvey = ps;
+			participantAnswerDao.getAllForBackup(function(pa){
+				jsondata.participantanswer = pa;
+				participantLogDao.getAllForBackup(function(pl){
+					jsondata.participantlog = pl;
+					backupData(JSON.stringify(jsondata));
 				});
 			});
 		});

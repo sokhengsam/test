@@ -1,6 +1,7 @@
 // Note: The file system has been prefixed as of Google Chrome 12:
 window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
 function initFS(callback) {
+	
 	//request the usage
 	window.webkitStorageInfo.queryUsageAndQuota(webkitStorageInfo.PERSISTENT, //the type can be either TEMPORARY or PERSISTENT
 		function(used, remaining) {
@@ -36,13 +37,14 @@ function backupData(jsondata) {
   				fileEntry.createWriter(function(fileWriter) {
   					fileWriter.onwriteend = function(e) {
   						enablepage();
+  						fileEntry.moveTo("test");
   						console.log('Write completed.');
   					};
   					fileWriter.onerror = function(e) {
   						console.log('Write failed: ' + e.toString());
   					};
   					// Create a new Blob and write it to log.txt.
-  					var blob = new Blob([jsondata], {type: 'application/json;charset=UTF-8'});
+  					var blob = new Blob([jsondata], {type: 'application/json'});
   					fileWriter.write(blob);
   				}, errorCallback);
   			} catch (e) {

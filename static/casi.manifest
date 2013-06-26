@@ -24,7 +24,7 @@ js/dao/questionTypeDao.js
 js/dao/surveysDao.js
 js/dao/sectionDao.js
 js/dao/synLogDao.js
-js/globalParam.js
+js/globalParam.js  
 js/iscroll.js
 
 js/adapter/QuestionAdapter.js
@@ -46,7 +46,7 @@ js/utils/popuphelper.js
 js/utils/NumberFormatHelper.js
 js/utils/file_writer.js
 
-js/questionaireNavigationHelper.js
+js/questionaireNavigationHelper.js  
 
 
 css/fonts/KhmerOS.ttf
@@ -84,7 +84,7 @@ view/interviewerParticipantIdentifier.html
 view/viewHistoryDetail.html
 view/emptyScreen.html
 view/introduction.html
-
+view/viewBackupData.html
 
 
 NETWORK:

@@ -1178,6 +1178,7 @@ function validateNumber(inputValue){
  */
 function validateDependency(compareValue, dependsOnQuestionId, condition, inputValue, successCallback) {
 	var returnObj = {};
+	console.log(compareValue + " | " + inputValue);
 	//if compare value provide let just check it directly, otherwise grap the answer back from database and compare
 	if(compareValue != undefined) {
 		//handle just one case now
