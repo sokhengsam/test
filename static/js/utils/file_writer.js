@@ -22,22 +22,29 @@ function initFS(callback) {
 	});
 }
 
-function backupData(jsondata) {
+function backupData(jsondata, isAuto, successCallback) {
 	var d = new DateTimeConvertor();
+	var prefix = "manual_";
 	if(!fis) {
 		console.log("No file system api has been init...");
 		return;
 	}
 	try {
 		console.log("backing up data...");
-  		fis.root.getFile('backup-'+d.getCurrentDateAndTime()+'.json', {create: true, exclusive: true}, 
+		if(isAuto) {
+			prefix = "auto_";
+		}
+  		fis.root.getFile(prefix + 'backup-'+d.getCurrentDateAndTime()+'.json', {create: true, exclusive: true}, 
   			function(fileEntry) {
   			// Create a FileWriter object for our FileEntry (log.txt).
   			try{
   				fileEntry.createWriter(function(fileWriter) {
   					fileWriter.onwriteend = function(e) {
   						enablepage();
-  						fileEntry.moveTo("test");
+  						//fileEntry.moveTo("test");
+  						if(typeof successCallback === "function") {
+  							successCallback();
+  						}
   						console.log('Write completed.');
   					};
   					fileWriter.onerror = function(e) {

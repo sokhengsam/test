@@ -153,9 +153,25 @@ function sychronizeData(pSurveys) {
 }
 function addRequestObject(requestData) {
 	if(requestData.participantsurvey != undefined && requestData.participantanswer != undefined && requestData.participantlog != undefined) {
+		if(fis == undefined) {
+			initFS();
+		}
 		showLoadingDialog();
 		request.uploadSurvey(requestData, function(syncLogObj){
-			clearAllParticipantAnswer(syncLogObj);
+			//need to save data into the backup file before removing it
+			var jsondata = {};
+			participantSurveyDao.getAllForBackup(function(ps){
+				jsondata.participantsurvey = ps;
+				participantAnswerDao.getAllForBackup(function(pa){
+					jsondata.participantanswer = pa;
+					participantLogDao.getAllForBackup(function(pl){
+						jsondata.participantlog = pl;
+						backupData(JSON.stringify(jsondata), true, function(){
+							clearAllParticipantAnswer(syncLogObj);
+						});
+					});
+				});
+			});
 		});
 	}
 }
