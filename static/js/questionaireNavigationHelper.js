@@ -865,6 +865,7 @@ $(function(){
 				var compareValue = $(c2a).find(".answer > input[type='radio']:checked").siblings("input").val();
 				if(compareValue != null) {
 					var inputValue = $(c2b).find(".answer > input").val();
+					console.log(compareValue +"|"+ inputValue);
 					validateDependency(compareValue, null, IS_BIGGER_THAN_OR_EQUAL, inputValue, function(valueDependencyValidation){
 						if(!valueDependencyValidation.state) {
 							alert("Number in C2b can't be bigger than C2a");
@@ -1184,7 +1185,7 @@ function validateDependency(compareValue, dependsOnQuestionId, condition, inputV
 		//handle just one case now
 		switch (condition) {
 		case IS_BIGGER_THAN_OR_EQUAL:
-			if(compareValue >= inputValue) {
+			if(Number(compareValue) >= Number(inputValue)) {
 				returnObj.state = true;
 			}
 			else {
