@@ -1461,6 +1461,9 @@ function showDailog(){
 	actionBlock.append($('<button></button>').text("Yes").addClass("dialog-button").click(function(){
 		var selectedSurvey = $("#selectedSurvey").data("selectedSurvey");
 		enablepage();
+		parseParticipantAnswer(function(){
+			//nothing to do
+		})
 		var participantSurvey = $("#participant").data("participant");
 		var dateTimeConvertor = new DateTimeConvertor();
 		participantSurvey.setEndDateTime(dateTimeConvertor.getCurrentDateTime());
