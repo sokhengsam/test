@@ -800,8 +800,11 @@ function moveNextQuestion() {
 				}
 				else {
 					//total score and show dialog
-					showDailog();
-					qIndex--; // keep index of current question, prevent deny dialog
+					parseParticipantAnswer(function(){
+						showDailog();
+						qIndex--; // keep index of current question, prevent deny dialog						
+						saveLastQuestion();
+					});
 				}
 			}	
 		//}
@@ -1460,9 +1463,6 @@ function showDailog(){
 	actionBlock.append($('<button></button>').text("Yes").addClass("dialog-button").click(function(){
 		var selectedSurvey = $("#selectedSurvey").data("selectedSurvey");
 		enablepage();
-		parseParticipantAnswer(function(){
-			//nothing to do
-		})
 		var participantSurvey = $("#participant").data("participant");
 		var dateTimeConvertor = new DateTimeConvertor();
 		participantSurvey.setEndDateTime(dateTimeConvertor.getCurrentDateTime());
@@ -1515,12 +1515,11 @@ function showDailog(){
 			$("#content").load("static/view/home.html");
 		}
 	}));
+	
 	actionBlock.append($('<button></button>').text("No").addClass("dialog-button").click(function(){
 		enablepage();
-		parseParticipantAnswer(function(){
-			saveLastQuestion();
-		})
 	}));
+	
 	$("#popup").append($("<div class='dialog-title'></div>").text("Confirm"));
 	$("#popup").append($("<div class='dialog-message'></div>").text("Are you satify with your answer?"));
 	$("#popup").append(actionBlock);
