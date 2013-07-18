@@ -35,7 +35,6 @@ var MobileDao = new Class({
 				dataset = result.rows;
 				for (var i = 0; i < dataset.length; i++) {
 					item = {};
-					item.MobileId = dataset.item(i)["mobileId"];
 					item.MobileKey = dataset.item(i)["mobileKey"];
 				}
 				successCallback(item);

@@ -160,14 +160,18 @@ function addRequestObject(requestData) {
 		request.uploadSurvey(requestData, function(syncLogObj){
 			//need to save data into the backup file before removing it
 			var jsondata = {};
-			participantSurveyDao.getAllForBackup(function(ps){
-				jsondata.participantsurvey = ps;
-				participantAnswerDao.getAllForBackup(function(pa){
-					jsondata.participantanswer = pa;
-					participantLogDao.getAllForBackup(function(pl){
-						jsondata.participantlog = pl;
-						backupData(JSON.stringify(jsondata), true, function(){
-							clearAllParticipantAnswer(syncLogObj);
+			
+			mobileDao.getAllForBackup(function(md){
+				jsondata.mobile = md;
+				participantSurveyDao.getAllForBackup(function(ps){
+					jsondata.participantsurvey = ps;
+					participantAnswerDao.getAllForBackup(function(pa){
+						jsondata.participantanswer = pa;
+						participantLogDao.getAllForBackup(function(pl){
+							jsondata.participantlog = pl;
+							backupData(JSON.stringify(jsondata), true, function(){
+								clearAllParticipantAnswer(syncLogObj);
+							});
 						});
 					});
 				});

@@ -29,13 +29,16 @@ $(function(){
 		var participantanswer = [];
 		var participantlog = [];
 		*/
-		participantSurveyDao.getAllForBackup(function(ps){
-			jsondata.participantsurvey = ps;
-			participantAnswerDao.getAllForBackup(function(pa){
-				jsondata.participantanswer = pa;
-				participantLogDao.getAllForBackup(function(pl){
-					jsondata.participantlog = pl;
-					backupData(JSON.stringify(jsondata));
+		mobileDao.getAllForBackup(function(md){
+			jsondata.mobile = md;
+			participantSurveyDao.getAllForBackup(function(ps){
+				jsondata.participantsurvey = ps;
+				participantAnswerDao.getAllForBackup(function(pa){
+					jsondata.participantanswer = pa;
+					participantLogDao.getAllForBackup(function(pl){
+						jsondata.participantlog = pl;
+						backupData(JSON.stringify(jsondata));
+					});
 				});
 			});
 		});
