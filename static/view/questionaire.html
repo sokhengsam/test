@@ -45,14 +45,14 @@
 <!-- question template -->
 <script id="questionTemplate" type="x-jquery-tmpl">
 <div class="question-header">
-	<span class="question-code">${displaySectionName}</span>
+	<span class="question-code">{{html displaySectionName}}</span>
 	<span class="suspend-survey" onclick="suspend();"></span>
 	<span><span class="large resize">A  </span><span class="active medium resize">A  </span><span class="small resize">A</span></span>
 </div>
 <div id="scrollWrapper" class="questionaire-page">
 	<div class="scrollable" id="scrollable">
   		<div class="question-block">
-			<div class="pquestion">{{html introduction}} ${parentQuestion}</div>
+			<div class="pquestion">{{html introduction}} {{html parentQuestion}}</div>
 			<div class="question" id="${questionId}" qtype="${questionTypeId}" allowNull="${allowNull}" qcode="${questionCode}" numberRange="${numberRange}">${questionCode}. {{html text}}</div>
 			<div class="answer-block"></div>
   		</div>
@@ -63,7 +63,7 @@
 <!-- parent of group question template -->
 <script id="parentGroupQuestionTemplate" type="x-jquery-tmpl">
 <div class="question-header">
-	<span class="question-code">${displaySectionName}</span>
+	<span class="question-code">{{html displaySectionName}}</span>
 	<span class="suspend-survey" onclick="suspend();"></span>
 	<span><span class="large resize">A  </span><span class="active medium resize">A  </span><span class="small resize">A</span></span>
 </div>

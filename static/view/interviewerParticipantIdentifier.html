@@ -30,7 +30,7 @@
 	var partic;
 	$(function(){
 		var surv = $("#selectedSurvey").data("selectedSurvey");
-		$(".title").text(surv.description);
+		$(".title").html(surv.description);
 		delete surv;
 		participantSurveyDao.getAll(function(participants){
 			partic = participants;

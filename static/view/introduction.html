@@ -16,7 +16,7 @@
 	$(function(){
 		var selectedSurvey = $("#selectedSurvey").data("selectedSurvey");
 		$(".section").css("min-height", $(window).height() - $(".footer").height());
-		$("#description").text(selectedSurvey.introduction1);
+		$("#description").html(selectedSurvey.introduction1);
 		var lang = $("body").data("language");
 		if(lang == 2) {
 			$("#description").html(selectedSurvey.introduction2);

@@ -13,7 +13,7 @@
 
 <!-- survey history template -->
 <script id="surveyHistoryListTemplate" type="x-jquery-tmpl">
-	<li>${description} <span class='survey-status'> ${notSynchronized} ppl | ${readySynchronized} sync</span></li>
+	<li>{{html description}} <span class='survey-status'> ${notSynchronized} ppl | ${readySynchronized} sync</span></li>
 </script>
 
 <script>
@@ -30,7 +30,7 @@ $(function(){
 		var participantlog = [];
 		*/
 		mobileDao.getAllForBackup(function(md){
-			jsondata.mobile = md;
+			jsondata.mobilekey = md.MobileKey;
 			participantSurveyDao.getAllForBackup(function(ps){
 				jsondata.participantsurvey = ps;
 				participantAnswerDao.getAllForBackup(function(pa){

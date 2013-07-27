@@ -162,7 +162,7 @@ function addRequestObject(requestData) {
 			var jsondata = {};
 			
 			mobileDao.getAllForBackup(function(md){
-				jsondata.mobile = md;
+				jsondata.mobilekey = md.MobileKey;
 				participantSurveyDao.getAllForBackup(function(ps){
 					jsondata.participantsurvey = ps;
 					participantAnswerDao.getAllForBackup(function(pa){
