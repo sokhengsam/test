@@ -31,7 +31,7 @@ var SectionDao = new Class({
 		});
 	},
 	getBySurvey: function(surveyId, success) {
-		var selectAll = "SELECT * FROM "+this.options.tableName + " WHERE surveyId = " + surveyId;
+		var selectAll = "SELECT * FROM "+this.options.tableName + " WHERE surveyId = " + surveyId + " and status = 1";
 		var items = [];
 		var self = this;
 		this.options.db.transaction(function(tx){

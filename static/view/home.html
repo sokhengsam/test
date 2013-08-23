@@ -43,9 +43,9 @@ $(function(){
 	$("ul #view_backup_data").click(function(){
 		$("#content").load("static/view/viewBackupData.html");
 	});
-	$("ul #clear_data").next().next().click(function(){
+	
+	$("#clear_data").click(function(){
 		showConfirmDialog("Are you sure you want to clear data?",function(){
-			enablepage();
 			participantAnswerDao.clear();
 			questionTypeDao.clear();
 			answerDao.clear();
@@ -54,6 +54,13 @@ $(function(){
 			surveyDao.clear();
 			provinceDao.clear();
 			languageDao.clear();
+			answerTypeDao.clear();
+			mobileDao.clear();
+			outcomeEvaluationDao.clear();
+			participantLogDao.clear();
+			participantSurveyDao.clear();
+			synLogDao.clear();
+			enablepage();	
 		},enablepage,240,137);
 	});
 	//request.uploadSurvey();

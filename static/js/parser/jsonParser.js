@@ -51,7 +51,7 @@ var JSONParser = new Class({
 			}
 			section.setIntroduction1(int1);
 			section.setIntroduction2(int2);
-			
+			section.setStatus(sect.Status);
 			sectionDao.persist(section,persistCallback);
 		}
 	},
@@ -100,7 +100,7 @@ var JSONParser = new Class({
 			answer.setAnswerTypeId(a.AnswerTypeID);
 			answer.setValue(a.Value);
 			answer.setGoToQuestionId(a.GoToQuestionID);
-			answer.setStatus("");
+			answer.setStatus(a.Status);
 			answer.setNumberRange(a.NumberRangeFrom + "-" + a.NumberRangeTo);
 			answerDao.persist(answer,persistCallback);
 		}
