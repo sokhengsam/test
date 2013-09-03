@@ -52,6 +52,8 @@
 			}
 		});
 		$("#begin").click(function(){
+			alcoholicScore = 0;
+			atsScore = 0;
 			$("body").data("language", $("#language option:selected").val());
 			var validationData = validateField(); 
 			if(!validationData.status) {
