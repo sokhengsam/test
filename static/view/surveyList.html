@@ -23,11 +23,11 @@
 		});
 	});
 	function loadSection(surveyId, description1, introduction1, introduction2) {
-		/*
-		if(isDownloadDataComplete()){
+		var isCompleted = isDownloadDataComplete() == 'false';
+		if(isCompleted){
 			alert("Downloaded data is not complete, application will not run properly.");
-			return;
-		}*/
+			return false;
+		}
 		sectionDao.getBySurvey(surveyId, function(sections) {
 			//questionDao.getBySection(surveyId, function(questions) {
 				$("body").data("sections", sections);
@@ -62,9 +62,6 @@
 	
 	function isDownloadDataComplete(){
 		var downloadStatus = localStorage.getItem("isDownloadDataComplete");
-		if(null != downloadStatus && downloadStatus == true){
-			return true;
-		}
-		return false;
+		return (null != downloadStatus && downloadStatus);
 	}
 </script>
