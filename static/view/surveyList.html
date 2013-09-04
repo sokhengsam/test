@@ -23,10 +23,11 @@
 		});
 	});
 	function loadSection(surveyId, description1, introduction1, introduction2) {
+		/*
 		if(isDownloadDataComplete()){
 			alert("Downloaded data is not complete, application will not run properly.");
 			return;
-		}
+		}*/
 		sectionDao.getBySurvey(surveyId, function(sections) {
 			//questionDao.getBySection(surveyId, function(questions) {
 				$("body").data("sections", sections);
