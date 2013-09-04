@@ -23,7 +23,7 @@
 		});
 	});
 	function loadSection(surveyId, description1, introduction1, introduction2) {
-		if(!isDownloadDataComplete()){
+		if(isDownloadDataComplete()){
 			alert("Downloaded data is not complete, application will not run properly.");
 			return;
 		}
