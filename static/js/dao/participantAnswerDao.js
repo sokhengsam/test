@@ -139,8 +139,8 @@ var ParticipantAnswerDao = new Class({
 			tx.executeSql(sql, [], function(){console.log("Delete record succed");onSuccess();}, function(tx, error){console.log("Delete fail " + error.message);});
 		});
 	},
-	queryByQuestionId: function(questionId, successCallback) {
-		var sql = "SELECT * FROM " + this.options.tableName + " WHERE questionId = " + questionId;
+	queryByQuestionId: function(questionId,participantSurveyId, successCallback) {
+		var sql = "SELECT * FROM " + this.options.tableName + " WHERE questionId = " + questionId + " and participantSurveyId = " + participantSurveyId;
 		console.log(sql);
 		var items = [];
 		this.options.db.transaction(function(tx){

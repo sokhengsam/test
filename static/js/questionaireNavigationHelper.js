@@ -850,6 +850,7 @@ $(function(){
 			//C3 id is 319 and it's a number input text
 			if(319 == $(".question-block > .question").attr("id")) {
 				var inputValue = $(".answer > input").val();
+				var participantSurvey = $("#participant").data("participant");
 				validateDependency(undefined, 317, IS_BIGGER_THAN_OR_EQUAL, inputValue, function(valueDependencyValidation){
 					if(!valueDependencyValidation.state) {
 						passC3 = false;
@@ -859,7 +860,7 @@ $(function(){
 					else {
 						moveNextQuestion();
 					}
-				});
+				},participantSurvey.getParticipantSurveyId());
 			}
 			else if(qcode == "C2") {
 				var child = $(".child-question");
@@ -1179,7 +1180,7 @@ function validateNumber(inputValue){
  * @param condition
  * @param pareValue
  */
-function validateDependency(compareValue, dependsOnQuestionId, condition, inputValue, successCallback) {
+function validateDependency(compareValue, dependsOnQuestionId, condition, inputValue, successCallback,participantSurveyId) {
 	var returnObj = {};
 	console.log(compareValue + " | " + inputValue);
 	//if compare value provide let just check it directly, otherwise grap the answer back from database and compare
@@ -1203,7 +1204,7 @@ function validateDependency(compareValue, dependsOnQuestionId, condition, inputV
 		successCallback(returnObj);
 	}
 	else {
-		participantAnswerDao.queryByQuestionId(dependsOnQuestionId, function(items){
+		participantAnswerDao.queryByQuestionId(dependsOnQuestionId,participantSurveyId, function(items){
 			if(items != undefined) {
 				var answerObject = items[0];
 				console.log(answerObject.getDescription());
