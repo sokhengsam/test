@@ -141,7 +141,6 @@ var ParticipantAnswerDao = new Class({
 	},
 	queryByQuestionId: function(questionId,participantSurveyId, successCallback) {
 		var sql = "SELECT * FROM " + this.options.tableName + " WHERE questionId = " + questionId + " and participantSurveyId = " + participantSurveyId;
-		console.log(sql);
 		var items = [];
 		this.options.db.transaction(function(tx){
 			tx.executeSql(sql, [], function(tx, result) {
@@ -157,8 +156,23 @@ var ParticipantAnswerDao = new Class({
 					item.setEndDateTime(dataset.item(i)["endDateTime"]);
 					items.push(item);
 				}
+				console.log(items);
 				successCallback(items);
 			});
 		});
+	},
+	queryRTSADMINCondition: function(participantSurveyId, successCallback) {
+		var sql = "select count(*) as count from " +  this.options.tableName + " where "
+			                             + "answerId in (1366, 1367, 1368, 1369, 1356, 1372, 1375, 1390, 1392) and participantSurveyId = " + participantSurveyId;
+		var count = 0;
+ 		this.options.db.transaction(function(tx){
+ 			tx.executeSql(sql, [], function(tx, result) {
+ 				dataset = result.rows;
+				count = dataset.item(0)["count"];
+ 				successCallback(count);
+ 			});
+ 		});
 	}
+	
+	
 });

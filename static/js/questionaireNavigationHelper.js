@@ -800,10 +800,43 @@ function moveNextQuestion() {
 				}
 				else {
 					//total score and show dialog
-					parseParticipantAnswer(function(){
-						showDailog();
-						qIndex--; // keep index of current question, prevent deny dialog						
-						saveLastQuestion();
+					parseParticipantAnswer(function() {
+						//get the answer for survey 14
+						var selectedSurvey = $("#selectedSurvey").data("selectedSurvey");
+						if(selectedSurvey.surveyId == 14) {
+							var participantSurvey = $("#participant").data("participant");
+							// If [A1 =1,2 , 3] & [A3=1 OR  A5=2, 3, 4, 5 OR A6a=1 OR A6b=1 OR A7=1 OR A8=1 OR A10=1]
+	        				var A1 = false;
+	        				//Check A1
+	        				participantAnswerDao.queryByQuestionId(467, participantSurvey.getParticipantSurveyId(), function(answers) {
+	        					for(i=0; i < answers.length; i++) {
+	        						if(RTSADMIN["467"].indexOf(Number(answers[i].getAnswerId())) != -1) {
+	        							A1 = true;
+	        							break;
+	        						}
+	        					}
+	        					//if A1 is true, check other conditions
+	        					if(A1) {
+	        						participantAnswerDao.queryRTSADMINCondition(participantSurvey.getParticipantSurveyId(), function(count){
+	        							if(count > 0) {
+	                    					showDailog(true);
+	                						qIndex--; // keep index of current question, prevent deny dialog						
+	                						saveLastQuestion();
+	        							}
+	        						});
+	        					}
+	        					else {
+	        						showDailog(false);
+	        						qIndex--; // keep index of current question, prevent deny dialog						
+	        						saveLastQuestion();
+	        					}
+	        				});
+						}
+						else {
+							showDailog();
+    						qIndex--; // keep index of current question, prevent deny dialog						
+    						saveLastQuestion();
+						}
 					});
 				}
 			}	
@@ -1349,8 +1382,8 @@ function answerValidated() {
 				var numberRange = $(".question-block > .question").attr("numberRange");
 				var inputValue = $(".question-block > .answer-block").find("input").val();
 				var emptyValidation = validateEmpty(inputValue);
-				var numberRangeValidation = Number(qType) == 2? validateNumberRange(numberRange,inputValue) : null;
-				var numberValidation = Number(qType) == 2? validateNumber(inputValue) : null;
+				var numberRangeValidation = Number(qType) == 2? validateNumberRange(numberRange,inputValue) : {state: true};
+				var numberValidation = Number(qType) == 2? validateNumber(inputValue) : {state: true};
 				if(!emptyValidation.state){
 					alert(emptyValidation.message);
 				}
@@ -1458,7 +1491,7 @@ function deleteData() {
 	delete $("#participant").data("participant");
 	delete $("#participantLog").data("participantLog");
 }
-function showDailog(){
+function showDailog(survey14Message){
 	buildPopUpPage(260,110);
 	var actionBlock = $("<div class='dialog-action'></div>");
 	actionBlock.append($('<button></button>').text("Yes").addClass("dialog-button").click(function(){
@@ -1482,6 +1515,9 @@ function showDailog(){
 					alertStr = "<font color='red'>មិនគ្រប់ល័ក្ខខ័ណ្ឌចូលរួមកម្មវិធី CCT ទេ!</font>";
 				}
 			}
+			if(selectedSurvey.surveyId == 14 && survey14Message) {
+				alertStr = "មានភាពប្រឈមខ្ពស់";
+			}
 			else {
 				if(atsScore == '' && alcoholicScore == '' || (atsScore == 0 && alcoholicScore == 0)) {
 					atsScore = participantSurveyLog.getATSScore();
@@ -1498,12 +1534,12 @@ function showDailog(){
 				}
 			}
 			if(alertStr != "") {
-				showScoreMessage(alertStr);
-			}
-			else {
-				deleteData();
-				$("#content").load("static/view/home.html");
-			}
+        		showScoreMessage(alertStr);
+        	}
+        	else {
+        		deleteData();
+        		$("#content").load("static/view/home.html");
+        	}
 		}
 		else {
 			if(!yes) {

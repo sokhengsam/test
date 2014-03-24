@@ -5,7 +5,8 @@ var CASIAPIRequests = new Class({
 	initailize: function(options){
 		this.parent();
 		//this.baseUrl = "http://cenat.gov.kh:8090/CASIMS/index.php/home/getjsondata";
-		this.baseUrl = "http://166.78.144.171:88/CASIMS/index.php/home/getjsondata";
+//		this.baseUrl = "http://166.78.144.171:88/CASIMS/index.php/home/getjsondata";
+		this.baseUrl = "http://166.78.144.171:88/RTS_Admin/index.php/home/getjsondata"
 		this.self = this;
 	},
 	uploadSurvey: function(requestData, callBack) {
@@ -13,7 +14,8 @@ var CASIAPIRequests = new Class({
 		var mobileKey = mobile.getMobileKey();
 		requestData.mobilekey = mobileKey;
 		//this.postRequest("http://cenat.gov.kh:8090/CASIMS/index.php/home/uploadjsondata", requestData,
-		this.postRequest("http://166.78.144.171:88/CASIMS/index.php/home/uploadjsondata", requestData,		
+//		this.postRequest("http://166.78.144.171:88/CASIMS/index.php/home/uploadjsondata", requestData,
+		this.postRequest("http://166.78.144.171:88/RTS_Admin/index.php/home/uploadjsondata", requestData,
 			function(response){
 				self.handleUploadResponse(response, callBack);
 				
@@ -62,13 +64,15 @@ var CASIAPIRequests = new Class({
 			requestData["last-modified-since"] = lastmodified;
 		}
 		var self = this;
-		//this.getRequest("http://cenat.gov.kh:8090/CASIMS/index.php/home/getjsondata", requestData, function(response){self.insertDB(response);}, function(){self.downloadSurveyFail();});
-		this.getRequest("http://166.78.144.171:88/CASIMS/index.php/home/getjsondata", requestData, function(response){self.insertDB(response);}, function(){self.downloadSurveyFail();});
+//		this.getRequest("http://cenat.gov.kh:8090/CASIMS/index.php/home/getjsondata", requestData, function(response){self.insertDB(response);}, function(){self.downloadSurveyFail();});
+//		this.getRequest("http://166.78.144.171:88/CASIMS/index.php/home/getjsondata", requestData, function(response){self.insertDB(response);}, function(){self.downloadSurveyFail();});
+		this.getRequest("http://166.78.144.171:88/RTS_Admin/index.php/home/getjsondata", requestData, function(response){self.insertDB(response);}, function(){self.downloadSurveyFail();});
 	},
 	getMobileKey: function(successCallback) {
 		var self = this;
 		//this.getRequest("http://cenat.gov.kh:8090/CASIMS/index.php/home/getmobilekey", {}, function(response){
-		this.getRequest("http://166.78.144.171:88/CASIMS/index.php/home/getmobilekey", {}, function(response){
+//		this.getRequest("http://166.78.144.171:88/CASIMS/index.php/home/getmobilekey", {}, function(response){
+		this.getRequest("http://166.78.144.171:88/RTS_Admin/index.php/home/getmobilekey", {}, function(response){
 			self.storeMobileKey(response, successCallback);
 		}, function(){console.log("fail to get mobile key");});
 	},

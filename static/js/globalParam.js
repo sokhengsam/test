@@ -29,6 +29,19 @@ var surveyDao = null,
 	A3bScoreId = 445,//specific case for CRF2
 	A4aScoreId = 446;
 	var fis;
+	//handle new CH for displaying message
+	//map the question to the list of the answers
+	var RTSADMIN = {
+	        // [A1 =1,2 , 3] & [A3=1 OR  A5=2, 3, 4, 5 OR A6a=1 OR A6b=1 OR A7=1 OR A8=1 OR A10=1]
+	        "467": [1340, 1341, 1342],//A1
+	        //A3, A5, A6a, A6b, A7, A8, A10
+	        "472": [1356],//A3
+	        "475": [1366, 1367, 1368, 1369],//A5
+	        "476": [1372],//A7
+	        "477": [1375],//A10
+	        "484": [1390],//A6a
+	        "485": [1392],//A6b
+	};
 
 var sampleJson = 
 {
